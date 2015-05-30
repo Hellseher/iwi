@@ -1,2 +1,5 @@
 # dotfiles
-.bashrc .tmuxrc
+_files of settings_
+
+.bashrc 
+.tmuxrc
