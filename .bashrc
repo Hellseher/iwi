@@ -2,7 +2,7 @@
 # File          :  .bashrc
 #
 # Created       :  Mon 08 Dec 2014 19:31:26
-# Last Modified :  Sat 30 May 2015 21:55:14
+# Last Modified :  Fri 19 Jun 2015 22:46:01
 # Maintainer    :  sharlatan, <sharlatanus@gmail.com>
 # License       :  Same as Bash (GPL)
 # Credits       :  See CREDITS section
@@ -18,7 +18,7 @@ if [ -f /etc/bashrc ]; then
 fi
 
 
-# -=[ EXPORTS                                                                {{{
+# -=[ EXPORTS ]=-                                                            {{{
 #export GOROOT=$HOME/go
 export EDITOR=vim
 #export PATH=$PATH:$GOROOT/bin
