@@ -1,0 +1,352 @@
+" File          : .vimrc
+"
+" Created       : Sun 16 Nov 2014 01:09:50
+" Last Modified : Fri 19 Jun 2015 22:41:32
+" Maintainer    : sharlatan <mailto@olee.co.uk>
+" License       : Same as Vim
+" Credits       : See INFO SOURCES
+" Description   :    This .vimrc file contains a bundle of settings for comfortable
+"               : work with various files (*.py, *.sh, *.vim, *.md, *.c etc.).
+"               : I tried to follow 
+"               :   "The division of the perceived universe into parts and wholes
+"               : is convenient and may be necessary, but no necessity determines
+"               : how it shall be done."
+"               : G. Bateson presupposition from "Mind and nature" 
+"               : [p. 47, ISBN 0-00-654119-4]
+"               :   The file divided into logical parts, which should be
+"               : understood without further explanation. 
+"               : Main settings are folded by [marker] method. 
+"               : To open all folders type {zi}
+
+
+"-=:[ PRESETS ]:=-
+set nocompatible
+set encoding=utf-8
+filetype off
+let mapleader=","
+
+""-=:[ PLUGINS INSTAL ]:=-                                                    {{{
+"" ~/.vim/bundle/                            " default path to all plugins
+""
+"set rtp+=~/.vim/bundle/Vundle.vim           " set the runtime path to Vundle
+"call vundle#begin()
+""
+""----[ core
+"Plugin 'gmarik/Vundle.vim'                  " required, let Vundle manage Vundle
+"Plugin 'Yggdroot/indentLine'                " display the indention levels
+""
+""----[ startup
+"Plugin 'mhinz/vim-startify'                 " log open files 
+"Plugin 'Hellseher/vim-template'             " preseted templates on startup
+"Plugin 'timestamp.vim'                      " add timestamps to file's header
+""
+""----[ completion | snippets
+"Plugin 'SirVer/ultisnips'
+"Plugin 'honza/vim-snippets'                 " 
+"Plugin 'scrooloose/nerdcommenter'
+"Plugin 'Valloric/YouCompleteMe'
+"Plugin 'tpope/vim-surround'                 " dual symbol completion
+""Plugin 'Shougo/unite.vim'                   " searches and display info source
+""
+""----[ tabulations
+"Plugin 'godlygeek/tabular'                  " smart aligning text
+"
+""----[ visual
+"Plugin 'scrooloose/nerdtree'                " console file browser
+"Plugin 'kien/ctrlp.vim'                     " Fuzzy file, buffer, mru, tag, etc
+"Plugin 'tagbar'                             " dependancy: Exuberant ctags 5.5
+"Plugin 'bling/vim-airline'                  " light  status/tabline
+"Plugin 'gundo'                              " undo tree with style
+"
+""----[ syntax
+"Plugin 'scrooloose/syntastic'
+"
+""----[ git
+"Plugin 'tpope/vim-fugitive'                 " the best Git wrapper
+"Plugin 'tasklist.vim'                       " helps to find TO DO
+"
+""----:[ languages ]:----
+"" Languages bandles here. Documents, refactorings.
+""
+""------[ GoLang
+"Plugin 'fatih/vim-go'                      " Go support for Vime
+""------[ Python
+""Plugin 'klen/python-mode'                  " Python code very quickly
+""------[ Ruby
+"Plugin 'tpope/vim-rails'
+""------[ Node.js
+"Plugin 'moll/vim-node'
+""------[ JavaScript
+"Plugin 'jelera/vim-javascript-syntax'
+""------[ Markups
+"Plugin 'mattn/emmet-vim'                    " Zen coding for HTML/CSS
+"Plugin 'plasticboy/vim-markdown'
+"Plugin 'gregsexton/MatchTag'
+"
+""----[ misc
+"Plugin 'renamer.vim'
+"
+"call vundle#end()                           " all plugins before this line
+""
+"" Toggle all settings on
+"filetype on
+"filetype indent on
+"filetype plugin on
+""<END OF PLUGINS INSTAL>-----------------------------------------------------}}}
+"
+""-=:[ BRIEF HELP ]:=-                                                        {{{
+"" :PluginInstall    - installs plugins; append `!` to update or just
+"" :PluginUpdate
+"" :PluginClean      - confirms removal of unused plugins; append `!` to
+"" see :h Vundle for more details or wiki for FAQ
+"" to get help for any plugins just h:<plugin's_name>
+"" to open/close any tags (NERDTree, tagbar) pres <o>
+""<END OF BRIEF HELP>---------------------------------------------------------}}}
+"
+""-=:[ PLUGINS SETTINGS ]:=-                                                  {{{
+""    Plugins which need settings here.
+""
+""---[ NERDTree
+"let NERDTreeShowHidden=1                    " show hiden files
+"
+""---[ Syntastic
+""https://github.com/scrooloose/syntastic
+"set statusline+=%#warningmsg#
+"set statusline+=%{SyntasticStatuslineFlag()}
+"set statusline+=%*
+"let g:syntastic_always_populate_loc_list = 1
+"let g:syntastic_auto_loc_list = 1
+"let g:syntastic_check_on_open = 1
+"let g:syntastic_check_on_wq = 0
+"
+""---[ vim-template
+""let g:templates_plugin_loaded = 1          " skip loading of the plugin
+""let g:templates_plugin_loaded = 1          " disable / enable insertion 
+""
+""----[ vim-markdown
+"let g:vim_markdown_folding_disabled=1
+"
+""---[ vim-airline
+"" :help ariline
+"if !exists('g:airline_symbols')
+"  let g:airline_symbols = {}
+"endif
+"let g:airline#extensions#tabline#enabled = 1
+"let g:airline#extensions#bufferline#enabled = 1
+"let g:airline#extensions#syntastic#enabled = 1
+"let g:airline#extensions#tabline#left_alt_sep = '┃'
+"let g:airline_section_y = '%{&fileencoding?&fileencoding:&encoding}'
+"let g:airline_section_z = '%l𝄘 %p%%%c⫼'
+"let g:airline_left_sep = ''
+"let g:airline_right_sep = ''
+"let g:airline_symbols.linenr = '¶'
+"let g:airline_symbols.readonly = ''
+"let g:airline_symbols.branch = '⎇'
+"let g:airline_symbols.paste = '∥'
+"let g:airline_symbols.whitespace = '⍟'
+"
+""---[pythot-mode
+"let g:pymode_lint_on_write = 0
+"
+""---[ YouCompleteMe
+"let g:ycm_key_list_select_completion=[]
+"let g:ycm_key_list_previous_completion=[]
+"
+""---[ UltiSnips
+"" let g:UltiSnipsExpandTrigger="<c-tab>"
+"" let g:UltiSnipsListSnippets="<c-s-tab>"
+"
+""<END OF PLUGINS SETTINGS>---------------------------------------------------}}}
+"
+""-=:[ PLUGIN MAPPING ]:=-                                                    {{{
+""----[ NERDTree
+"nmap <leader>nt :NERDTreeToggle<CR>
+""----[ tagbar
+"nmap <leader>tg :TagbarToggle<CR>
+""----[ GunDo
+"nnoremap <Leader>gd :GundoToggle<CR>
+""<END OF PLUGIN MAPPING>-----------------------------------------------------}}}
+
+"-=:[ VIM SETTINGS ]:=-                                                      {{{
+"
+syntax on
+set t_Co=256
+set background=dark
+colorscheme solarized 
+"
+"
+"----:[ Visual Settings ]:----
+"    Settings that affect visual appereance, such as Colorscheme,
+" numbers, etc., can be changed here.
+
+
+"------[ gVim
+if has("gui_running")
+    set background=light
+    set guioptions-=m                       "remove menu bar
+    set guioptions-=T                       "remove toolbar
+    set guioptions-=r                       "remove right-hand scroll bar
+    set guioptions-=L                       "remove left-hand scroll bar
+    set guifont=Monospace\ 11
+    set mouse=c                             " disable mouse click
+    set lines=999 columns=999
+    hi Folded gui=NONE
+endif
+"
+"
+"------[ visual marks
+hi MatchParen cterm=bold ctermbg=NONE ctermfg=Red
+set hlsearch
+set list                                   " show unprintable symbols
+set listchars=eol:¬,tab:╾─                 " end of line, tabulation
+hi SpecialKey ctermfg=darkGray ctermbg=NONE
+set fillchars=vert:│                       " window separation character
+hi VertSplit ctermbg=NONE
+"
+"
+"------:[ lines 𝄙 ]:------
+"--------[ wrap|break
+set wrap                                    " wrap long ln
+set linebreak                               " break at words
+set tw=80                                   " ln length
+au FileType html setl tw=110
+"--------[ numbers|hl ln & column
+set number
+set relativenumber
+set cursorcolumn                            " hl cursorcolumn
+autocmd InsertLeave * set cursorcolumn
+autocmd InsertEnter * set nocursorcolumn
+set cursorline                              " hl CursorLine
+autocmd InsertLeave * set cursorline
+autocmd InsertEnter * set nocursorline
+"--------[ status
+set noshowmode
+set showcmd                                 " show commands in bottom side
+set laststatus=2                            " show status line 
+set title                                   " show buffer name
+set ch=2                                    " command line 2 lines
+"--------[ indention
+set tabstop=4                               " 1 tab = 4 spaces
+set shiftwidth=4                            " number of shifts with >|< 
+set softtabstop=4                           " 4 spaces per tab
+set expandtab                               " tab by spaces
+set autoindent                              " align the new line indent
+set backspace=2                             " back spaces over indent
+"
+"
+"----[ completion
+set pumheight=3                             " max num to show in pupup menu
+set wildmenu                                " command-line complition
+"
+"
+"----[ folding
+set fen                                     " enable folding
+set fdm=marker                              " fold method
+hi Folded term=NONE cterm=NONE
+hi FoldColumn ctermfg=100
+"
+"
+"----[ file types
+au FileType html setl tw=100 sw=2 sts=2
+"
+"
+"----[ keymap
+set keymap=russian-jcukenwin                " set up keymaping for ru
+set iminsert=0
+set imsearch=0
+
+"----[ misc
+set hidden
+set visualbell
+set noerrorbells
+" Try to keep it function disabled, it has compatalbe problem with Syntastic
+"set shellcmdflag=-ic
+set nobackup
+set noswapfile
+"<END OF VIM SETTINGS>------------------------------------------------------}}}
+
+"-=:[ VIM MAPPING ]:=-                                                       {{{
+"
+" X clipboard
+nmap <leader>yy yy:silent .w !xclip
+vmap <leader>y y:silent '<,'> w !xclip
+
+" UPPERCASE
+inoremap <C-u> <Esc>bgUwA
+nnoremap <C-u> bgUe
+"
+" header
+inoremap <leader>hd -=:[  ]:=-<Esc>F[lli
+nnoremap <leader>hd a-=:[  ]:=-<Esc>F[lli
+" end of
+inoremap <leader>ef <end<Esc>bgUwA of<Esc>bgUwA  ><Esc>ha
+" spell checking
+nnoremap <silent> <leader>sp :set spell!<CR>
+"
+" off hl search
+nnoremap <leader>, :nohl<CR>
+"
+"win switching
+nnoremap <leader>h <C-w>h
+nnoremap <Leader>l <C-w>l
+nnoremap <Leader>k <C-w>k
+nnoremap <Leader>j <C-w>j
+"win moving
+nnoremap <C-h> <C-w>H
+nnoremap <C-l> <C-w>L
+nnoremap <C-k> <C-w>K
+nnoremap <C-j> <C-w>J
+"
+" date insertion
+inoremap <leader>dt <Esc>o<Esc>a<C-R>=strftime("%a %d %b %Y %I:%M:%S ")<CR><Esc>
+nnoremap <leader>dt o<Esc>a<C-R>=strftime("%a %d %b %Y %I:%M:%S ")<CR><Esc>
+"
+" Esc
+" You can map Esc if it is far on keyboard, or you can use <CTRL>[ as alias.
+" inoremap jk <Esc>                         
+"
+" Edit my Vimc file
+nnoremap <Leader>ev :vsplit $MYVIMRC<cr>
+nnoremap <Leader>sv :source $MYVIMRC<cr> 
+"<END OF VIM MAPPINGS>-------------------------------------------------------}}}
+
+"-=:[ FUNCTIONS ]:=-                                                         {{{
+
+"<END OF FUNCTIONS>----------------------------------------------------------}}}
+
+"-=:[ ABBREVIATIONS ]:=-                                                     {{{
+"
+"----[ Russian
+"set langmap=ФИСВУАПРШОЛДЬТЩЗЙКЫЕГМЦЧНЯ;abcdefghijklmnopqrstuvwxyz
+"set langmap=фисвуапршолдьтщзйкыегмцчня;abcdefghijklmnopqrstuvwxyz
+" add something here
+
+
+
+"<END of ABBREVIATIONS>------------------------------------------------------}}}
+
+"-=:[ INFO SOURCES ]:=-                                                      {{{
+"
+"----[ txt
+" http://habrahabr.ru/post/239579/
+" http://habrahabr.ru/post/239579/
+" http://habrahabr.ru/post/151128/
+" http://www.moolenaar.net/habits_ru.html
+" http://www.intelesyscorp.com/blog/awesome-vim-configuration
+"
+" ----[ scast
+" www.derekwyatt.org
+" vimcasts.org
+"
+" ----[ .vimrc
+" https://github.com/justinmk/config/blob/master/.vimrc
+" https://github.com/drmikehenry/vimfiles/blob/master/vimrc
+" https://github.com/derekwyatt/vim-config/blob/master/vimrc
+" https://github.com/timlar/vim/blob/master/.vimrc
+" https://github.com/skwp/dotfiles/blob/master/vimrc
+" http://agentzh.org/misc/.vimrc
+" http://pastebin.com/paPWQ5fE
+" http://amix.dk/vim/vimrc.html
+"<END OF INFO SOURCES>-------------------------------------------------------}}}
+"
+" <END OF " VIMRC>-------------------------------------------------------------

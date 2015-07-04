@@ -22,7 +22,6 @@ fi
 #export GOROOT=$HOME/go
 export EDITOR=vim
 #export PATH=$PATH:$GOROOT/bin
-export PATH="$PATH:$HOME/.rvm/bin" # Add RVM to PATH for scripting
 #< END Of EXPORTS >-                                                         }}}
 
 # -=:[ SETTINGS ]:=-                                                         {{{
