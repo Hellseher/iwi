@@ -2,7 +2,7 @@
 # File          :  .bashrc
 #
 # Created       :  Mon 08 Dec 2014 19:31:26
-# Last Modified :  Fri 19 Jun 2015 22:46:01
+# Last Modified :  Mon 06 Jul 2015 06:47:25
 # Maintainer    :  sharlatan, <sharlatanus@gmail.com>
 # License       :  Same as Bash (GPL)
 # Credits       :  See CREDITS section
@@ -20,6 +20,7 @@ fi
 
 # -=[ EXPORTS ]=-                                                            {{{
 #export GOROOT=$HOME/go
+export HISTCONTROL=ignoredups: erasedups
 export EDITOR=vim
 #export PATH=$PATH:$GOROOT/bin
 #< END Of EXPORTS >-                                                         }}}
@@ -32,7 +33,6 @@ PROMPT_COMMAND='pwd'
 PS1=' \[\e[1;33m\](\#:\!)\$:\[\e[0m\] '
 
 # History hacks
-export HISTCONTROL=ignoredups: erasedups
 shopt -s histappend
 export PROMPT_COMMAND="history -a; history -c; history -r; $PROMPT_COMMAND"
 # <END OF # SETTINGS>--------------------------------------------------------}}}
