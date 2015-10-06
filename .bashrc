@@ -2,7 +2,7 @@
 # File          :  .bashrc
 #
 # Created       :  Mon 08 Dec 2014 19:31:26
-# Last Modified :  Mon 06 Jul 2015 06:47:25
+# Last Modified :  Sun 20 Sep 2015 23:48:12
 # Maintainer    :  sharlatan, <sharlatanus@gmail.com>
 # License       :  Same as Bash (GPL)
 # Credits       :  See CREDITS section
@@ -22,15 +22,20 @@ fi
 #export GOROOT=$HOME/go
 export HISTCONTROL=ignoredups: erasedups
 export EDITOR=vim
+#export PATH:$PATH:~/.lein/lein
 #export PATH=$PATH:$GOROOT/bin
-#< END Of EXPORTS >-                                                         }}}
+# export 256 colors to terminal
+if [[ "$TERM" == "xterm" ]]; then
+    export TERM=xterm-256color
+fi
+#<END Of EXPORTS >-----------------------------------------------------------}}}
 
 # -=:[ SETTINGS ]:=-                                                         {{{
 # set vi like keyboard movement
 set -o vi           # se
 
 PROMPT_COMMAND='pwd'
-PS1=' \[\e[1;33m\](\#:\!)\$:\[\e[0m\] '
+PS1='[ \[\e[33m\]\u@\H\[\e[m\] ]\$: ' 
 
 # History hacks
 shopt -s histappend
@@ -38,57 +43,6 @@ export PROMPT_COMMAND="history -a; history -c; history -r; $PROMPT_COMMAND"
 # <END OF # SETTINGS>--------------------------------------------------------}}}
 
 #-=:[ FUNCTIONS ]:=-                                                          {{{
-# Add all extra functionality here.
-
-#--==[ pht ]==------------------------------------------------------------------
-# Bunch of function to work with photos.
-#
-
-
-function picsort(){
-    # Sort pictures in local directory by created date
-    read -p "Sort images? (Yy|Nn): " answer
-    if [[ $answer = y  ||  $answer = Y ]]; then
-        exiftool -r '-Directory<DateTimeOriginal' \
-            -d %d_%B_%Y . && find ./ -type d -empty \
-                -exec rm -rf {}\;
-    fi
-}
-
-
-function extract () {
-    # ease way to extract archives
-    if [ -f $1 ]; then
-        case $1 in
-            *.tat.bz2   ) tar xvjf $1
-                ;;
-            *.tat.gz    ) tar xvzf $1
-                ;;
-            *.bz2       ) bunzip2 $1
-                ;;
-            *.rar       ) unrar x $1
-                ;;
-            *.gz        ) gunzip $1
-                ;;
-            *.tar       ) tar xvf $1
-                ;;
-            *.tbz2      ) tar xvjf $1
-                ;;
-            *.tgz       ) tar xvzf $1
-                ;;
-            *.zip       ) unzip $1
-                ;;
-            *.Z         ) uncompress $1
-                ;;
-            *.7z        ) 7z x  $1
-                ;;
-            *           ) echo "Cant extract '$1'..."
-                ;;
-        esac
-    else
-        echo "'$1' is not a valid file..."
-    fi
-}
 #-=[ fzf setup ]=---------------------------------------------------------------
 # TODO add case condition > fd (-a -f)
 
@@ -127,6 +81,15 @@ function fdf() {
     file=$(fzf-tmux -d 20% +m -q "$1") && dir=$(dirname "$file") &&
         cd "$dir"
 }
+
+function show() {
+    if [[ $# -ne 1 ]]; then
+        echo Enter at least one argument
+        exit 1
+    fi
+    grep $1 ~/Documents/txt/overrall | awk -F: '{print $3}' | tr -d '\n' | xclip
+    #function_body
+}
 #
 #function lsd() {
 #    # list of recently visited dirs
@@ -150,6 +113,7 @@ function fdf() {
 #-=:[ ALIAS ]:=-                                                             {{{
 alias c='clear'
 alias em='emacs -nw'
+alias aplay='ansible-playbook'
 #<END OF ALIAS>--------------------------------------------------------------}}}
 
 
