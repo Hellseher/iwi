@@ -1,7 +1,7 @@
 " File          : .vimrc
 "
 " Created       : Sun 16 Nov 2014 01:09:50
-" Last Modified : Fri 19 Jun 2015 22:41:32
+" Last Modified : Fri 16 Oct 2015 21:35:57
 " Maintainer    : sharlatan <mailto@olee.co.uk>
 " License       : Same as Vim
 " Credits       : See INFO SOURCES
@@ -26,72 +26,82 @@ filetype off
 let mapleader=","
 
 ""-=:[ PLUGINS INSTAL ]:=-                                                    {{{
-"" ~/.vim/bundle/                            " default path to all plugins
+" ~/.vim/bundle/                            " default path to all plugins
+"
+set rtp+=~/.vim/bundle/Vundle.vim           " set the runtime path to Vundle
+call vundle#begin()
+"
+"----[ core
+Plugin 'gmarik/Vundle.vim'                  " required, let Vundle manage Vundle
 ""
-"set rtp+=~/.vim/bundle/Vundle.vim           " set the runtime path to Vundle
-"call vundle#begin()
-""
-""----[ core
-"Plugin 'gmarik/Vundle.vim'                  " required, let Vundle manage Vundle
-"Plugin 'Yggdroot/indentLine'                " display the indention levels
-""
-""----[ startup
-"Plugin 'mhinz/vim-startify'                 " log open files 
-"Plugin 'Hellseher/vim-template'             " preseted templates on startup
-"Plugin 'timestamp.vim'                      " add timestamps to file's header
-""
-""----[ completion | snippets
-"Plugin 'SirVer/ultisnips'
-"Plugin 'honza/vim-snippets'                 " 
+"----[ startup
+Plugin 'mhinz/vim-startify'                 " log open files 
+Plugin 'Hellseher/vim-template'             " preseted templates on startup
+Plugin 'timestamp.vim'                      " add timestamps to file's header
+"
+"----[ completion | snippets
+Plugin 'SirVer/ultisnips'
+Plugin 'honza/vim-snippets'                 " 
 "Plugin 'scrooloose/nerdcommenter'
-"Plugin 'Valloric/YouCompleteMe'
-"Plugin 'tpope/vim-surround'                 " dual symbol completion
+Plugin 'Valloric/YouCompleteMe'
+Plugin 'tpope/vim-surround'                 " dual symbol completion
 ""Plugin 'Shougo/unite.vim'                   " searches and display info source
 ""
 ""----[ tabulations
-"Plugin 'godlygeek/tabular'                  " smart aligning text
+Plugin 'godlygeek/tabular'                  " smart aligning text
 "
 ""----[ visual
-"Plugin 'scrooloose/nerdtree'                " console file browser
-"Plugin 'kien/ctrlp.vim'                     " Fuzzy file, buffer, mru, tag, etc
-"Plugin 'tagbar'                             " dependancy: Exuberant ctags 5.5
-"Plugin 'bling/vim-airline'                  " light  status/tabline
+Plugin 'scrooloose/nerdtree'                " console file browser
+Plugin 'kien/ctrlp.vim'                     " Fuzzy file, buffer, mru, tag, etc
+Plugin 'tagbar'                             " dependancy: Exuberant ctags 5.5
+Plugin 'bling/vim-airline'                  " light  status/tabline
 "Plugin 'gundo'                              " undo tree with style
+"Plugin 'Yggdroot/indentLine'                " display the indention levels
 "
 ""----[ syntax
-"Plugin 'scrooloose/syntastic'
+Plugin 'scrooloose/syntastic'
 "
 ""----[ git
-"Plugin 'tpope/vim-fugitive'                 " the best Git wrapper
+Plugin 'tpope/vim-fugitive'                 " the best Git wrapper
 "Plugin 'tasklist.vim'                       " helps to find TO DO
 "
-""----:[ languages ]:----
-"" Languages bandles here. Documents, refactorings.
-""
-""------[ GoLang
-"Plugin 'fatih/vim-go'                      " Go support for Vime
+"----:[ languages ]:----
+" Languages bandles here. Documents, refactorings.
+"
+"------[ Clojure
+Plugin 'tpope/vim-fireplace'                " Clojure REPL
+Plugin 'guns/vim-clojure-static'
+Plugin 'tpope/vim-leiningen'
+Plugin 'tpope/vim-classpath'
+"Plugin 'vim-scripts/paredit.vim' 
+
+"------[ GoLang
+Plugin 'fatih/vim-go'                      " Go support for Vime
 ""------[ Python
 ""Plugin 'klen/python-mode'                  " Python code very quickly
 ""------[ Ruby
-"Plugin 'tpope/vim-rails'
-""------[ Node.js
-"Plugin 'moll/vim-node'
-""------[ JavaScript
-"Plugin 'jelera/vim-javascript-syntax'
-""------[ Markups
-"Plugin 'mattn/emmet-vim'                    " Zen coding for HTML/CSS
-"Plugin 'plasticboy/vim-markdown'
-"Plugin 'gregsexton/MatchTag'
+Plugin 'tpope/vim-rails'
+"------[ Node.js
+Plugin 'moll/vim-node'
+"------[ JavaScript
+Plugin 'jelera/vim-javascript-syntax'
+"------[ Markups
+Plugin 'othree/html5.vim'                   " HTML5, SVG omnicomplete fun
+Plugin 'mattn/emmet-vim'                    " Zen coding for HTML/CSS
+Plugin 'plasticboy/vim-markdown'
+Plugin 'gregsexton/MatchTag'
+"Plugin 'chase/vim-ansible-yaml'             " sntx hl and indent for Ansible
 "
-""----[ misc
-"Plugin 'renamer.vim'
+"----[ misc
+Plugin 'beloglazov/vim-online-thesaurus'    " Online theasurus
 "
-"call vundle#end()                           " all plugins before this line
+"
+call vundle#end()                           " all plugins before this line
 ""
 "" Toggle all settings on
-"filetype on
-"filetype indent on
-"filetype plugin on
+filetype on
+filetype indent on
+filetype plugin on
 ""<END OF PLUGINS INSTAL>-----------------------------------------------------}}}
 "
 ""-=:[ BRIEF HELP ]:=-                                                        {{{
@@ -103,66 +113,70 @@ let mapleader=","
 "" to open/close any tags (NERDTree, tagbar) pres <o>
 ""<END OF BRIEF HELP>---------------------------------------------------------}}}
 "
-""-=:[ PLUGINS SETTINGS ]:=-                                                  {{{
-""    Plugins which need settings here.
-""
-""---[ NERDTree
-"let NERDTreeShowHidden=1                    " show hiden files
+"-=:[ PLUGINS SETTINGS ]:=-                                                  {{{
+"    Plugins which need settings here.
 "
-""---[ Syntastic
-""https://github.com/scrooloose/syntastic
-"set statusline+=%#warningmsg#
-"set statusline+=%{SyntasticStatuslineFlag()}
-"set statusline+=%*
-"let g:syntastic_always_populate_loc_list = 1
-"let g:syntastic_auto_loc_list = 1
-"let g:syntastic_check_on_open = 1
-"let g:syntastic_check_on_wq = 0
+""---[ NERDTree
+let NERDTreeShowHidden=1                    " show hiden files
+"
+"---[ Syntastic
+"https://github.com/scrooloose/syntastic
+set statusline+=%#warningmsg#
+set statusline+=%{SyntasticStatuslineFlag()}
+set statusline+=%*
+let g:syntastic_always_populate_loc_list = 1
+let g:syntastic_auto_loc_list = 1
+let g:syntastic_check_on_open = 1
+let g:syntastic_check_on_wq = 0
 "
 ""---[ vim-template
 ""let g:templates_plugin_loaded = 1          " skip loading of the plugin
 ""let g:templates_plugin_loaded = 1          " disable / enable insertion 
 ""
 ""----[ vim-markdown
-"let g:vim_markdown_folding_disabled=1
+let g:vim_markdown_folding_disabled=1
 "
-""---[ vim-airline
-"" :help ariline
-"if !exists('g:airline_symbols')
-"  let g:airline_symbols = {}
-"endif
-"let g:airline#extensions#tabline#enabled = 1
-"let g:airline#extensions#bufferline#enabled = 1
-"let g:airline#extensions#syntastic#enabled = 1
+"---[ vim-airline
+" :help ariline
+if !exists('g:airline_symbols')
+  let g:airline_symbols = {}
+endif
+let g:airline#extensions#tabline#enabled = 1
+let g:airline#extensions#bufferline#enabled = 1
+let g:airline#extensions#syntastic#enabled = 1
 "let g:airline#extensions#tabline#left_alt_sep = '┃'
-"let g:airline_section_y = '%{&fileencoding?&fileencoding:&encoding}'
-"let g:airline_section_z = '%l𝄘 %p%%%c⫼'
-"let g:airline_left_sep = ''
-"let g:airline_right_sep = ''
-"let g:airline_symbols.linenr = '¶'
-"let g:airline_symbols.readonly = ''
-"let g:airline_symbols.branch = '⎇'
-"let g:airline_symbols.paste = '∥'
-"let g:airline_symbols.whitespace = '⍟'
+let g:airline_section_y = '%{&fileencoding?&fileencoding:&encoding}'
+let g:airline_section_z = '%l𝄘 %p%%%c⫼'
+let g:airline_left_sep = ''
+let g:airline_right_sep = ''
+let g:airline_symbols.linenr = '¶'
+let g:airline_symbols.readonly = ''
+let g:airline_symbols.branch = '⎇'
+let g:airline_symbols.paste = '∥'
+let g:airline_symbols.whitespace = '⍟'
 "
-""---[pythot-mode
+"---[pythot-mode
 "let g:pymode_lint_on_write = 0
 "
-""---[ YouCompleteMe
-"let g:ycm_key_list_select_completion=[]
-"let g:ycm_key_list_previous_completion=[]
+"---[ YouCompleteMe
+let g:ycm_key_list_select_completion=['<c-j>', '<Enter>']
 "
-""---[ UltiSnips
-"" let g:UltiSnipsExpandTrigger="<c-tab>"
-"" let g:UltiSnipsListSnippets="<c-s-tab>"
+"---[ UltiSnips
+let  g:UltiSnipsExpandTrigger="<tab>"
+"
+"---[ indentLine
+let g:indentLine_char = '┆'
 "
 ""<END OF PLUGINS SETTINGS>---------------------------------------------------}}}
-"
+
 ""-=:[ PLUGIN MAPPING ]:=-                                                    {{{
+"
 ""----[ NERDTree
-"nmap <leader>nt :NERDTreeToggle<CR>
-""----[ tagbar
-"nmap <leader>tg :TagbarToggle<CR>
+nmap <leader>nt :NERDTreeToggle<CR>
+" Find current file in the tree
+nmap <leader>/ :NERDTreeFind<CR>
+"----[ tagbar
+nmap <leader>tg :TagbarToggle<CR>
 ""----[ GunDo
 "nnoremap <Leader>gd :GundoToggle<CR>
 ""<END OF PLUGIN MAPPING>-----------------------------------------------------}}}
@@ -170,7 +184,7 @@ let mapleader=","
 "-=:[ VIM SETTINGS ]:=-                                                      {{{
 "
 syntax on
-set t_Co=256
+"set t_Co=256
 set background=dark
 colorscheme solarized 
 "
@@ -198,7 +212,7 @@ endif
 hi MatchParen cterm=bold ctermbg=NONE ctermfg=Red
 set hlsearch
 set list                                   " show unprintable symbols
-set listchars=eol:¬,tab:╾─                 " end of line, tabulation
+set listchars=eol:¬,tab:⊳\                 " end of line, tabulation
 hi SpecialKey ctermfg=darkGray ctermbg=NONE
 set fillchars=vert:│                       " window separation character
 hi VertSplit ctermbg=NONE
@@ -208,7 +222,7 @@ hi VertSplit ctermbg=NONE
 "--------[ wrap|break
 set wrap                                    " wrap long ln
 set linebreak                               " break at words
-set tw=80                                   " ln length
+set tw=79                                   " ln length
 au FileType html setl tw=110
 "--------[ numbers|hl ln & column
 set number
@@ -223,7 +237,7 @@ autocmd InsertEnter * set nocursorline
 set noshowmode
 set showcmd                                 " show commands in bottom side
 set laststatus=2                            " show status line 
-set title                                   " show buffer name
+"set title                                   " show buffer name
 set ch=2                                    " command line 2 lines
 "--------[ indention
 set tabstop=4                               " 1 tab = 4 spaces
@@ -234,9 +248,9 @@ set autoindent                              " align the new line indent
 set backspace=2                             " back spaces over indent
 "
 "
-"----[ completion
-set pumheight=3                             " max num to show in pupup menu
-set wildmenu                                " command-line complition
+"----[ completion, pop up
+set pumheight=7                             " max num to show in pop-up menu
+set wildmenu                                " command-line completion
 "
 "
 "----[ folding
@@ -250,16 +264,21 @@ hi FoldColumn ctermfg=100
 au FileType html setl tw=100 sw=2 sts=2
 "
 "
-"----[ keymap
+"----[ keymap and spelling
 set keymap=russian-jcukenwin                " set up keymaping for ru
 set iminsert=0
 set imsearch=0
+highlight lCursor guifg=NONE guibg=Cyan
+set spelllang=en,ru
 
 "----[ misc
+" Look up the help for each options
+set ttimeout
+set ttimeoutlen=100
 set hidden
 set visualbell
 set noerrorbells
-" Try to keep it function disabled, it has compatalbe problem with Syntastic
+" Try to keep it function disabled, it has compatible problem with Syntastic
 "set shellcmdflag=-ic
 set nobackup
 set noswapfile
@@ -267,13 +286,11 @@ set noswapfile
 
 "-=:[ VIM MAPPING ]:=-                                                       {{{
 "
-" X clipboard
-nmap <leader>yy yy:silent .w !xclip
-vmap <leader>y y:silent '<,'> w !xclip
-
-" UPPERCASE
-inoremap <C-u> <Esc>bgUwA
-nnoremap <C-u> bgUe
+" copy/paste between VIM sessions
+" thanks to https://github.com/mokevnin
+vmap <Leader>y :w! ~/.vim/.vbuf<CR>
+nmap <Leader>y :.w! ~/.vim/.vbuf<CR>
+nmap <Leader>p :r ~/.vim/.vbuf<CR>
 "
 " header
 inoremap <leader>hd -=:[  ]:=-<Esc>F[lli
@@ -298,12 +315,8 @@ nnoremap <C-k> <C-w>K
 nnoremap <C-j> <C-w>J
 "
 " date insertion
-inoremap <leader>dt <Esc>o<Esc>a<C-R>=strftime("%a %d %b %Y %I:%M:%S ")<CR><Esc>
-nnoremap <leader>dt o<Esc>a<C-R>=strftime("%a %d %b %Y %I:%M:%S ")<CR><Esc>
-"
-" Esc
-" You can map Esc if it is far on keyboard, or you can use <CTRL>[ as alias.
-" inoremap jk <Esc>                         
+inoremap <leader>dt <Esc>o<Esc>a<C-R>=strftime("%a %d %b %Y %I-%M-%S ")<CR><Esc>
+nnoremap <leader>dt o<Esc>a<C-R>=strftime("%a %d %b %Y %I-%M-%S ")<CR><Esc>
 "
 " Edit my Vimc file
 nnoremap <Leader>ev :vsplit $MYVIMRC<cr>
@@ -333,10 +346,11 @@ nnoremap <Leader>sv :source $MYVIMRC<cr>
 " http://habrahabr.ru/post/151128/
 " http://www.moolenaar.net/habits_ru.html
 " http://www.intelesyscorp.com/blog/awesome-vim-configuration
+" http://rayninfo.co.uk/vimtips.html
 "
 " ----[ scast
 " www.derekwyatt.org
-" vimcasts.org
+" www. vimcasts.org
 "
 " ----[ .vimrc
 " https://github.com/justinmk/config/blob/master/.vimrc
@@ -348,5 +362,4 @@ nnoremap <Leader>sv :source $MYVIMRC<cr>
 " http://pastebin.com/paPWQ5fE
 " http://amix.dk/vim/vimrc.html
 "<END OF INFO SOURCES>-------------------------------------------------------}}}
-"
-" <END OF " VIMRC>-------------------------------------------------------------
+" <END OF  VIMRC>-------------------------------------------------------------
