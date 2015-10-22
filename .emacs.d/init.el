@@ -6,6 +6,7 @@
 ;;; Credits       :  http://aaronbedra.com/emacs.d/
 ;;;               :  http://vinitkumar.me/articles/2014/05/04/Setting-Up-Emacs-For-Development/
 ;;;               :  https://github.com/purcell/emacs.d/blob/master/init.el
+;;;               :  http://ergoemacs.org/emacs/emacs_tabs_space_indentation_setup.html
 ;;;
 ;;;
 ;;-=:[ PACKAGES ]:=----------------------------------------------------{{{
@@ -29,6 +30,7 @@
                            evil
                            feature-mode
                            flycheck
+			   folding
                            go-mode
                            graphviz-dot-mode
                            haml-mode
@@ -41,8 +43,8 @@
                            o-blog
                            org
                            paredit
-			   powerline
                            php-mode
+			   powerline
                            puppet-mode
                            restclient
                            rvm
@@ -68,6 +70,7 @@
                       (package-install pkg))))
 
 ;; ---[ load packages
+(require 'folding)
 (require 'linum)
 (require 'server)
 (require 'font-lock)
@@ -136,7 +139,10 @@
         (load-theme 'wombat t))
 
 ;; ----[ indenting
-(setq tab-width 2)
+(setq-default tab-width 4)
+(setq tab-width 4)
+(setq-default tab-always-indent t)
+
 ;; Inhibit startup/splash screen
 (setq inhibit-splash-screen   t 
       ingibit-startup-message nil
@@ -154,8 +160,8 @@
 (let ((display-table (or standard-display-table (make-display-table))))
     (set-display-table-slot display-table 'vertical-border (make-glyph-code ?│))
       (setq standard-display-table display-table))
-;;;---[ Server mode
-;  (unless (server-running-p)
-;            (server-start))
-;; (set-face-attribute 'default nil: font "Terminus-12")
-;;< END OF EMACS SETTINGS >--------------------------------------------------}}}
+
+;;---[ Server mode
+(unless (server-running-p)
+          (server-start))
+;< END OF EMACS SETTINGS >--------------------------------------------------}}}

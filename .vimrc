@@ -1,7 +1,7 @@
 " File          : .vimrc
 "
 " Created       : Sun 16 Nov 2014 01:09:50
-" Last Modified : Fri 16 Oct 2015 21:35:57
+" Last Modified : Thu 22 Oct 2015 22:13:22
 " Maintainer    : sharlatan <mailto@olee.co.uk>
 " License       : Same as Vim
 " Credits       : See INFO SOURCES
@@ -286,11 +286,15 @@ set noswapfile
 
 "-=:[ VIM MAPPING ]:=-                                                       {{{
 "
-" copy/paste between VIM sessions
+" ---[ copy | paste
+" between VIM sessions
 " thanks to https://github.com/mokevnin
 vmap <Leader>y :w! ~/.vim/.vbuf<CR>
 nmap <Leader>y :.w! ~/.vim/.vbuf<CR>
 nmap <Leader>p :r ~/.vim/.vbuf<CR>
+" enter paste mode, on midle clic mouse
+nnoremap <leader>m :r!xclip -o<CR>
+inoremap <leader>m <Esc>:r!xclip -o<CR>
 "
 " header
 inoremap <leader>hd -=:[  ]:=-<Esc>F[lli

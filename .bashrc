@@ -2,7 +2,7 @@
 # File          :  .bashrc
 #
 # Created       :  Mon 08 Dec 2014 19:31:26
-# Last Modified :  Sun 20 Sep 2015 23:48:12
+# Last Modified :  Tue 20 Oct 2015 00:45:47
 # Maintainer    :  sharlatan, <sharlatanus@gmail.com>
 # License       :  Same as Bash (GPL)
 # Credits       :  See CREDITS section
@@ -51,6 +51,7 @@ function fe() {
     # -Bypass fuzzy finder if ther's only one match (--selected-1)
     # - Exit if ther's no match (--exit-0)
 
+    cd
     local file
     file=$(fzf-tmux -d 20% --query="$1" --select-1 --exit-0)
     [ -n "$file" ] && ${EDITOR: -vim} "$file"
@@ -59,6 +60,7 @@ function fe() {
 function fd() {
     # fd - cd to selected directory (excluding hiden)
 
+    cd
     local dir
     dir=$(find ${1:-*} -path '*/\.' -prune \
         -o -type d -print 2> /dev/null | fzf-tmux -d 20% +m) &&
@@ -68,6 +70,7 @@ function fd() {
 function fda() {
     # fda - cd to any (including hiden) directory
 
+    cd
     local dir
     dir=$(find ${1:-.} -type d 2> /dev/null | fzf-tmux -d 20% +m) &&
         cd "$dir"
@@ -76,6 +79,7 @@ function fda() {
 function fdf() {
     # fda cd into directory of the selected file
 
+    cd
     local file
     local dir
     file=$(fzf-tmux -d 20% +m -q "$1") && dir=$(dirname "$file") &&
