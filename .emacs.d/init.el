@@ -9,7 +9,7 @@
 ;;;               :  http://ergoemacs.org/emacs/emacs_tabs_space_indentation_setup.html
 ;;;
 ;;;
-;;-=:[ PACKAGES ]:=----------------------------------------------------{{{
+;;;-=:[ PACKAGES ]:=----------------------------------------------------{{{
 ;; Package manager setup
 (require 'package)
 (add-to-list 'package-archives
@@ -20,41 +20,41 @@
 ; --[ list of required packages
 (package-initialize)
 (defvar abedra/packages '(ac-slime
-                           auto-complete
-                           autopair
-                           clojure-mode
-                           coffee-mode
-                           csharp-mode
-                           deft
-                           erlang
-                           evil
-                           feature-mode
-                           flycheck
-			   folding
-                           go-mode
-                           graphviz-dot-mode
-                           haml-mode
-                           haskell-mode
-                           htmlize
-                           idris-mode
-                           markdown-mode
-                           marmalade
-                           nodejs-repl
-                           o-blog
-                           org
-                           paredit
-                           php-mode
-			   powerline
-                           puppet-mode
-                           restclient
-                           rvm
-                           scala-mode
-                           smex
-                           sml-mode
-                           solarized-theme
-                           web-mode
-                           writegood-mode
-                           yaml-mode)
+						  auto-complete
+                          autopair
+                          clojure-mode
+                          coffee-mode
+                          csharp-mode
+                          deft
+                          erlang
+                          evil
+                          feature-mode
+                          flycheck
+						  folding
+                          go-mode
+                          graphviz-dot-mode
+                          haml-mode
+                          haskell-mode
+                          htmlize
+                          idris-mode
+                          markdown-mode
+                          marmalade
+                          nodejs-repl
+                          o-blog
+                          org
+                          paredit
+                          php-mode
+						  powerline
+                          puppet-mode
+                          restclient
+                          rvm
+                          scala-mode
+                          smex
+                          sml-mode
+                          solarized-theme
+                          web-mode
+                          writegood-mode
+                          yaml-mode)
   "Default packages")
 
 (defun abedra/packages-installed-p ()
