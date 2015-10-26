@@ -2,7 +2,7 @@
 # File          :  .bashrc
 #
 # Created       :  Mon 08 Dec 2014 19:31:26
-# Last Modified :  Tue 20 Oct 2015 00:45:47
+# Last Modified :  Mon 26 Oct 2015 22:15:23
 # Maintainer    :  sharlatan, <sharlatanus@gmail.com>
 # License       :  Same as Bash (GPL)
 # Credits       :  See CREDITS section
@@ -46,6 +46,7 @@ export PROMPT_COMMAND="history -a; history -c; history -r; $PROMPT_COMMAND"
 #-=[ fzf setup ]=---------------------------------------------------------------
 # TODO add case condition > fd (-a -f)
 
+# ---[ fzf 
 function fe() {
     # fe [fuzzy pattern] open the selected file with the default editor
     # -Bypass fuzzy finder if ther's only one match (--selected-1)
@@ -85,7 +86,13 @@ function fdf() {
     file=$(fzf-tmux -d 20% +m -q "$1") && dir=$(dirname "$file") &&
         cd "$dir"
 }
+# --[ end of fzf ]--
 
+# --[ percol ]--
+function mp () {
+    'Read man with percol'
+     tmux split-window -hc "man $(ls /usr/bin | percol)"
+}
 function show() {
     if [[ $# -ne 1 ]]; then
         echo Enter at least one argument
