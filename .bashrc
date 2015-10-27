@@ -2,7 +2,7 @@
 # File          :  .bashrc
 #
 # Created       :  Mon 08 Dec 2014 19:31:26
-# Last Modified :  Mon 26 Oct 2015 22:15:23
+# Last Modified :  Tue 27 Oct 2015 00:03:14
 # Maintainer    :  sharlatan, <sharlatanus@gmail.com>
 # License       :  Same as Bash (GPL)
 # Credits       :  See CREDITS section
@@ -93,7 +93,12 @@ function mp () {
     'Read man with percol'
      tmux split-window -hc "man $(ls /usr/bin | percol)"
 }
+function gpom () {
+    git push origin master
+}
+
 function show() {
+    'Copy password from the list'
     if [[ $# -ne 1 ]]; then
         echo Enter at least one argument
         exit 1
