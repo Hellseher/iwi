@@ -2,7 +2,7 @@
 # File          :  .bashrc
 #
 # Created       :  Mon 08 Dec 2014 19:31:26
-# Last Modified :  Tue 27 Oct 2015 00:03:14
+# Last Modified :  Wed 28 Oct 2015 21:35:10
 # Maintainer    :  sharlatan, <sharlatanus@gmail.com>
 # License       :  Same as Bash (GPL)
 # Credits       :  See CREDITS section
@@ -90,21 +90,24 @@ function fdf() {
 
 # --[ percol ]--
 function mp () {
-    'Read man with percol'
-     tmux split-window -hc "man $(ls /usr/bin | percol)"
+    # Read man with percol
+     tmux split-window 'man $(ls /usr/bin | percol)'
+}
+function m() {
+    #function_body
+    man $1 | percol
 }
 function gpom () {
     git push origin master
 }
 
 function show() {
-    'Copy password from the list'
+    # Copy password from the list
     if [[ $# -ne 1 ]]; then
         echo Enter at least one argument
         exit 1
     fi
     grep $1 ~/Documents/txt/overrall | awk -F: '{print $3}' | tr -d '\n' | xclip
-    #function_body
 }
 #
 #function lsd() {

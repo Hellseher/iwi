@@ -1,7 +1,7 @@
 " File          : .vimrc
 "
 " Created       : Sun 16 Nov 2014 01:09:50
-" Last Modified : Thu 22 Oct 2015 22:13:22
+" Last Modified : Fri 30 Oct 2015 23:03:35
 " Maintainer    : sharlatan <mailto@olee.co.uk>
 " License       : Same as Vim
 " Credits       : See INFO SOURCES
@@ -30,7 +30,7 @@ let mapleader=","
 "
 set rtp+=~/.vim/bundle/Vundle.vim           " set the runtime path to Vundle
 call vundle#begin()
-"
+ " auto upde/install on start up
 "----[ core
 Plugin 'gmarik/Vundle.vim'                  " required, let Vundle manage Vundle
 ""
@@ -216,14 +216,13 @@ set listchars=eol:¬,tab:⊳\                 " end of line, tabulation
 hi SpecialKey ctermfg=darkGray ctermbg=NONE
 set fillchars=vert:│                       " window separation character
 hi VertSplit ctermbg=NONE
-"
-"
+
 "------:[ lines 𝄙 ]:------
 "--------[ wrap|break
 set wrap                                    " wrap long ln
 set linebreak                               " break at words
 set tw=79                                   " ln length
-au FileType html setl tw=110
+
 "--------[ numbers|hl ln & column
 set number
 set relativenumber
@@ -233,12 +232,14 @@ autocmd InsertEnter * set nocursorcolumn
 set cursorline                              " hl CursorLine
 autocmd InsertLeave * set cursorline
 autocmd InsertEnter * set nocursorline
+
 "--------[ status
 set noshowmode
 set showcmd                                 " show commands in bottom side
 set laststatus=2                            " show status line 
 "set title                                   " show buffer name
 set ch=2                                    " command line 2 lines
+
 "--------[ indention
 set tabstop=4                               " 1 tab = 4 spaces
 set shiftwidth=4                            " number of shifts with >|< 
@@ -246,20 +247,17 @@ set softtabstop=4                           " 4 spaces per tab
 set expandtab                               " tab by spaces
 set autoindent                              " align the new line indent
 set backspace=2                             " back spaces over indent
-"
-"
+
 "----[ completion, pop up
 set pumheight=7                             " max num to show in pop-up menu
 set wildmenu                                " command-line completion
-"
-"
+
 "----[ folding
 set fen                                     " enable folding
 set fdm=marker                              " fold method
 hi Folded term=NONE cterm=NONE
 hi FoldColumn ctermfg=100
-"
-"
+
 "----[ file types
 au FileType html setl tw=100 sw=2 sts=2
 "
