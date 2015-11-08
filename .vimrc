@@ -1,7 +1,7 @@
 " File          : .vimrc
 "
 " Created       : Sun 16 Nov 2014 01:09:50
-" Last Modified : Fri 30 Oct 2015 23:03:35
+" Last Modified : Fri 06 Nov 2015 00:13:28
 " Maintainer    : sharlatan <mailto@olee.co.uk>
 " License       : Same as Vim
 " Credits       : See INFO SOURCES
@@ -94,6 +94,7 @@ Plugin 'gregsexton/MatchTag'
 "
 "----[ misc
 Plugin 'beloglazov/vim-online-thesaurus'    " Online theasurus
+Plugin 'tcl.vim'
 "
 "
 call vundle#end()                           " all plugins before this line

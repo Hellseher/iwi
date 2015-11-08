@@ -2,7 +2,7 @@
 # File          :  .bashrc
 #
 # Created       :  Mon 08 Dec 2014 19:31:26
-# Last Modified :  Wed 28 Oct 2015 21:35:10
+# Last Modified :  Sun 08 Nov 2015 23:34:22
 # Maintainer    :  sharlatan, <sharlatanus@gmail.com>
 # License       :  Same as Bash (GPL)
 # Credits       :  See CREDITS section
@@ -107,7 +107,7 @@ function show() {
         echo Enter at least one argument
         exit 1
     fi
-    grep $1 ~/Documents/txt/overrall | awk -F: '{print $3}' | tr -d '\n' | xclip
+    grep $1 ~/Documents/txt/overrall | awk -F⋮ '{print $3}' | tr -d '\n' | xclip
 }
 #
 #function lsd() {
