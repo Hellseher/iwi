@@ -2,7 +2,7 @@
 # File          :  .bashrc
 #
 # Created       :  Mon 08 Dec 2014 19:31:26
-# Last Modified :  Sun 08 Nov 2015 23:34:22
+# Last Modified :  Mon 09 Nov 2015 22:32:35
 # Maintainer    :  sharlatan, <sharlatanus@gmail.com>
 # License       :  Same as Bash (GPL)
 # Credits       :  See CREDITS section
@@ -19,15 +19,8 @@ fi
 
 
 # -=[ EXPORTS ]=-                                                            {{{
-#export GOROOT=$HOME/go
-export HISTCONTROL=ignoredups: erasedups
+export HISTCONTROL=ignoredups:erasedups
 export EDITOR=vim
-#export PATH:$PATH:~/.lein/lein
-#export PATH=$PATH:$GOROOT/bin
-# export 256 colors to terminal
-if [[ "$TERM" == "xterm" ]]; then
-    export TERM=xterm-256color
-fi
 #<END Of EXPORTS >-----------------------------------------------------------}}}
 
 # -=:[ SETTINGS ]:=-                                                         {{{
