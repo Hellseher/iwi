@@ -2,7 +2,7 @@
 # File          :  .bashrc
 #
 # Created       :  Mon 08 Dec 2014 19:31:26
-# Last Modified :  Mon 09 Nov 2015 22:32:35
+# Last Modified :  Mon 23 Nov 2015 21:54:19
 # Maintainer    :  sharlatan, <sharlatanus@gmail.com>
 # License       :  Same as Bash (GPL)
 # Credits       :  See CREDITS section
