@@ -1,0 +1,72 @@
+#! /bin/sh
+# File          :  install.sh
+# Created       :  Fri 23 Oct 2015 23:15:47
+# Last Modified :  Mon 28 Dec 2015 13:55:22
+# Maintainer    :  sharlatan, <sharlatanus@gmail.com>
+# License       :  Same as Bash (GPL)
+# Credits:
+#
+# Intallation of Install Working Invironment
+#  _          _ 
+# (_)        (_)
+#  ___      ___ 
+# | \ \ /\ / / |
+# | |\ V  V /| |
+# |_| \_/\_/ |_|
+#               
+ABS_PATH="$(dirname $(readlink -f $0))"
+
+LS_HF=$(ls -a $ABS_PATH | grep "^\.")
+INSTALL_PKG="vim tmux guake fish"
+
+if [[ $UID -ne 0 ]]; then
+    echo Run as root.
+    exit 0
+fi
+# -=:[ FUNCTIONS ]:=- {{{
+help_info() {
+     cat << EOF
+     usage: $0 [OPTION]
+     -h, --help     Show this message
+EOF
+ }
+
+
+yum_install() {
+    yum update
+    yum install -yq $1
+}
+
+dnf_install() {
+    dnf update
+    dnf install -yq $1
+}
+
+apt_install() {
+    apt-get update
+    apt-get install -yq $1
+}
+
+dots_install() {
+    #
+    # Link all dot files to $(HOME)
+    #
+    for df in $(ls $ABS_PATH/dotfiles); do
+        ln -sf $ABS_PATH/dotfiles/$df  
+    done
+}
+# }}}
+
+# ---[ main ]---
+
+# case what_pkg in
+#     yum) yum_install
+#         ;;
+#     dnf) dnf_install
+#         ;;
+#     apt) apt_install
+# ecas
+# 
+echo ${ABS_PATH}
+dots_install
+help_info

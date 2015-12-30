@@ -2,7 +2,7 @@
 # File          :  .bashrc
 #
 # Created       :  Mon 08 Dec 2014 19:31:26
-# Last Modified :  Mon 23 Nov 2015 21:54:19
+# Last Modified :  Sun 20 Dec 2015 22:13:27
 # Maintainer    :  sharlatan, <sharlatanus@gmail.com>
 # License       :  Same as Bash (GPL)
 # Credits       :  See CREDITS section
@@ -28,7 +28,7 @@ export EDITOR=vim
 set -o vi           # se
 
 PROMPT_COMMAND='pwd'
-PS1='[ \[\e[33m\]\u@\H\[\e[m\] ]\$: ' 
+PS1='[ \[\e[33m\]\u@\H\[\e[m\] ]:\$ ' 
 
 # History hacks
 shopt -s histappend
@@ -52,9 +52,9 @@ function fe() {
 }
 
 function fd() {
+    #
     # fd - cd to selected directory (excluding hiden)
-
-    cd
+    #
     local dir
     dir=$(find ${1:-*} -path '*/\.' -prune \
         -o -type d -print 2> /dev/null | fzf-tmux -d 20% +m) &&
@@ -62,18 +62,18 @@ function fd() {
 }
 
 function fda() {
+    #
     # fda - cd to any (including hiden) directory
-
-    cd
+    #
     local dir
     dir=$(find ${1:-.} -type d 2> /dev/null | fzf-tmux -d 20% +m) &&
         cd "$dir"
 }
 
 function fdf() {
+    #
     # fda cd into directory of the selected file
-
-    cd
+    #
     local file
     local dir
     file=$(fzf-tmux -d 20% +m -q "$1") && dir=$(dirname "$file") &&

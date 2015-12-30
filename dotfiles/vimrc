@@ -1,7 +1,7 @@
 " File          : .vimrc
 "
 " Created       : Sun 16 Nov 2014 01:09:50
-" Last Modified : Fri 06 Nov 2015 00:13:28
+" Last Modified : Wed 23 Dec 2015 21:00:15
 " Maintainer    : sharlatan <mailto@olee.co.uk>
 " License       : Same as Vim
 " Credits       : See INFO SOURCES
@@ -43,7 +43,7 @@ Plugin 'timestamp.vim'                      " add timestamps to file's header
 Plugin 'SirVer/ultisnips'
 Plugin 'honza/vim-snippets'                 " 
 "Plugin 'scrooloose/nerdcommenter'
-Plugin 'Valloric/YouCompleteMe'
+"Plugin 'Valloric/YouCompleteMe'
 Plugin 'tpope/vim-surround'                 " dual symbol completion
 ""Plugin 'Shougo/unite.vim'                   " searches and display info source
 ""
@@ -55,6 +55,7 @@ Plugin 'scrooloose/nerdtree'                " console file browser
 Plugin 'kien/ctrlp.vim'                     " Fuzzy file, buffer, mru, tag, etc
 Plugin 'tagbar'                             " dependancy: Exuberant ctags 5.5
 Plugin 'bling/vim-airline'                  " light  status/tabline
+Plugin 'Xuyuanp/nerdtree-git-plugin'        " git mode visible chars
 "Plugin 'gundo'                              " undo tree with style
 "Plugin 'Yggdroot/indentLine'                " display the indention levels
 "
@@ -119,6 +120,19 @@ filetype plugin on
 "
 ""---[ NERDTree
 let NERDTreeShowHidden=1                    " show hiden files
+"
+" ---[ NERDTree Git Plugin
+let g:NERDTreeIndicatorMapCustom = {
+    \ "Modified"  : "✹",
+    \ "Staged"    : "✚",
+    \ "Untracked" : "✭",
+    \ "Renamed"   : "➜",
+    \ "Unmerged"  : "═",
+    \ "Deleted"   : "✖",
+    \ "Dirty"     : "✗",
+    \ "Clean"     : "✔︎",
+    \ "Unknown"   : "?"
+    \ }
 "
 "---[ Syntastic
 "https://github.com/scrooloose/syntastic
@@ -327,6 +341,22 @@ nnoremap <Leader>sv :source $MYVIMRC<cr>
 "<END OF VIM MAPPINGS>-------------------------------------------------------}}}
 
 "-=:[ FUNCTIONS ]:=-                                                         {{{
+"
+" fill rest of line with characters
+function! FillLine( str )
+    " set tw to the desired total length
+    let tw = &textwidth
+    if tw==0 | let tw = 80 | endif
+    " strip trailing spaces first
+    .s/[[:space:]]*$//
+    " calculate total number of 'str's to insert
+    let reps = (tw - col("$")) / len(a:str)
+    " insert them, if there's room, removing trailing spaces (though forcing
+    " there to be one)
+    if reps > 0
+        .s/$/\=(' '.repeat(a:str, reps))/
+    endif
+endfunction
 
 "<END OF FUNCTIONS>----------------------------------------------------------}}}
 
