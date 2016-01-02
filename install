@@ -1,7 +1,7 @@
 #! /bin/sh
 # File          :  install.sh
 # Created       :  Fri 23 Oct 2015 23:15:47
-# Last Modified :  Mon 28 Dec 2015 13:55:22
+# Last Modified :  Sat 02 Jan 2016 23:16:28
 # Maintainer    :  sharlatan, <sharlatanus@gmail.com>
 # License       :  Same as Bash (GPL)
 # Credits:
@@ -15,58 +15,110 @@
 # |_| \_/\_/ |_|
 #               
 ABS_PATH="$(dirname $(readlink -f $0))"
+USR_PATH="$(echo ${ABS_PATH} | grep -oP "\/home\/\w+")"
+SYS_CONF="${ABS_PATH}/sys.cfg"
 
-LS_HF=$(ls -a $ABS_PATH | grep "^\.")
-INSTALL_PKG="vim tmux guake fish"
 
 if [[ $UID -ne 0 ]]; then
-    echo Run as root.
-    exit 0
+    echo Run as root
+    exit 1
 fi
-# -=:[ FUNCTIONS ]:=- {{{
-help_info() {
+
+# -=:[ FUNCTIONS ]:=-                                                        {{{
+#
+# Required function for convenient installation. 
+#
+
+__help() {
      cat << EOF
-     usage: $0 [OPTION]
-     -h, --help     Show this message
+usage: $0 <OPTION>
+    --help             Show this message.
+    --all              Complete installation.
+
+    --dot             Link all dotfiles to $USR_PATH.
+    --set <SET_NAME>   Install set of packages.
 EOF
  }
 
+#__cmdp() {
+#    #
+#    # Determine if command exists
+#    #
+#    type "$1" &> /dev/null ;
+#}
 
-yum_install() {
-    yum update
-    yum install -yq $1
+__pm() {
+    #
+    # Returns the packet manager name
+    #
+    if [[ -x "$(command -v yum)" ]]; then
+        yum update
+        xargs -a $1 yum install -yq
+        exit 0
+    elif [[ -x "$(command -v dnf)" ]]; then
+        dnf update
+        xargs -a $1 dnf install -yq
+        exit 0
+    elif [[ -x "$(command -v apt-get)" ]]; then
+        apt-get update
+        xargs -a $1 apt-get install -yq
+        exit 0
+    else 
+        echo Non of yum, dnf, apg-get was found.
+        exit 1
+    fi
 }
 
-dnf_install() {
-    dnf update
-    dnf install -yq $1
+__pkg_install() {
+    #
+    # Determines the packet manager, update and install packages.
+    # 
+    source ${ABS_PATH}/cfg.sh
+    local sets="$(grep -oP "[A-Z]+" ${ABS_PATH}/cfg.sh)"
+
+    if [[ $# -eq 0 ]]; then
+        echo Avialible sets:
+        echo
+        echo ${sets}
+        echo
+        exit 1
+    fi
 }
 
-apt_install() {
-    apt-get update
-    apt-get install -yq $1
-}
-
-dots_install() {
+__dot_link() {
     #
     # Link all dot files to $(HOME)
     #
-    for df in $(ls $ABS_PATH/dotfiles); do
-        ln -sf $ABS_PATH/dotfiles/$df  
+    for dot_file in $(ls "${ABS_PATH}/dotfiles"); do
+        ln -sf "${ABS_PATH}/dotfiles/$dot_file" "${USR_PATH}/.$dot_file"
     done
 }
 # }}}
 
-# ---[ main ]---
+# -=:[ MAIN ]:=-{{{
+#
+# Meaty part of the installation
+#
 
-# case what_pkg in
-#     yum) yum_install
-#         ;;
-#     dnf) dnf_install
-#         ;;
-#     apt) apt_install
-# ecas
-# 
-echo ${ABS_PATH}
-dots_install
-help_info
+if [[ $# -eq 0 ]]; then
+    __help
+fi
+
+for opt in $@; do
+  case $opt in
+    --help) 
+        __help exit 0
+        ;;
+    --dots)
+        __dot_link
+        exit 0
+        ;;
+    --set)
+        __pm
+        # __pkg_install
+        exit 0
+        ;;
+      esac
+done
+# }}}
+
