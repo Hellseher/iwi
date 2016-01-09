@@ -1,39 +1,41 @@
 #! /bin/sh
 # File          :  install.sh
 # Created       :  Fri 23 Oct 2015 23:15:47
-# Last Modified :  Fri 08 Jan 2016 04:47:41
+# Last Modified :  Sat 09 Jan 2016 02:20:24
 # Maintainer    :  sharlatan, <sharlatanus@gmail.com>
 # License       :  Same as Bash (GPL)
 # Credits:
 #
-# Intallation of Install Working Invironment
-#  _          _ 
-# (_)        (_)
-#  ___      ___ 
-# | \ \ /\ / / |
-# | |\ V  V /| |
-# |_| \_/\_/ |_|
-#               
+# Install Working Invironment
+##################
+#  _          _  #
+# (_)        (_) #
+#  __      __  #
+# | \ \ /\ / / | #
+# | |\ V  V /| | #
+# |_| \_/\_/ |_| #
+#                #
+##################
 
 ABS_PATH="$(dirname $(readlink -f $0))"
 USR_PATH="$(echo ${ABS_PATH} | grep -oP "\/home\/\w+")"
-SET_LIST="$(grep -oP "[A-Z]\[.+" "${ABS_PATH}/cfg" | sort)"
+SET_LIST="$(grep -oP "[A-Z]\s\w+" "${ABS_PATH}/pack.list" | sort)"
 DOT_LIST="$(ls "${ABS_PATH}/dotfiles")"
 
-HL="--------------------"
+PACKAGE_MANAGERS=(yum pacman emerge zypp apt-get)
 
 
 if [[ $UID -ne 0 ]]; then
-    echo Run as root
+    echo Error: This script has to be run under the root user.
     exit 1
 fi
-
-# -=:[ FUNCTIONS ]:=-                                                        {{{
+############################################################################
+#                     -=:[GLOBAL FUNCTIONS DEFINITIONS ]:=-                #
+############################################################################
+# Required function for convenient installation.  {{{
 #
-# Required function for convenient installation. 
-#
 
-__help() {
+_help() {
      cat << EOF
 usage: $0 [-hadrs]
     -h   Show this message.
@@ -45,21 +47,22 @@ usage: $0 [-hadrs]
 EOF
  }
 
-__package_manager() {
+_package_manager() {
     #
-    # Use appropriate packet manager to instal.
+    # Use appropriate package manager to instal.
     #
+    #echo ${PACKAGE_MANAGERS[*]}
+    #exit 1
     if [[ -x "$(command -v dnf)" ]]; then
         dnf update
-        xargs -a $1 dnf install -yq
-        exit 0
+        dnf install $(_set_list) || { echo "Failed"; exit 0; }
     elif [[ -x "$(command -v yum)" ]]; then
         yum update
-        xargs -a $1 yum install -yq
+        yum install $(_set_list)
         exit 0
     elif [[ -x "$(command -v apt-get)" ]]; then
         apt-get update
-        xargs -a $1 apt-get install -yq
+        apt-get install $(_sset_list)
         exit 0
     else 
         echo Non of yum, dnf, apg-get was found.
@@ -67,64 +70,35 @@ __package_manager() {
     fi
 }
 
-__set_list() {
+_set_list() {
     #
-    # Parse cfg file, and show specific sets
+    # Parse pack.list file, and show specific sets
     #
-    echo $1
-    sed -n '/_$1/,/$1_/{/_$1/b;/$1_/b;p}' "${ABS_PATH}/cfg"
+    if [ $get_set == "A" ] || [ $get_set == "all" ]; then
+        grep -vP "[A-Z]|\}|^$" ./pack.list
+    fi
+
+    sed -n "/$get_set/,/\}/{/$get_set/d;/\}/d;p;}" ./pack.list
+    # awk -v pat="$get_set" \ '$0 ~ pat{p=1; print; next} \ p&&/\}/{p=0};p' ./pack.list
 }
 
-__set_menu() {
-    #
-    # Menu for set option, grab variables from cfg
-    #
-    echo Available:
-    echo ${HL}
-    PS3="> "
-    # select SET in ${SET_LIST[@]}; do
-        #case $SET in
-        #    "SYSTEM")
-        #        echo one
-        #        echo ${SYSTEM}
-        #        break
-        #        ;;
-        #    2)
-        #        echo ${DEVELOPMENT}
-        #        break
-        #        ;;
-        #    3)
-        #        echo ${LANGUAGES}
-        #        break
-        #        ;;
-        #    4)
-        #        echo ${MEDIA}
-        #        break
-        #        ;;
-        #    5)
-        #        echo ${OFFICE}
-        #        break
-        #        ;;
-        #    6)
-        #        echo ${ALL}
-        #        break
-        #        ;;
-        #    *)
-        #        echo Invalid option selected
-        #        ;;
-        #esac
-    #done#
-}
-
-__set_install() {
+_set_install() {
     #
     # Install set of packages;
     #
-    echo
+    _set_list
+    printf  "\npackeges will be installed [y/N]: "
+    read -t 10 yes_no
+    
+    if [[ "$yes_no" != "y" ]]; then
+        echo leave
+        exit 1
+    fi
+    _package_manager
 
 }
 
-__dot_link() {
+_dot_link() {
     #
     # Link all dot files to $(HOME)
     #
@@ -142,29 +116,30 @@ __dot_link() {
 
 if [[ $# -eq 0 ]]; then
     printf "No arguments provided\n\n"
-    __help && exit 1
+    _help && exit 1
 fi
 
 OPTIONS=":hadrs:"
 while getopts "${OPTIONS}" opt; do
     case $opt in
         h) 
-            __help && exit 1
+            _help && exit 1
             ;;
         a)
             echo Complete Installation!
             ;;
         d)
-            __dot_link exit 0
+            _dot_link && exit 0
             ;;
         r)
             echo Add repository!
             ;;
         s)
             get_set=($OPTARG)
+            _set_install
             ;;
         \?) echo "Unknown option: -$OPTARG" >&2 && echo
-            __help && exit 1
+            _help && exit 1
             ;;
         :) 
             echo Aveilable sets for installation:
@@ -175,7 +150,4 @@ while getopts "${OPTIONS}" opt; do
             ;;
     esac
 done
-
-__set_list $get_set
-
 # }}}
