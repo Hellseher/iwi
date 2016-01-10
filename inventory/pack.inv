@@ -1,0 +1,72 @@
+
+S system {
+rtorrent
+virt-manager
+guake
+tmux
+unzip
+}
+
+G gnome {
+gnome-tweak-tool
+}
+
+D development {
+vim
+emacs
+strace
+make
+automake
+gdb
+libtool
+autoconf
+gettext
+binutils
+cmake
+ghc
+gcc
+ctags
+git
+gitk
+}
+
+PY python development {
+pip
+python-cryptography
+python-cffi
+python-ply
+}
+
+L languages {
+java-*-openjdk
+lua
+perl
+python-pip
+ruby
+sbcl
+tcl
+haskell-platform
+}
+
+M media {
+banshee
+blender
+freemind
+gimp
+hugin
+inkscape
+rawtherapee
+inkscape
+vlc
+pidgin
+}
+
+O office {
+thunderbird
+dia
+glom
+pandoc
+}
+
+A all { Install all available sets.
+}
