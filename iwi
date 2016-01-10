@@ -1,0 +1,190 @@
+#! /bin/sh
+# File          :  install.sh
+# Created       :  Fri 23 Oct 2015 23:15:47
+# Last Modified :  Sun 10 Jan 2016 23:22:22
+# Maintainer    :  sharlatan, <sharlatanus@gmail.com>
+# License       :  Same as Bash (GPL)
+# Credits:
+#
+# Install Working Inventory #
+      ##################
+      #  _          _  #
+      # (_)        (_) #
+      #  __      __    #
+      # | \ \ /\ / / | #
+      # | |\ V  V /| | #
+      # |_| \_/\_/ |_| #
+      #                #
+      ##################
+
+# This scrip includes package installation and update the system. In this case
+# you nee run it under Root user, or use sudo.
+# List all dependencies command, which are not part of BASH
+
+if [[ $UID -ne 0 ]]; then
+    echo Error: This script has to be run under the root user.
+    exit 1
+fi
+############################################################################
+#                     -=:[GLOBAL VARIABLE DEFINITIONS ]:=-                 #
+############################################################################
+# Variable definition part {{{
+
+ABS_PATH="$(dirname $(readlink -f $0))"
+# TODO: chose user
+USR_PATH="home/$USER"
+SET_LIST="$(grep -oP "[A-Z]{1,2}(\s\w+){1,2}" "${ABS_PATH}/inventory/pack.inv" | sort)"
+DOT_LIST="$(ls "${ABS_PATH}/dotfiles")"
+
+PACKAGE_MANAGERS=(yum pacman emerge zypp apt-get)
+#}}}
+
+############################################################################
+#                     -=:[GLOBAL FUNCTIONS DEFINITIONS ]:=-                #
+############################################################################
+# Required function for convenient installation.  {{{
+
+_help() {
+     cat << EOF
+SYNOPSIS:
+
+    iwi [OPTION ...] [-hadrs]
+
+OPTIONS:
+
+    -h   Show this message.
+    -a   Complete installation.
+
+    -d   Link all dotfiles to $USR_PATH.
+    -r   Add extra repositoris.
+    -s   Install set of packages.
+
+Report bugs to: sharlataus@gmail.com
+IWI development page: https://github.com/Hellseher/iwi
+EOF
+ }
+
+_yes_no() {
+    printf  "\nListed will be installed [y/N]: "
+    read -t 10 yes_no
+    
+    if [[ "$yes_no" != "y" ]]; then
+        echo "See you..."
+        exit 1
+    fi
+}
+
+_package_manager() {
+    #
+    # Use appropriate package manager to instal.
+    #
+    #echo ${PACKAGE_MANAGERS[*]}
+    #exit 1
+    if [[ -x "$(command -v dnf)" ]]; then
+        dnf update
+        dnf install $(_set_list) || { echo "Failed"; exit 0; }
+    elif [[ -x "$(command -v yum)" ]]; then
+        yum update
+        yum install $(_set_list)
+        exit 0
+    elif [[ -x "$(command -v apt-get)" ]]; then
+        apt-get update
+        apt-get install $(_sset_list)
+        exit 0
+    else 
+        echo Non of yum, dnf, apg-get was found.
+        exit 1
+    fi
+}
+
+# Lists
+_set_list() {
+    #
+    # Parse inventory/pack.inv file, and list them to stdout;
+    #
+    if [ $get_set == "A" ] || [ $get_set == "all" ]; then
+        grep -vP "[A-Z]|\}|^$" ./inventory/pack.inv
+    fi
+
+    sed -n "/$get_set/,/\}/{/$get_set/d;/\}/d;p;}" ./inventory/pack.inv
+}
+
+_repo_list() {
+    # TODO: creage repository list for yeach package manager.
+    echo "Hello world!"
+}
+
+# Installation functions
+_set_install() {
+    #
+    # Install set of packages;
+    #
+    _set_list
+    _yes_no
+
+    # Give set list to detected package manager.
+    _package_manager
+}
+
+_dot_link() {
+    #
+    # Link all dot files to $(HOME)
+    #
+    echo "${DOT_LIST}"
+
+    _yes_no
+
+    for dot_file in ${DOT_LIST}; do
+        ln -sf "${ABS_PATH}/dotfiles/$dot_file" "${USR_PATH}/.$dot_file"
+    done
+}
+
+_all_install() {
+    #TODO emplement complete installation (repo add, upgrade, package install,
+    # dotfiles linking.
+    echo "Hello World!"
+}
+# }}}
+
+############################################################################
+#                              -=:[MAIN]:=-                                #
+############################################################################
+# Meaty part of the installation {{{
+
+if [[ $# -eq 0 ]]; then
+    printf "No arguments provided\n\n"
+    _help && exit 1
+fi
+
+options=":hadrs:"
+while getopts "${options}" opt; do
+    case $opt in
+        h) 
+            _help && exit 1
+            ;;
+        a)
+            echo Complete Installation!
+            ;;
+        d)
+            _dot_link && exit 0
+            ;;
+        r)
+            echo Add repository!
+            ;;
+        s)
+            get_set=($OPTARG)
+            _set_install
+            ;;
+        \?) echo "Unknown option: -$OPTARG" >&2 && echo
+            _help && exit 1
+            ;;
+        :) 
+            echo Aveilable sets for installation:
+            printf "\n${SET_LIST}\n" >&2 && exit 1
+            ;;
+        *) echo "Unimplemented option: -$OPTARG" >&2
+            exit 1
+            ;;
+    esac
+done
+# }}}
