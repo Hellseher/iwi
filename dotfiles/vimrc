@@ -1,7 +1,7 @@
 " File          : .vimrc
 "
 " Created       : Sun 16 Nov 2014 01:09:50
-" Last Modified : Wed 23 Dec 2015 21:00:15
+" Last Modified : Sun 10 Jan 2016 01:20:51
 " Maintainer    : sharlatan <mailto@olee.co.uk>
 " License       : Same as Vim
 " Credits       : See INFO SOURCES
@@ -201,7 +201,7 @@ nmap <leader>tg :TagbarToggle<CR>
 syntax on
 "set t_Co=256
 set background=dark
-colorscheme solarized 
+colorscheme solarized
 "
 "
 "----:[ Visual Settings ]:----

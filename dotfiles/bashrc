@@ -2,7 +2,7 @@
 # File          :  .bashrc
 #
 # Created       :  Mon 08 Dec 2014 19:31:26
-# Last Modified :  Sun 20 Dec 2015 22:13:27
+# Last Modified :  Sat 09 Jan 2016 10:22:45
 # Maintainer    :  sharlatan, <sharlatanus@gmail.com>
 # License       :  Same as Bash (GPL)
 # Credits       :  See CREDITS section
@@ -129,9 +129,9 @@ alias aplay='ansible-playbook'
 #<END OF ALIAS>--------------------------------------------------------------}}}
 
 
-if [[ ! $TERM =~ screen ]]; then
-        exec tmux
-fi
+#if [[ ! $TERM =~ screen ]]; then
+#        exec tmux
+#fi
 [ -f ~/.fzf.bash ] && source ~/.fzf.bash
 
 #-=:[ CREDITS ]:=-{{{
