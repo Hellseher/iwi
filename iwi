@@ -1,10 +1,10 @@
-#! /bin/sh
+#!/usr/bin/env bash
 # File          :  install.sh
 # Created       :  Fri 23 Oct 2015 23:15:47
-# Last Modified :  Sun 10 Jan 2016 23:22:22
+# Last Modified :  Mon 11 Jan 2016 20:11:33
 # Maintainer    :  sharlatan, <sharlatanus@gmail.com>
 # License       :  Same as Bash (GPL)
-# Credits:
+# Credits:      :  https://dotfiles.github.io/
 #
 # Install Working Inventory #
       ##################
@@ -17,9 +17,10 @@
       #                #
       ##################
 
-# This scrip includes package installation and update the system. In this case
-# you nee run it under Root user, or use sudo.
-# List all dependencies command, which are not part of BASH
+# This scrip includes package installation and system update. In this case
+# you need run it under Root user, or use sudo.
+
+# TODO: List all dependencies command, which are not part of BASH built-in
 
 if [[ $UID -ne 0 ]]; then
     echo Error: This script has to be run under the root user.
@@ -31,12 +32,13 @@ fi
 # Variable definition part {{{
 
 ABS_PATH="$(dirname $(readlink -f $0))"
-# TODO: chose user
-USR_PATH="home/$USER"
+
+USR_PATH="/home/$USER"
 SET_LIST="$(grep -oP "[A-Z]{1,2}(\s\w+){1,2}" "${ABS_PATH}/inventory/pack.inv" | sort)"
 DOT_LIST="$(ls "${ABS_PATH}/dotfiles")"
 
 PACKAGE_MANAGERS=(yum pacman emerge zypp apt-get)
+DEPENDENCIES=()
 #}}}
 
 ############################################################################
@@ -89,10 +91,10 @@ _package_manager() {
         exit 0
     elif [[ -x "$(command -v apt-get)" ]]; then
         apt-get update
-        apt-get install $(_sset_list)
+        apt-get install $(_set_list)
         exit 0
     else 
-        echo Non of yum, dnf, apg-get was found.
+        echo Non of yum, dnf, apt-get was found.
         exit 1
     fi
 }
@@ -110,7 +112,7 @@ _set_list() {
 }
 
 _repo_list() {
-    # TODO: creage repository list for yeach package manager.
+    # TODO: create repository list for each package manager.
     echo "Hello world!"
 }
 
