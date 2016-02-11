@@ -4,7 +4,7 @@
 # Last Modified :  Sun 24 Jan 2016 19:44:31
 # Maintainer    :  sharlatan, <sharlatanus@gmail.com>
 # License       :  Same as Bash (GPL)
-# Credits:      :  https://dotfiles.github.io/
+# Credits:      :  https://dot.github.io/
 #
 # Install Working Inventory #
       ##################
@@ -32,9 +32,9 @@ fi
 
 ABS_PATH="$(dirname $(readlink -f $0))"
 
-USR_PATH="/home/$USER"
-SET_LIST="$(grep -oP "[A-Z]{1,2}(\s\w+){1,2}" "${ABS_PATH}/inventory/pack.inv" | sort)"
-DOT_LIST="$(ls "${ABS_PATH}/dotfiles")"
+USR_PATH="/home/$(logname)"
+SET_LIST="$(grep -oP "[A-Z]{1,2}(\s\w+){1,2}" "${ABS_PATH}/inv/pack.inv" | sort)"
+DOT_LIST="$(ls "${ABS_PATH}/dot")"
 
 # supported package managers
 PACKAGE_MANAGERS=(yum pacman emerge zypp apt-get)
@@ -52,7 +52,7 @@ OPTIONS=":hards:"
 _help() {
      cat << EOF
 NAME
-        iwi - install working inventory
+        iwi - install working inv
 
 SYNOPSIS
 
@@ -64,7 +64,7 @@ OPTIONS
         -a   All, install everthing.
 
         -r   Add extra repositoris.
-        -d   Link all dotfiles to $USR_PATH.
+        -d   Link all dot to $USR_PATH.
         -s   Install set of packages.
 
 Report bugs to: sharlataus@gmail.com
@@ -108,13 +108,13 @@ _package_manager() {
 # Lists
 _set_list() {
     #
-    # Parse inventory/pack.inv file, and list them to stdout;
+    # Parse inv/pack.inv file, and list them to stdout;
     #
     if [ $get_set == "A" ] || [ $get_set == "all" ]; then
-        grep -vP "[A-Z]|\}|^$" ./inventory/pack.inv
+        grep -vP "[A-Z]|\}|^$" ./inv/pack.inv
     fi
 
-    sed -n "/$get_set/,/\}/{/$get_set/d;/\}/d;p;}" ./inventory/pack.inv
+    sed -n "/$get_set/,/\}/{/$get_set/d;/\}/d;p;}" ./inv/pack.inv
 }
 
 _repo_list() {
@@ -143,13 +143,13 @@ _dot_link() {
     _yes_no
 
     for dot_file in ${DOT_LIST}; do
-        ln -sf "${ABS_PATH}/dotfiles/$dot_file" "${USR_PATH}/.$dot_file"
+        ln -sf "${ABS_PATH}/dot/$dot_file" "${USR_PATH}/.$dot_file"
     done
 }
 
 _all_install() {
     #TODO emplement complete installation (repo add, upgrade, package install,
-    # dotfiles linking.
+    # dot linking.
     echo "Hello World!"
 }
 
