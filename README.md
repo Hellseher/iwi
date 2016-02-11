@@ -2,11 +2,11 @@
 File          : README.md
 
 Created       : Sun 10 Jan 2016 21:23:39
-Last Modified : Sun 10 Jan 2016 22:49:20
+Last Modified : Thu 11 Feb 2016 03:11:23
 Maintainer    : sharlatan
 -->
 
-
+[![Build Status](https://travis-ci.org/Hellseher/iwi.svg?branch=master)](https://travis-ci.org/Hellseher/iwi)
 IWI
 ---
 _Install Working Inventory_
