@@ -1,4 +1,2 @@
 language: bash
 sudo: required
-script:
-    - bash iwi
