@@ -1,7 +1,7 @@
 #!/usr/bin/env bash
 # File          :  install.sh
 # Created       :  Fri 23 Oct 2015 23:15:47
-# Last Modified :  Mon 11 Jan 2016 20:11:33
+# Last Modified :  Sun 24 Jan 2016 19:44:31
 # Maintainer    :  sharlatan, <sharlatanus@gmail.com>
 # License       :  Same as Bash (GPL)
 # Credits:      :  https://dotfiles.github.io/
@@ -20,7 +20,6 @@
 # This scrip includes package installation and system update. In this case
 # you need run it under Root user, or use sudo.
 
-# TODO: List all dependencies command, which are not part of BASH built-in
 
 if [[ $UID -ne 0 ]]; then
     echo Error: This script has to be run under the root user.
@@ -37,8 +36,11 @@ USR_PATH="/home/$USER"
 SET_LIST="$(grep -oP "[A-Z]{1,2}(\s\w+){1,2}" "${ABS_PATH}/inventory/pack.inv" | sort)"
 DOT_LIST="$(ls "${ABS_PATH}/dotfiles")"
 
+# supported package managers
 PACKAGE_MANAGERS=(yum pacman emerge zypp apt-get)
+# TODO: List all dependencies command, which are not part of BASH built-in
 DEPENDENCIES=()
+
 #}}}
 
 ############################################################################
@@ -46,20 +48,24 @@ DEPENDENCIES=()
 ############################################################################
 # Required function for convenient installation.  {{{
 
+OPTIONS=":hards:"
 _help() {
      cat << EOF
-SYNOPSIS:
+NAME
+        iwi - install working inventory
 
-    iwi [OPTION ...] [-hadrs]
+SYNOPSIS
 
-OPTIONS:
+        iwi [OPTION ...] [-hards]
 
-    -h   Show this message.
-    -a   Complete installation.
+OPTIONS
 
-    -d   Link all dotfiles to $USR_PATH.
-    -r   Add extra repositoris.
-    -s   Install set of packages.
+        -h   Show this message.
+        -a   All, install everthing.
+
+        -r   Add extra repositoris.
+        -d   Link all dotfiles to $USR_PATH.
+        -s   Install set of packages.
 
 Report bugs to: sharlataus@gmail.com
 IWI development page: https://github.com/Hellseher/iwi
@@ -146,6 +152,17 @@ _all_install() {
     # dotfiles linking.
     echo "Hello World!"
 }
+
+_no_option() {
+    case $OPTARG in
+        s) 
+            echo Aveilable sets for installation:
+            printf "\n${SET_LIST}\n" >&2 && exit 1
+            ;;
+        d)
+            echo Ddddd!
+    esac
+}
 # }}}
 
 ############################################################################
@@ -158,8 +175,7 @@ if [[ $# -eq 0 ]]; then
     _help && exit 1
 fi
 
-options=":hadrs:"
-while getopts "${options}" opt; do
+while getopts "${OPTIONS}" opt; do
     case $opt in
         h) 
             _help && exit 1
@@ -174,15 +190,13 @@ while getopts "${options}" opt; do
             echo Add repository!
             ;;
         s)
-            get_set=($OPTARG)
+            get_set="$OPTARG"
             _set_install
             ;;
         \?) echo "Unknown option: -$OPTARG" >&2 && echo
             _help && exit 1
             ;;
         :) 
-            echo Aveilable sets for installation:
-            printf "\n${SET_LIST}\n" >&2 && exit 1
             ;;
         *) echo "Unimplemented option: -$OPTARG" >&2
             exit 1

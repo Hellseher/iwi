@@ -1,19 +1,7 @@
-
-S system {
-rtorrent
-virt-manager
-guake
-tmux
-unzip
-}
-
-G gnome {
-gnome-tweak-tool
+A all { Install all available sets.
 }
 
 D development {
-vim
-emacs
 strace
 make
 automake
@@ -25,9 +13,14 @@ binutils
 cmake
 ghc
 gcc
+cmake
 ctags
 git
 gitk
+}
+
+G gnome {
+gnome-tweak-tool
 }
 
 PY python development {
@@ -35,6 +28,7 @@ pip
 python-cryptography
 python-cffi
 python-ply
+python-devel
 }
 
 L languages {
@@ -61,12 +55,29 @@ vlc
 pidgin
 }
 
-O office {
-thunderbird
-dia
-glom
-pandoc
+N networking {
+nmap
 }
 
-A all { Install all available sets.
+O office text{
+dia
+emacs
+glom
+mutt
+pandoc
+thunderbird
+vim
 }
+
+S system {
+gnupg
+rtorrent
+virt-manager
+guake
+tmux
+unzip
+mc
+remmina
+gparted
+}
+

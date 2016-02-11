@@ -1,0 +1,49 @@
+#! /usr/bin/env bash
+# File          :  cl-env
+# Created       :  Sun 31 Jan 2016 23:25:39
+# Last Modified :  Sun 07 Feb 2016 03:56:42
+# Maintainer    :  sharlatan, <sharlatanus@gmail.com>
+# License       :  Same as Bash (GPL)
+# Credits:
+#
+# Description  : Installation Common Lisp development environment
+# 
+
+############################################################################
+#                          -=:[GLOBAL VARIABLES ]:=-                       #
+############################################################################
+# Global variables definition part {{{
+CL_LIBS=(
+    clack    #
+    roswell  #
+    commonqt #
+    cl-dbi   #
+    cl-async #
+    plump    #
+    yason    #
+    cl-yaml  #
+    cl-csv
+    )
+#}}}
+
+_help() {
+     cat << EOF
+NAME
+        cl-env - install/remove Common Lisp environment
+
+SYNOPSIS
+
+        cl-env [OPTION ...] [-hiu]
+
+OPTIONS
+
+        -h   Show this message.
+        -i   Install
+        -u   Uninstall
+
+Report bugs to: sharlataus@gmail.com
+It's a part of IWI package, development page: https://github.com/Hellseher/iwi
+EOF
+}
+
+echo ${CL_LIBS[*]}

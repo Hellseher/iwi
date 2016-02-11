@@ -1,7 +1,7 @@
 ;;; File:           init.el
 ;;;
 ;;; Created       :  Tue 10 Mar 2015 11:39:46
-;;; Last Modified :  Fri 16 Oct 2015 22:29:56
+;;; Last Modified :  Thu 11 Feb 2016 02:49:19
 ;;; Maintainer    :  sharlatan
 ;;; Credits       :  http://aaronbedra.com/emacs.d/
 ;;;               :  http://vinitkumar.me/articles/2014/05/04/Setting-Up-Emacs-For-Development/
@@ -15,12 +15,9 @@
 (add-to-list 'package-archives
                           '("melpa" . "https://melpa.org/packages/"))
 
-(load (expand-file-name "~/.cl/slime-helper.el")) 
-(add-to-list 'load-path "~/.cl/slime/")
 ; --[ list of required packages
 (package-initialize)
-(defvar abedra/packages '(ac-slime
-						  auto-complete
+(defvar abedra/packages '(auto-complete
                           autopair
                           clojure-mode
                           coffee-mode
@@ -57,6 +54,9 @@
                           yaml-mode)
   "Default packages")
 
+(setq inferior-lisp-program "sbcl")
+(load (expand-file-name "~/.cl/slime-helper.el")) 
+
 (defun abedra/packages-installed-p ()
     (loop for pkg in abedra/packages
                   when (not (package-installed-p pkg)) do  (return nil)
@@ -69,7 +69,7 @@
               (when (not (package-installed-p pkg))
                       (package-install pkg))))
 
-;; ---[ load packages
+;; ---[ Enable packages
 (require 'folding)
 (require 'linum)
 (require 'server)
@@ -80,37 +80,10 @@
 (require 'ansi-color)
 (require 'evil)             ; Vim-mode for Emacs
 (require 'autopair)         ; makes sure that brace structures (), [], {}
-(require 'slime-autoloads)  
-(require 'slime)
 (require 'neotree)          ; NERDTree for Emacs
 ;;< END OF PLUGINS INSTAL >--------------------------------------------------}}}
 
 ;;-=:[ PACKAGES SETTINGS ]:=--------------------------------------------------{{{
-;;---[ Slime
-(eval-after-load "slime"
-                 '(progn
-                    (setq slime-lisp-implementations
-                          '((sbcl ("/usr/bin/sbcl"))
-                            (ecl ("/usr/bin/ecl"))
-                            (clisp ("/usr/bin/clisp"))))
-                    (slime-setup '(
-                                  slime-asdf
-                                  slime-autodoc
-                                  slime-editing-commands
-                                  slime-fancy-inspector
-                                  slime-fontifying-fu
-                                  slime-fuzzy
-                                  slime-indentation
-                                  slime-mdot-fu
-                                  slime-package-fu
-                                  slime-references
-                                  slime-repl
-                                  slime-sbcl-exts
-                                  slime-scratch
-                                  slime-xref-browser
-                                   ))
-                    (slime-autodoc-mode)
-                          'slime-fuzzy-complete-symbol))
 (evil-mode 1)
 (ac-config-default) ; auto-complete
 (global-set-key [f8] 'neotree-toggle)
