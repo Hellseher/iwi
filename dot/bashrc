@@ -1,15 +1,10 @@
 #! /usr/bin/env bash
-# File          :  .bashrc
-# Created       :  Mon 08 Dec 2014 19:31:26
-# Last Modified :  Wed Mar 30 2016 06:07:22 sharlatan
-# Maintainer    :  sharlatan, <sharlatanus@gmail.com>
-# License       :  Same as Bash (GPL)
-# Credits       :  See CREDITS section
-#
-# -=:[ DESCRIPTION ]:=-
-#
-# All setting for .bashrc file.
-# <END OF # DESCRIPTION>-------------------------------------------------------
+# File          : .bashrc
+# Created       : Mon 08 Dec 2014 19:31:26
+# Last Modified : <2017-7-22 Sat 13:06:22 BST> sharlatan
+# Maintainer    : sharlatan, <sharlatanus@gmail.com>
+# Short         : BASH config file
+
 
 # Source global definitions
 if [ -f /etc/bashrc ]; then
@@ -17,31 +12,75 @@ if [ -f /etc/bashrc ]; then
 fi
 
 
-# -=[ EXPORTS ]=-                                                            {{{
+# ------------------------------------------------------------------------------
+#+EXPORTS
 export HISTCONTROL=ignoredups:erasedups
-export EDITOR=vim
-#<END Of EXPORTS >-----------------------------------------------------------}}}
+export INFOPATH="$INFOPATH":/usr/share/info
+#GUIX_PROFILE="$HOME/.guix-profile"
+#rource "$HOME/.guix-profile/etc/profile"
 
-# -=:[ SETTINGS ]:=-                                                         {{{
-# set vi like keyboard movement
-set -o vi           # se
+# ------------------------------------------------------------------------------
+#+SETTINGS
 
-PROMPT_COMMAND='pwd'
-PS1='[ $(if [ $? = 0 ]; then echo "\[\033[01;32m\]●";\
- else 2>/dev/null;\
- echo "\[\033[01;31m\]●\[\e[m\]"; fi) ][ \[\e[33m\]\u@\H\[\e[m\] ]:\$ '
+# Command promt hacks, descriptive output.
+
+# ┌─[sharlatan@base201215]-[22/07/17 W29 13:05]
+# ├─[/home/sharlatan/Projects/my-GitHub/cix/spices]
+# ├─[PID 23610 CHS 1]-[0.182]
+# └─> ~$
+
+START="$(date +%s)"
+
+_prmtcmd() {
+    local end
+    local NA='\[\e[0m\]'
+    local R='\[\e[0;31m\]'
+    local G='\[\e[0;32m\]'
+    local B='\[\e[1;34m\]'
+
+    end="$(date +%s)"
+
+    PS1="\n┌─[${G}\u${NA}@\h]"
+    PS1+="-[$(date +"%d/%m/%y W%V %H:%M")]\n"
+    PS1+="├─[${NA}${PWD}${NA}]\n"
+    PS1+="├─[PID $$ CHS $(pgrep -P $$ | wc -l)]"
+    PS1+="-[${G}$((end - START)).$(date +%3N)${NA}]\n"
+    PS1+="└─> ${B}~$ ${NA}"
+}
+
+PROMPT_COMMAND=_prmtcmd
+
 
 # History hacks
 shopt -s histappend
 export PROMPT_COMMAND="history -a; history -c; history -r; $PROMPT_COMMAND"
-# <END OF # SETTINGS>--------------------------------------------------------}}}
 
-#-=:[ FUNCTIONS ]:=-                                                          {{{
-#-=[ fzf setup ]=---------------------------------------------------------------
-# TODO add case condition > fd (-a -f)
+# ------------------------------------------------------------------------------
+#+FUNCTIONS
 
-# ---[ fzf
-function fe() {
+whatp() {
+    # Return a name of a package for given command.
+    local cmd
+    cmd="$1"
+    rpm -qf $(which "$cmd")
+}
+
+whatc() {
+    # Return a list of commands for given package name.
+    local pckg
+    pckg="$1"
+    rpm -ql "$pckg" | grep -oP "(?<=in/).+"
+}
+
+whatd() {
+    # Return a list of command with short doc string of a given package
+    local pckg
+    pckg="$1"
+    whatis $(whatc "$pckg")
+}
+## fzf
+# https://github.com/junegunn/fzf
+fe() {
     # fe [fuzzy pattern] open the selected file with the default editor
     # -Bypass fuzzy finder if ther's only one match (--selected-1)
     # - Exit if ther's no match (--exit-0)
@@ -52,7 +91,7 @@ function fe() {
     [ -n "$file" ] && ${EDITOR: -vim} "$file"
 }
 
-function fd() {
+fd() {
     #
     # fd - cd to selected directory (excluding hiden)
     #
@@ -62,7 +101,7 @@ function fd() {
     cd "$dir"
 }
 
-function fda() {
+fda() {
     #
     # fda - cd to any (including hiden) directory
     #
@@ -71,7 +110,7 @@ function fda() {
         cd "$dir"
 }
 
-function fdf() {
+fdf() {
     #
     # fda cd into directory of the selected file
     #
@@ -80,22 +119,23 @@ function fdf() {
     file=$(fzf-tmux -d 20% +m -q "$1") && dir=$(dirname "$file") &&
         cd "$dir"
 }
-# --[ end of fzf ]--
 
-# --[ percol ]--
-function mp () {
+
+## percol
+# https://github.com/mooz/percol
+mp () {
     # Read man with percol
      tmux split-window 'man $(ls /usr/bin | percol)'
 }
-function m() {
+m() {
     #function_body
     man $1 | percol
 }
-function gpom () {
+gpom () {
     git push origin master
 }
 
-function show() {
+show() {
     # Copy password from the list
     if [[ $# -ne 1 ]]; then
         echo Enter at least one argument
@@ -104,28 +144,11 @@ function show() {
     grep $1 ~/Documents/txt/overrall | awk -FБ▀╝ '{print $3}' | tr -d '\n' | xclip
 }
 
-function mcd() { mkdir -p "$1" && cd "$1";}
-#
-#function lsd() {
-#    # list of recently visited dirs
-#
-#    if [ -e /tmp/lsd ]; then
-#        rm /tmp/lsd
-#    else touch /tmp/lsd
-#    fi
-#
-#    history|awk '$0 !~ /history/' | awk '$0 !~ /\"/'|awk '/cd \// || /cd \~/ ||
-#        /pushd \// || /pushd \~/' | awk '{print $3}' |
-#        sort -u | nl | tee /tmp/lsd
-#
-#    read -p "> " where
-#    TOGO=$(sed -n "${where}p" /tmp/lsd | awk -F" " '{print $2}')
-#    eval cd "$TOGO"
-#}
-#
-#<END OF FUNCIONS>-----------------------------------------------------------}}}
+mcd() { mkdir -p "$1" && cd "$1";}
 
-#-=:[ ALIAS ]:=-                                                             {{{
+# ------------------------------------------------------------------------------
+#+ALIASES
+
 alias c='clear'
 alias em='emacs -nw'
 alias aplay='ansible-playbook'
@@ -136,8 +159,7 @@ alias ....='cd ../../../'
 alias .....='cd ../../../../'
 alias ......='cd ../../../../../'
 
-# ls
-alias ls="ls -1p --color=auto"
+# ls tricks
 alias l="ls -lhGgo"
 alias ll="ls -lh"
 alias la="ls -lhGgoA"
@@ -146,16 +168,8 @@ alias lS="ls -lhGgoSr"
 alias l.="ls -lhGgod .*"
 alias lhead="ls -lhGgo | head"
 alias ltail="ls -lhGgo | tail"
-alias lmore='ls -lhGgo | more'
-#<END OF ALIAS>--------------------------------------------------------------}}}
+alias lless='ls -lhGgo | less'
+alias u="cd ..;ls"
 
-
-#if [[ ! $TERM =~ screen ]]; then
-#        exec tmux
-#fi
 [ -f ~/.fzf.bash ] && source ~/.fzf.bash
-
-#-=:[ CREDITS ]:=-{{{
-# --[ GitHub
-# https://github.com/junegunn/fzf
-#<END OF CREDITS> }}}
+# End of .bashrc
