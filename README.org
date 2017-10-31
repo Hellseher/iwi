@@ -1,0 +1,37 @@
+# File     : README..org
+# Created  : Sun 10 Jan 2016 21:23:39
+# Modified : <2017-10-30 Mon 03:08:09 GMT> Sharlatan
+
+#+TITLE: IWI
+/Install Working Inventory/
+#+AUTHOR: Sharlatan <sharlatanus@gmail.com>
+
+* Synopsis
+
+The aim of IWI is to make tuning of Linux distribution more consistent. If you
+have your own dotfiles, necessary list of package you using constantly from
+distribution to distribution or you want to create a set of packages for
+specific purposes, you can use IWI.
+
+It's just a BASH script with extra config files looks like a list of packages
+separated by sets. Dots file and settings for your beloved editors and
+multiplexers.
+
+*** Ansible
+
+#+BEGIN_EXAMPLE
+cd Ansible
+ansible-playbook -i "localhost," -c local iwi.yaml  --ask-become-pass
+#+END_EXAMPLE
+
+
+* References
+If you need more functionality, take a look at:
+-   [GNU stow](https://www.gnu.org/software/stow/)
+-   [FAI](http://fai-project.org/)
+-   [Cobber](http://cobbler.github.io/)
+
+-   [Spacewalk](http://spacewalk.redhat.com/)
+-   [OpenQRM](http://www.openqrm-enterprise.com/)
+-   [Ansible](https://www.ansible.com/)
+

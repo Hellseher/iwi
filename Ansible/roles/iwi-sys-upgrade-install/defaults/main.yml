@@ -1,0 +1,47 @@
+---
+
+rpm:
+  pkg:
+    core:
+      - emacs
+      - libselinux-python
+    devel:
+      - '@Development tools'
+      - binutils
+      - strace
+      - gdb
+      - gcc
+      - git
+      - python3-pip
+      - python2-pip
+      - ctags
+      - global
+      - perf
+      - mingw-w64-tools
+    net:
+      - nmap
+      - tcpdump
+      - wget
+      - rsync
+    arch:
+      - zip
+      - bzip2
+      - cpio
+      - tar
+      - gzip
+      - xz
+    search:
+      - ack
+      - the_silver_searcher
+      - fdupes
+      - jq
+    gnome:
+      - gnome-tweak-tool
+  repo:
+    - rpm-fusion
+    - raw-therapee
+
+
+deb:
+  devel:
+    - build-essential

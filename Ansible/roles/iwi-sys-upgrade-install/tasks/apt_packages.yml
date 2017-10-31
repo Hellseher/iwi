@@ -1,0 +1,53 @@
+---
+
+- name: "upgrade all installed packages"
+  apt:
+    update_cache: yes
+    upgrade: dist
+
+- name: "install core packages"
+  apt: name={{item}} state=latest
+  with_items:
+    - emacs
+
+- name: install the 'Development tools' package group
+  apt:
+    name: 'build-essential' 
+    state: latest
+
+- name: "installing development packages"
+  apt: name={{item}} state=latest
+  with_items:
+    - binutils
+    - strace
+    - gdb
+    - gcc
+    - git
+    - python3-pip
+    - python2-pip
+    - ctags
+    - global
+    - perf
+
+- name: "install network related packages"
+  apt: name={{item}} state=latest
+  with_items:
+    - nmap
+    - tcpdump
+    - wget
+    - rsync
+
+- name: "install packaging/archiving related packages"
+  apt: name={{item}} state=latest
+  with_items:
+    - zip
+    - bzip2
+    - cpio
+    - tar
+    - gzip
+    - xz
+
+- name: "install gnome extensions"
+  apt: name={{item}} state=latest
+  with_items:
+    - gnome-tweak-tool

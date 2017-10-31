@@ -1,0 +1,17 @@
+---
+
+conf:
+  # (bash|fish|zsh)
+  shell: bash
+  specifics: true
+  parallel: false
+
+rust:
+  crates:
+    - rustfmt
+    - racer
+    - alacritty
+  targets:
+    - nightly-x86_64-unknown-linux-gnu
+    - x86_64-unknown-linux-musl
+    - aarch64-linux-android

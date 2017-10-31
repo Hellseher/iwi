@@ -1,0 +1,30 @@
+---
+
+- name: "upgrade all installed packages"
+  dnf:
+    name: "*"
+    state: latest
+
+- name: "install core packages"
+  dnf: name={{item}} state=latest
+  with_items: "{{ rpm.pkg.core }}"
+
+- name: "install development packages"
+  dnf: name={{item}} state=latest
+  with_items: "{{ rpm.pkg.devel }}"
+
+- name: "install networking packages"
+  dnf: name={{item}} state=latest
+  with_items: "{{ rpm.pkg.net }}"
+
+- name: "install archiving packages"
+  dnf: name={{item}} state=latest
+  with_items: "{{ rpm.pkg.arch }}"
+
+- name: "install searcher packages"
+  dnf: name={{item}} state=latest
+  with_items: "{{ rpm.pkg.search }}"
+
+- name: "install gnome extensions"
+  dnf: name={{item}} state=latest
+  with_items: "{{ rpm.pkg.gnome }}"

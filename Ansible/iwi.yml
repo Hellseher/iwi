@@ -1,0 +1,53 @@
+---
+
+- hosts: localhost
+  become: True
+  become_method: su
+  become_user: root
+  gather_facts: False
+
+  pre_tasks:
+    - name: "apt check"
+      raw: bash -c "command -v apt-get"
+      ignore_errors: yes
+      register: if_apt
+    - name: "dnf check"
+      raw: bash -c "command -v dnf"
+      register: if_dnf
+      ignore_errors: yes
+    - name: "yum check"
+      raw: bash -c "command -v yum"
+      register: if_yum
+      ignore_errors: yes
+    - name: "python check"
+      raw: bash -c "command -v python"
+      register: if_py
+      ignore_errors: yes
+
+    - name: "apt install python"
+      raw: "apt -qqy update && apt install -qqy python-minimal"
+      when: if_apt.stdout == "/usr/bin/apt" and if_py.stdout != ""
+
+    - name: "dnf install python"
+      raw: "dnf install -qy python2"
+      when: if_dnf.stdout == "/usr/bin/dnf" and if_py.stdout != ""
+
+    - name: "yum install python"
+      raw: "yum install -qy python2?"
+      when:
+        - if_yum.stdout == "/usr/bin/yum"
+        - if_dnf.stdout == ""
+        - if_py.stdout != ""
+
+    - name: "control python check"
+      raw: bash -c "command -v python"
+      register: if_py
+      ignore_errors: yes
+    - meta: end_play
+      when: if_py.stdout == ""
+    - name: "gathering facts"
+      setup:
+
+  roles:
+    - iwi-sys-upgrade-install
+    - iwi-lang-rust
