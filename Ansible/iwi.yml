@@ -6,45 +6,57 @@
   become_user: root
   gather_facts: False
 
+# Make sure that we have Python installed before run the rest of the playbook,
+# workaround few different package managers. Depends on BASH build-in *command*
+
   pre_tasks:
     - name: "apt check"
-      raw: bash -c "command -v apt-get"
-      ignore_errors: yes
+      raw: command -v apt || echo apt_nill
       register: if_apt
+    - name: "apt-get check"
+      raw: command -v apt-get || echo apt_get_nill
+      register: if_apt_get
     - name: "dnf check"
-      raw: bash -c "command -v dnf"
+      raw: command -v dnf || echo dnf_nill
       register: if_dnf
-      ignore_errors: yes
     - name: "yum check"
-      raw: bash -c "command -v yum"
+      raw: command -v yum || echo yum_nill
       register: if_yum
-      ignore_errors: yes
     - name: "python check"
-      raw: bash -c "command -v python"
-      register: if_py
-      ignore_errors: yes
+      raw: command -v python || echo python_nil
+      register: if_python
 
     - name: "apt install python"
-      raw: "apt -qqy update && apt install -qqy python-minimal"
-      when: if_apt.stdout == "/usr/bin/apt" and if_py.stdout != ""
+      raw: "apt -y update && apt install -y python-minimal python-setuptools"
+      when:
+        - if_apt.stdout == "/usr/bin/apt"
+        - if_python.stdout != "python_nil"
+
+    - name: "apt-get install python"
+      raw: "apt-get -y update && apt install -y python-minimal python-setuptools"
+      when:
+        - if_apt_get.stdout == "/usr/bin/apt-get"
+        - if_apt.stdout != "apt_nil"
+        - if_python.stdout != "python_nil"
 
     - name: "dnf install python"
       raw: "dnf install -qy python2"
-      when: if_dnf.stdout == "/usr/bin/dnf" and if_py.stdout != ""
+      when:
+        - if_dnf.stdout == "/usr/bin/dnf"
+        - if_python.stdout != "python_nil"
 
     - name: "yum install python"
       raw: "yum install -qy python2?"
       when:
         - if_yum.stdout == "/usr/bin/yum"
-        - if_dnf.stdout == ""
-        - if_py.stdout != ""
+        - if_dnf.stdout != "dnf_nil"
+        - if_python.stdout != "python_nil"
 
     - name: "control python check"
-      raw: bash -c "command -v python"
-      register: if_py
-      ignore_errors: yes
+      raw: command -v python || echo python_nil
+      register: if_python
     - meta: end_play
-      when: if_py.stdout == ""
+      when: if_python.stdout != "python_nil"
     - name: "gathering facts"
       setup:
 
