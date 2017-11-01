@@ -1,7 +1,34 @@
+;;;; sbclrc -- configuration file for SBCL
+;;;; Created  :
+;;;; Modified :
+;;;; Author   :
+;;;; Short    :
+
+;;;; Commentary:
+
+;;;; Code:
 
 ;;; The following lines added by ql:add-to-init-file:
+
+;; Path to SBCL source code directory
+(sb-ext:set-sbcl-source-location "/home/sharlatan/Data/sft/src/sbcl/")
+
 #-quicklisp
-(let ((quicklisp-init (merge-pathnames ".cl/setup.lisp" (user-homedir-pathname))))
+(let ((quicklisp-init (merge-pathnames ".local/share/quicklisp/setup.lisp"
+                                       (user-homedir-pathname))))
   (when (probe-file quicklisp-init)
     (load quicklisp-init)))
+
+(require :asdf)
+
+;;; If a fasl was stale, try to recompile and load (once).
+(defmethod asdf:perform :around ((o asdf:load-op)
+                                 (c asdf:cl-source-file))
+  (handler-case (call-next-method o c)
+    ;; If a fasl was stale, try to recompile and load (once).
+    (sb-ext:invalid-fasl ()
+      (asdf:perform (make-instance 'asdf:compile-op) c)
+      (call-next-method))))
+
+;;;; sbclrc ends here
 

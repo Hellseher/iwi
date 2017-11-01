@@ -1,7 +1,7 @@
 #! /usr/bin/env bash
 # File          :  cl-env
 # Created       :  Sun 31 Jan 2016 23:25:39
-# Last Modified :  Sun 07 Feb 2016 03:56:42
+# Last Modified :  Sun 14 Feb 2016 09:05:10
 # Maintainer    :  sharlatan, <sharlatanus@gmail.com>
 # License       :  Same as Bash (GPL)
 # Credits:
@@ -13,6 +13,12 @@
 #                          -=:[GLOBAL VARIABLES ]:=-                       #
 ############################################################################
 # Global variables definition part {{{
+ABS_PATH="$(dirname $(readlink -f $0))"
+IWI_PATH="$(echo ${ABS_PATH} | grep -oE '^.+iwi')"
+SKEl_DIRS=(.emacs.d quicklisp Projects)
+USR_N="common-lisp-user"
+INSTALL_PACKS=(emacs sbcl)
+
 CL_LIBS=(
     clack    #
     roswell  #
@@ -23,7 +29,7 @@ CL_LIBS=(
     yason    #
     cl-yaml  #
     cl-csv
-    )
+        )
 #}}}
 
 _help() {
@@ -46,4 +52,31 @@ It's a part of IWI package, development page: https://github.com/Hellseher/iwi
 EOF
 }
 
-echo ${CL_LIBS[*]}
+_lispusradd(){
+    #
+    # Create a Lisp user and skeleton directories
+    #
+    echo "Creating user: ${USR_N}"
+    #useradd "${USR_N}"
+    echo "${USR_N}:lisp" | chpasswd
+    echo "Make skeleton directories: ${SKEl_DIRS[*]}"
+
+    for dir in ${SKEl_DIRS[*]}; do
+        mkdir -p "/home/${USR_N}/$dir"
+        chown ${USR_N}:${USR_N} "/home/${USR_N}/$dir"
+    done
+}
+
+_emacs_sbcl_quicklisp() {
+    dnf -qy install ${INSTALL_PACKS[*]}
+
+    cp "${IWI_PATH}/dot/sbclrc" "/home/${USR_N}/.sbclrc"
+    chown -h ${USR_N}:${USR_N} "/home/${USR_N}/.sbclrc"
+
+    cp "${IWI_PATH}/dot/emacs.d/init.el" "/home/${USR_N}/.emacs.d/init.el"
+    chown -h ${USR_N}:${USR_N} "/home/${USR_N}/.emacs.d/init.el"
+}
+
+_emacs_sbcl_quicklisp
+#_lispusradd
+

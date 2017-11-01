@@ -1,11 +1,11 @@
 #!/usr/bin/env bash
-# File          :  install.sh
-# Created       :  Fri 23 Oct 2015 23:15:47
-# Last Modified :  Thu 11 Feb 2016 03:15:56
-# Maintainer    :  sharlatan, <sharlatanus@gmail.com>
-# License       :  Same as Bash (GPL)
-# Credits:      :  https://dot.github.io/
-#
+# File          : install.sh
+# Created       : Fri 23 Oct 2015 23:15:47
+# Modified      : <2017-1-22 Sun 23:52:24 GMT> sharlatan
+# Maintainer    : sharlatan, <sharlatanus@gmail.com>
+# License       : Same as Bash (GPL)
+# Credits:      : https://dot.github.io/
+
 # Install Working Inventory #
       ##################
       #  _          _  #
@@ -20,15 +20,10 @@
 # This scrip includes package installation and system update. In this case
 # you need run it under Root user, or use sudo.
 
-
-if [[ $UID -ne 0 ]]; then
-    echo Error: This script has to be run under the root user.
-    exit 1
-fi
 ############################################################################
 #                     -=:[GLOBAL VARIABLE DEFINITIONS ]:=-                 #
 ############################################################################
-# Variable definition part {{{
+# Variable definition part
 
 ABS_PATH="$(dirname $(readlink -f $0))"
 
@@ -37,16 +32,16 @@ SET_LIST="$(grep -oP "[A-Z]{1,2}(\s\w+){1,2}" "${ABS_PATH}/inv/pack.inv" | sort)
 DOT_LIST="$(ls "${ABS_PATH}/dot")"
 
 # supported package managers
-PACKAGE_MANAGERS=(yum pacman emerge zypp apt-get)
+PACKAGE_MANAGERS=(dnf yum pacman emerge zypp apt)
 # TODO: List all dependencies command, which are not part of BASH built-in
 DEPENDENCIES=()
 
-#}}}
+#
 
 ############################################################################
 #                     -=:[GLOBAL FUNCTIONS DEFINITIONS ]:=-                #
 ############################################################################
-# Required function for convenient installation.  {{{
+# Required function for convenient installation.
 
 OPTIONS=":hards:"
 _help() {
@@ -75,7 +70,7 @@ EOF
 _yes_no() {
     printf  "\nListed will be installed [y/N]: "
     read -t 10 yes_no
-    
+
     if [[ "$yes_no" != "y" ]]; then
         echo "See you..."
         exit 1
@@ -99,8 +94,8 @@ _package_manager() {
         apt-get update
         apt-get install $(_set_list)
         exit 0
-    else 
-        echo Non of yum, dnf, apt-get was found.
+    else
+        echo "Non of ${PACKAGE_MANAGERS[*]} was found."
         exit 1
     fi
 }
@@ -113,7 +108,7 @@ _set_list() {
     if [ $get_set == "A" ] || [ $get_set == "all" ]; then
         grep -vP "[A-Z]|\}|^$" ./inv/pack.inv
     fi
-
+echo test 1 2 3
     sed -n "/$get_set/,/\}/{/$get_set/d;/\}/d;p;}" ./inv/pack.inv
 }
 
@@ -127,6 +122,7 @@ _set_install() {
     #
     # Install set of packages;
     #
+    echo 1 2 3
     _set_list
     _yes_no
 
@@ -155,7 +151,7 @@ _all_install() {
 
 _no_option() {
     case $OPTARG in
-        s) 
+        s)
             echo Aveilable sets for installation:
             printf "\n${SET_LIST}\n" >&2 && exit 1
             ;;
@@ -163,44 +159,48 @@ _no_option() {
             echo Ddddd!
     esac
 }
-# }}}
+#
 
-############################################################################
-#                              -=:[MAIN]:=-                                #
-############################################################################
-# Meaty part of the installation {{{
+# ------------------------------------------------------------------------------
+#+MAIN
 
-if [[ $# -eq 0 ]]; then
-    printf "No arguments provided\n\n"
-    _help && exit 1
-fi
+main () {
+    [ "$(id -i)" == "0" ] || { echo "Run as root." && exit 1; }
 
-while getopts "${OPTIONS}" opt; do
-    case $opt in
-        h) 
-            _help && exit 1
-            ;;
-        a)
-            echo Complete Installation!
-            ;;
-        d)
-            _dot_link && exit 0
-            ;;
-        r)
-            echo Add repository!
-            ;;
-        s)
-            get_set="$OPTARG"
-            _set_install
-            ;;
-        \?) echo "Unknown option: -$OPTARG" >&2 && echo
-            _help && exit 1
-            ;;
-        :) 
-            ;;
-        *) echo "Unimplemented option: -$OPTARG" >&2
-            exit 1
-            ;;
-    esac
-done
-# }}}
+    if [[ $# -eq 0 ]]; then
+        printf "No arguments provided\n\n"
+        _help && exit 1
+    fi
+
+    while getopts "${OPTIONS}" opt; do
+        case $opt in
+            h)
+                _help && exit 1
+                ;;
+            a)
+                echo Complete Installation!
+                ;;
+            d)
+                _dot_link && exit 0
+                ;;
+            r)
+                echo Add repository!
+                ;;
+            s)
+                echo ${OPTARG}
+                get_set="$OPTARG"
+                _set_install
+                ;;
+            \?) echo "Unknown option: -$OPTARG" >&2 && echo
+                _help && exit 1
+                ;;
+            :)
+                ;;
+            *) echo "Unimplemented option: -$OPTARG" >&2
+               exit 1
+               ;;
+        esac
+    done}
+
+main "$@"
+# iwi ends here

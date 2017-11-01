@@ -1,23 +1,22 @@
 #! /usr/bin/env bash
 # File          : .bashrc
 # Created       : Mon 08 Dec 2014 19:31:26
-# Last Modified : <2017-7-22 Sat 13:06:22 BST> sharlatan
+# Modified : <2017-10-28 Sat 14:33:17 BST> Sharlatan
 # Maintainer    : sharlatan, <sharlatanus@gmail.com>
 # Short         : BASH config file
-
 
 # Source global definitions
 if [ -f /etc/bashrc ]; then
     . /etc/bashrc
 fi
 
-
 # ------------------------------------------------------------------------------
 #+EXPORTS
+shopt -s histappend
 export HISTCONTROL=ignoredups:erasedups
 export INFOPATH="$INFOPATH":/usr/share/info
-#GUIX_PROFILE="$HOME/.guix-profile"
-#rource "$HOME/.guix-profile/etc/profile"
+export PATH="${PATH}:${HOME}/.cargo/bin:${HOME}/.local/bin"
+export PROMPT_COMMAND="history -a; history -c; history -r; $PROMPT_COMMAND"
 
 # ------------------------------------------------------------------------------
 #+SETTINGS
@@ -40,7 +39,7 @@ _prmtcmd() {
 
     end="$(date +%s)"
 
-    PS1="\n┌─[${G}\u${NA}@\h]"
+    PS1="┌─[${G}\u${NA}@\h]"
     PS1+="-[$(date +"%d/%m/%y W%V %H:%M")]\n"
     PS1+="├─[${NA}${PWD}${NA}]\n"
     PS1+="├─[PID $$ CHS $(pgrep -P $$ | wc -l)]"
@@ -52,8 +51,6 @@ PROMPT_COMMAND=_prmtcmd
 
 
 # History hacks
-shopt -s histappend
-export PROMPT_COMMAND="history -a; history -c; history -r; $PROMPT_COMMAND"
 
 # ------------------------------------------------------------------------------
 #+FUNCTIONS
@@ -135,15 +132,6 @@ gpom () {
     git push origin master
 }
 
-show() {
-    # Copy password from the list
-    if [[ $# -ne 1 ]]; then
-        echo Enter at least one argument
-        exit 1
-    fi
-    grep $1 ~/Documents/txt/overrall | awk -FБ▀╝ '{print $3}' | tr -d '\n' | xclip
-}
-
 mcd() { mkdir -p "$1" && cd "$1";}
 
 # ------------------------------------------------------------------------------
@@ -171,5 +159,4 @@ alias ltail="ls -lhGgo | tail"
 alias lless='ls -lhGgo | less'
 alias u="cd ..;ls"
 
-[ -f ~/.fzf.bash ] && source ~/.fzf.bash
 # End of .bashrc
