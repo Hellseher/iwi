@@ -2,8 +2,16 @@
 
 rpm:
   pkg:
-    core:
+    editors:
       - emacs
+      - vim
+    shells:
+      - zsh
+      - fish
+      - screen
+      - tmux
+    core:
+      - redhat-lsb
       - libselinux-python
     devel:
       - '@Development tools'
@@ -35,12 +43,21 @@ rpm:
       - the_silver_searcher
       - fdupes
       - jq
+    media:
+      - rawtherapee
+      - thunderbird
+      - gimp
+      - inkscape
+      - krita
+      - freemind
     gnome:
       - gnome-tweak-tool
+  libs:
+    - curlpp
   repo:
-    - rpm-fusion
-    - raw-therapee
-
+    fedora:
+      - "https://download1.rpmfusion.org/free/fedora/rpmfusion-free-release-{{ ansible_distribution_version }}.noarch.rpm"
+      - "https://download1.rpmfusion.org/nonfree/fedora/rpmfusion-nonfree-release-{{ ansible_distribution_version }}.noarch.rpm"
 
 deb:
   devel:

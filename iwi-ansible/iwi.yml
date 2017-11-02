@@ -1,6 +1,6 @@
 ---
 
-- hosts: localhost
+- hosts: self
   become: True
   become_method: su
   become_user: root
@@ -56,7 +56,7 @@
       raw: command -v python || echo python_nil
       register: if_python
     - meta: end_play
-      when: if_python.stdout != "python_nil"
+      when: if_python.stdout == "python_nil"
     - name: "gathering facts"
       setup:
 

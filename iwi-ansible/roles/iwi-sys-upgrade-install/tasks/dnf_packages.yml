@@ -5,26 +5,23 @@
     name: "*"
     state: latest
 
-- name: "install core packages"
-  dnf: name={{item}} state=latest
-  with_items: "{{ rpm.pkg.core }}"
+- name: "repository for Fedora"
+  dnf:
+    name: "{{ item }}"
+    state: present
+  when: ansible_distribution == "Fedora"
+  with_items: "{{ rpm.repo.fedora }}"
 
-- name: "install development packages"
-  dnf: name={{item}} state=latest
-  with_items: "{{ rpm.pkg.devel }}"
+- name: "packages"
+  dnf: name={{item.value}} state=latest
+  with_dict: "{{ rpm.pkg }}"
 
-- name: "install networking packages"
+- name: "libraries"
   dnf: name={{item}} state=latest
-  with_items: "{{ rpm.pkg.net }}"
+  with_items: "{{ rpm.libs }}"
 
-- name: "install archiving packages"
-  dnf: name={{item}} state=latest
-  with_items: "{{ rpm.pkg.arch }}"
+- name: "autoremove"
+  dnf:
+    autoremove: yes
 
-- name: "install searcher packages"
-  dnf: name={{item}} state=latest
-  with_items: "{{ rpm.pkg.search }}"
-
-- name: "install gnome extensions"
-  dnf: name={{item}} state=latest
-  with_items: "{{ rpm.pkg.gnome }}"
+# http://docs.ansible.com/ansible/latest/dnf_module.html

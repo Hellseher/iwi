@@ -1,6 +1,6 @@
 # File     : README..org
 # Created  : Sun 10 Jan 2016 21:23:39
-# Modified : <2017-10-30 Mon 03:08:09 GMT> Sharlatan
+# Modified : <2017-11-02 Thu 00:45:00 GMT> Sharlatan
 
 #+TITLE: IWI
 /Install Working Inventory/
@@ -17,13 +17,41 @@ It's just a BASH script with extra config files looks like a list of packages
 separated by sets. Dots file and settings for your beloved editors and
 multiplexers.
 
-*** Ansible
+** iwi-ansible
 
 #+BEGIN_EXAMPLE
 cd Ansible
-ansible-playbook -i "localhost," -c local iwi.yaml  --ask-become-pass
+ansible-playbook iwi.yml -c local --ask-become-pass
 #+END_EXAMPLE
 
+* Tested on
+
+#+BEGIN_SRC sh  :results value org :results output replace :exports results
+printf "Workstation\n-----------\n"
+printf "SYS\t: %s\n" "$(uname -sori)" 
+printf "CPU\t: %s\n" "$(grep -m 1 -oP "(?<=model\sname\s:\s).+" /proc/cpuinfo)" 
+printf "DISTR\t: %s\n" "$(lsb_release -sd)"
+echo
+printf "Enviroment\n----------\n"
+printf "BASH\t: %s\n" "$(bash --version 2>&1 | head -n1)"
+printf "PYTHON\t: %s\n" "$(python --version 2>&1)"
+printf "ANSIBLE\t: %s\n" "$(ansible --version 2>&1 | head -n1)"
+#+END_SRC
+
+#+RESULTS:
+#+BEGIN_SRC org
+Workstation
+-----------
+SYS	: Linux 4.13.3-300.fc27.x86_64 x86_64 GNU/Linux
+CPU	: Intel(R) Core(TM) i7-3770S CPU @ 3.10GHz
+DISTR	: "Fedora release 27 (Twenty Seven)"
+
+Enviroment
+----------
+BASH	: GNU bash, version 4.4.12(1)-release (x86_64-redhat-linux-gnu)
+PYTHON	: Python 2.7.13
+ANSIBLE	: ansible 2.4.0.0
+#+END_SRC
 
 * References
 If you need more functionality, take a look at:
