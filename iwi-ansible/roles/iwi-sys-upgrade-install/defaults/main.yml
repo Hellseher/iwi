@@ -16,16 +16,20 @@ rpm:
     devel:
       - '@Development tools'
       - binutils
-      - strace
-      - gdb
-      - gcc
-      - git
-      - python3-pip
-      - python2-pip
+      - cmake
       - ctags
+      - fontconfig-devel
+      - freetype-devel
+      - gcc
+      - gdb
+      - git
       - global
-      - perf
       - mingw-w64-tools
+      - perf
+      - python2-pip
+      - python3-pip
+      - strace
+      - xclip
     net:
       - nmap
       - tcpdump

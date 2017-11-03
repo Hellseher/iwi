@@ -1,0 +1,25 @@
+---
+
+- block:
+    - name: "ensure ~/.local strcture"
+      file:
+        path: "{{ item }}"
+        state: directory
+      with_items:
+        - "~/.local/bin"
+        - "~/.local/src/rust"
+
+    - name: "clone gits to ~/.local/src/rust"
+      git:
+        repo: "{{ item.git }}"
+        dest: "~/.local/src/rust/{{ item.dir }}"
+      with_items: "{{ rust.gits }}"
+
+    - name: "build apps with cargo"
+      shell: |
+        cd ~/.local/src/rust/{{ item.dir }}
+        cargo build --release
+      with_items: "{{ rust.gits }}"
+
+  become: yes
+  become_user: "{{ ansible_user_id }}"

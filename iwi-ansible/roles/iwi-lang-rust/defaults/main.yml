@@ -10,8 +10,9 @@ rust:
   crates:
     - rustfmt
     - racer
-    - alacritty
   targets:
     - nightly-x86_64-unknown-linux-gnu
     - x86_64-unknown-linux-musl
     - aarch64-linux-android
+  gits:
+    - { dir: "alacrity", git: "https://github.com/jwilm/alacritty.git" }
