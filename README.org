@@ -1,6 +1,6 @@
 # File     : README..org
 # Created  : Sun 10 Jan 2016 21:23:39
-# Modified : <2017-11-02 Thu 00:45:00 GMT> Sharlatan
+# Modified : <2017-11-04 Sat 03:29:02 GMT> Sharlatan
 
 #+TITLE: IWI
 /Install Working Inventory/
@@ -17,12 +17,51 @@ It's just a BASH script with extra config files looks like a list of packages
 separated by sets. Dots file and settings for your beloved editors and
 multiplexers.
 
+* Installation manifest
+** Packages
+** Languages support
+** Shells support
+** Editors support
+
+* Chose your way!
+** iwi-shell-bash
+
 ** iwi-ansible
 
 #+BEGIN_EXAMPLE
-cd Ansible
-ansible-playbook iwi.yml -c local --ask-become-pass
+~$ cd iwi-ansible
+~$ ./iwi.yml
 #+END_EXAMPLE
+
+#+BEGIN_SRC sh  :results value org :results output replace :exports results
+./iwi-ansible/iwi.yml --list-tasks
+#+END_SRC
+
+#+RESULTS:
+#+BEGIN_SRC org
+
+playbook: ./iwi-ansible/iwi.yml
+
+  play #1 (self): self	TAGS: []
+    tasks:
+      apt check	TAGS: []
+      apt-get check	TAGS: []
+      dnf check	TAGS: []
+      yum check	TAGS: []
+      python check	TAGS: []
+      apt install python	TAGS: []
+      apt-get install python	TAGS: []
+      dnf install python	TAGS: []
+      yum install python	TAGS: []
+      control python check	TAGS: []
+      gathering facts	TAGS: []
+      iwi-sys-upgrade-install : ReadHead family	TAGS: []
+      iwi-sys-upgrade-install : Debian family	TAGS: []
+      iwi-lang-rust : download and install Rust	TAGS: []
+      iwi-lang-rust : add to shell completion and eviroment	TAGS: []
+      iwi-lang-rust : install applications	TAGS: []
+      iwi-lang-rust : rustup update	TAGS: []
+#+END_SRC
 
 * Tested on
 

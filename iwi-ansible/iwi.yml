@@ -12,16 +12,16 @@
 
   pre_tasks:
     - name: "apt check"
-      raw: command -v apt || echo apt_nill
+      raw: command -v apt || echo apt_nil
       register: if_apt
     - name: "apt-get check"
-      raw: command -v apt-get || echo apt_get_nill
+      raw: command -v apt-get || echo apt_get_nil
       register: if_apt_get
     - name: "dnf check"
-      raw: command -v dnf || echo dnf_nill
+      raw: command -v dnf || echo dnf_nil
       register: if_dnf
     - name: "yum check"
-      raw: command -v yum || echo yum_nill
+      raw: command -v yum || echo yum_nil
       register: if_yum
     - name: "python check"
       raw: command -v python || echo python_nil
@@ -30,34 +30,34 @@
     - name: "apt install python"
       raw: "apt -y update && apt install -y python-minimal python-setuptools"
       when:
-        - if_apt.stdout == "/usr/bin/apt"
-        - if_python.stdout == "python_nil"
+        - "'apt_nil' not in if_apt.stdout" 
+        - "'python_nil' in if_python.stdout"
 
     - name: "apt-get install python"
       raw: "apt-get -y update && apt install -y python-minimal python-setuptools"
       when:
-        - if_apt_get.stdout == "/usr/bin/apt-get"
-        - if_apt.stdout == "apt_nil"
-        - if_python.stdout == "python_nil"
+        - "'apt_get_nil' not in if_apt_get.stdout" 
+        - "'apt_nil' in if_apt.stdout" 
+        - "'python_nil' in if_python.stdout"
 
     - name: "dnf install python"
       raw: "dnf install -qy python2"
       when:
-        - if_dnf.stdout == "/usr/bin/dnf"
-        - if_python.stdout == "python_nil"
+        - "'dnf_nil' not in if_dnf.stdout" 
+        - "'python_nil' in if_python.stdout"
 
     - name: "yum install python"
       raw: "yum install -qy python2?"
       when:
-        - if_yum.stdout == "/usr/bin/yum"
-        - if_dnf.stdout == "dnf_nil"
-        - if_python.stdout == "python_nil"
+        - "'yum_nil' not in if_yum.stdout" 
+        - "'dnf_nil' in if_dnf.stdout" 
+        - "'python_nil' in if_python.stdout"
 
     - name: "control python check"
       raw: command -v python || echo python_nil
       register: if_python
     - meta: end_play
-      when: if_python.stdout == "python_nil"
+      when: "'python_nil' in if_python.stdout"
     - name: "gathering facts"
       setup:
 
