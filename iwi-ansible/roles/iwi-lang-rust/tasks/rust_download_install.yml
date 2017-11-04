@@ -7,24 +7,28 @@
     mode: 0755
 
 - block:
-
   - name: "install Rust with /tmp/rustup-init.sh, run by {{ ansible_user_id }}"
     shell: '/tmp/rustup-init.sh -y' 
 
-  - name: "check if creat installed"
-    stat: path=~/.cargo/bin/{{ item }}
+  - name: "components"
+    shell: " ~/.cargo/bin/rustup component add {{ item }}"
+    with_items: "{{ rust.components }}"
+
+  - name: "check if crate installed"
+    shell: ~/.cargo/bin/cargo install --list
+    register: cargo_pkgs
+
+  - debug:
+      msg: "{{ 'exa' in cargo_pkgs.stdout  }}"
+
+  - name: "common crates"
+    shell: ~/.cargo/bin/rustup run stable cargo install {{ item }}
+    when: item not in cargo_pkgs.stdout
     with_items: "{{ rust.crates }}"
-    register: rust_crate
 
-  - name: "install common package"
-    shell: ~/.cargo/bin/rustup run stable cargo install {{ item.item }}
-    with_items: "{{ rust_crate.results }}"
-    when:
-      - item.stat.exists == False 
-
-  # - name: install rust targets
-  #   shell: ~/.cargo/bin/rustup target add {{ item }}
-  #   with_items: "{{ rust.targets }}"
+  - name: install rust targets
+    shell: ~/.cargo/bin/rustup target add {{ item }}
+    with_items: "{{ rust.targets }}"
 
   become: yes
   become_user: "{{ ansible_user_id }}"

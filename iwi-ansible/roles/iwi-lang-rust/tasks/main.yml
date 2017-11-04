@@ -6,3 +6,6 @@
   include_tasks: "rust_env.yml"
 - name: "install applications"
   include_tasks: "rust_apps.yml"
+
+- name: "rustup update"
+  shell: rustup update

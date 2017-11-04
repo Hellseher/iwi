@@ -1,6 +1,6 @@
 ---
 
-- name: "upgrade all installed packages"
+- name: "installed packages"
   dnf:
     name: "*"
     state: latest

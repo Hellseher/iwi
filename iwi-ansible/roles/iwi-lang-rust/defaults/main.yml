@@ -1,18 +1,16 @@
 ---
 
-conf:
-  # (bash|fish|zsh)
-  shell: bash
-  specifics: true
-  parallel: false
-
 rust:
+  components:
+    - rust-src
   crates:
     - rustfmt
     - racer
+    - exa
+    - fd-find
+    - ripgrep
   targets:
-    - nightly-x86_64-unknown-linux-gnu
-    - x86_64-unknown-linux-musl
-    - aarch64-linux-android
+    - x86_64-pc-windows-msvc
+    - x86_64-pc-windows-gnu
   gits:
-    - { dir: "alacrity", git: "https://github.com/jwilm/alacritty.git" }
+    - { dir: "alacritty", git: "https://github.com/jwilm/alacritty.git" }

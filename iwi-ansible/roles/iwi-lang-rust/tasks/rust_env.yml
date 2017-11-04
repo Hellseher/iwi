@@ -4,50 +4,47 @@
     path: /etc/bash_completion.d
     state: directory
     recurse: yes
-  when: conf.shell == "bash"
 
 - name: "bash completion"
   shell: ~/.cargo/bin/rustup completions bash > /etc/bash_completion.d/rustup.bash-completion
   args:
     creates: /etc/bash_completion.d/rustup.bash-completion
-  when: conf.shell == "bash"
 
-- name: "add ~/.cargo/bin to ~/.bashrc"
+- block:
+    - name: "fish directory"
+      file:
+        path: ~/.config/fish/completions
+        state: directory
+        recurse: yes
+    - name: "fish complitions"
+      shell: ~/.cargo/bin/rustup completions fish > ~/.config/fish/completions/rustup.fish
+      args:
+        creates: ~/.config/fish/completions/rustup.fish
+    - name: "zsh directory"
+      file:
+        path: ~/.zfunc/completions
+        state: directory
+        recurse: yes
+    - name: "zsh complitions"
+      shell: ~/.cargo/bin/rustup completions zsh > ~/.zfunc/completions/_rustup
+      args:
+        creates: ~/.zfunc/completions/_rustup
+
+    - name: "get rust sysroot"
+      shell: ~/.cargo/bin/rustc --print sysroot
+      register: rust_sysroot
+
+    - name: "add ~/.cargo/bin to ~/.bashrc"
+      lineinfile:
+        path: ~/.bashrc
+        regexp: "^.*export.*cargo/.*$"
+        line: 'export PATH="$HOME/.cargo/bin:$PATH"'
+
+    - name: "export RUST_SRC_PATH to ~/.bashrc"
+      lineinfile:
+        path: ~/.bashrc
+        regexp: "^.*export.*RUST_SRC_PATH/.*$"
+        line: 'export RUST_SRC_PATH={{ rust_sysroot.stdout }}/lib/rustlib/src/rust/src'
+
   become: yes
   become_user: "{{ ansible_user_id }}"
-  lineinfile:
-    path: ~/.bashrc
-    regexp: "^.*export.*cargo/.*$"
-    line: 'export PATH="$HOME/.cargo/bin:$PATH"'
-  when: conf.shell == "bash"
-
-- name: "fish directory"
-  file:
-    path: ~/.config/fish/completions
-    state: directory
-    recurse: yes
-  when: conf.shell == "fish"
-
-- name: "fish complitions"
-  shell: ~/.cargo/bin/rustup completions fish > ~/.config/fish/completions/rustup.fish
-  args:
-    creates: ~/.config/fish/completions/rustup.fish
-  when: conf.shell == "fish"
-
-- name: "zsh directory"
-  file:
-    path: ~/.zfunc
-    state: directory
-    recurse: yes
-  when: conf.shell == "zsh"
-
-- name: "zsh complitions"
-  shell: ~/.cargo/bin/rustup completions zsh > ~/.zfunc/_rustup
-  args:
-    creates: ~/.zfunc/_rustup
-  when: conf.shell == "zsh"
-
-- name: "update rustup toolchanes"
-  become: yes
-  become_user: "{{ ansible_user_id }}"
-  shell: ~/.cargo/bin/rustup update

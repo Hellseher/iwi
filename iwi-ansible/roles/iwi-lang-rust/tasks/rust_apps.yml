@@ -21,5 +21,12 @@
         cargo build --release
       with_items: "{{ rust.gits }}"
 
+    - name: "link binary to ~/.local/bin"
+      file:
+        src: "~/.local/src/rust/{{ item.dir }}/target/release/{{ item.dir }}"
+        dest: "~/.local/bin/{{ item.dir }}"
+        state: link
+      with_items: "{{ rust.gits }}"
+
   become: yes
   become_user: "{{ ansible_user_id }}"
