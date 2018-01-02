@@ -1,9 +1,9 @@
 ---
 
-- name: "ReadHead family"
-  include_tasks: "dnf_packages.yml"
-  when: ansible_os_family == "ReadHat" or ansible_distribution == "Fedora"
+- name: "Fedora distribution"
+  include_tasks: "fedora_distribution.yml"
+  when: ansible_distribution == "Fedora"
 
-- name: "Debian family"
-  include_tasks: "dnf_packages.yml"
-  when: ansible_os_family == "Debian" or ansible_distribution == "Ubuntu"
+- name: "Ubuntu distribution"
+  include_tasks: "ubuntu_distribution.yml"
+  when: ansible_distribution == "Ubuntu"

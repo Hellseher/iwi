@@ -1,66 +1,18 @@
 #!/usr/bin/ansible-playbook
 ---
+# File     : iwi.yml
+# Created  : <2017-12-30 Sat 01:16:52 GMT>
+# Modified : <2017-12-30 Sat 01:39:38 GMT> Sharlatan
 
 - hosts: self
-  become: True
-  become_method: su
-  become_user: root
   gather_facts: False
 
-# Make sure that we have Python installed before run the rest of the playbook,
-# workaround few different package managers. Depends on BASH build-in *command*
-
-  pre_tasks:
-    - name: "apt check"
-      raw: command -v apt || echo apt_nil
-      register: if_apt
-    - name: "apt-get check"
-      raw: command -v apt-get || echo apt_get_nil
-      register: if_apt_get
-    - name: "dnf check"
-      raw: command -v dnf || echo dnf_nil
-      register: if_dnf
-    - name: "yum check"
-      raw: command -v yum || echo yum_nil
-      register: if_yum
-    - name: "python check"
-      raw: command -v python || echo python_nil
-      register: if_python
-
-    - name: "apt install python"
-      raw: "apt -y update && apt install -y python-minimal python-setuptools"
-      when:
-        - "'apt_nil' not in if_apt.stdout" 
-        - "'python_nil' in if_python.stdout"
-
-    - name: "apt-get install python"
-      raw: "apt-get -y update && apt install -y python-minimal python-setuptools"
-      when:
-        - "'apt_get_nil' not in if_apt_get.stdout" 
-        - "'apt_nil' in if_apt.stdout" 
-        - "'python_nil' in if_python.stdout"
-
-    - name: "dnf install python"
-      raw: "dnf install -qy python2"
-      when:
-        - "'dnf_nil' not in if_dnf.stdout" 
-        - "'python_nil' in if_python.stdout"
-
-    - name: "yum install python"
-      raw: "yum install -qy python2?"
-      when:
-        - "'yum_nil' not in if_yum.stdout" 
-        - "'dnf_nil' in if_dnf.stdout" 
-        - "'python_nil' in if_python.stdout"
-
-    - name: "control python check"
-      raw: command -v python || echo python_nil
-      register: if_python
-    - meta: end_play
-      when: "'python_nil' in if_python.stdout"
-    - name: "gathering facts"
-      setup:
-
   roles:
+    - prelude
     - iwi-sys-upgrade-install
-    - iwi-lang-rust
+    - iwi-lang-python
+    # - iwi-lang-latex
+    # - iwi-lang-rust
+
+# ------------------------------------------------------------------------------
+# End of iwi.yml

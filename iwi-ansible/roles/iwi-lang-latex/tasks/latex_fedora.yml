@@ -1,0 +1,10 @@
+---
+# File     : latex_fedoar.yml
+# Created  : <2017-11-06 Mon 22:28:30 GMT>
+# Modified : <2017-11-06 Mon 22:45:26 GMT> Sharlatan
+
+- name: "install texlive required packages"
+  dnf:
+    name: "{{ item.name }}"
+    state: latest
+  with_items: "{{ texlive.pkgs }}"

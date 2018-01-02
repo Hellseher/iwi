@@ -1,0 +1,9 @@
+---
+# File     :  main.yml
+# Created  : <2017-11-06 Mon 22:23:18GMT>
+# Modified : <2017-11-06 Mon 22:49:24 GMT> Sharlatan
+
+- name: "LaTeX Fedora"
+  include_tasks: "latex_fedora.yml"
+  when: ansible_distribution == "Fedora"
+    

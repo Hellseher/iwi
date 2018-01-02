@@ -1,0 +1,11 @@
+---
+# File     : main.yml
+# Created  : <2017-12-30 Sat 00:40:40 GMT>
+# Modified : <2017-12-30 Sat 00:54:28 GMT> Sharlatan
+
+- name: "Fedora install python-* packages"
+  include_tasks: "./fedora_distribution.yml"
+  when: ansible_distribution == "Fedora"
+
+# ------------------------------------------------------------------------------
+# End of main.yml

@@ -1,0 +1,17 @@
+---
+# File     : main.yml
+# Created  : <2017-11-06 Mon 22:30:29 GMT>
+# Modified : <2017-11-06 Mon 22:44:56 GMT> Sharlatan
+
+texlive:
+  pkgs:
+    - { name: "texlive", desc: "TeX formatting system" }
+    - { name: "texlive-capt-of", desc: "captions on more than floats" }
+    - { name: "texlive-collection-latex", desc: "LaTeX fundamental packages" }
+    - { name: "texlive-collection-latexextra", desc: "A very large collection of add-on packages for LaTeX" }
+    - { name: "texlive-collection-latexrecommended", desc: "LaTeX recommended packages" }
+    - { name: "texlive-collection-xetex", desc: "XeTeX and packages" }
+    - { name: "texlive-latex", desc: "A TeX macro package that defines LaTeX" }
+    - { name: "texlive-wrapfig", desc: "produces figures which text can flow around" }
+    - { name: "texlive-xetex", desc: "Unicode and OpenType-enabled TeX engine" }
+    - { name: "texlive-xetex-def", desc: "Colour and graphics support for XeTeX" }

@@ -1,0 +1,30 @@
+---
+
+- name: "lates existing packages"
+  dnf:
+    name: "*"
+    state: latest
+
+- name: "repository"
+  dnf:
+    name: "{{ item }}"
+    state: present
+  with_items: "{{ repo.fedora }}"
+
+- name: "package groups"
+  dnf:
+    name: "{{ item.name }}"
+    state: latest
+  with_items: "{{ dnf.fedora.groups }}"
+
+- name: "additional packages"
+  dnf:
+    name: "{{ item.name }}"
+    state: latest
+  with_items: "{{ dnf.fedora.pkgs }}"
+
+- name: "autoremove"
+  dnf:
+    autoremove: yes
+
+# http://docs.ansible.com/ansible/latest/dnf_module.html

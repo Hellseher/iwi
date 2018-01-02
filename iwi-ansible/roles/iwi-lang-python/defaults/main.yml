@@ -1,0 +1,14 @@
+---
+
+dnf:
+  fedora:
+    pkgs:
+      - { name: "PyYAML", desc: "YAML parser and emitter for Python" }
+      - { name: "python3-PyYAML", desc: "YAML parser and emitter for Python" }
+      - { name: "python2-pip", desc: "A tool for installing and managing Python2 packages" }
+      - { name: "python3-pip", desc: "A tool for installing and managing Python3 packages" }
+      - { name: "python2-jinja2", desc: "General purpose template engine for python2" }
+      - { name: "python3-jinja2", desc: "General purpose template engine for python3" }
+
+pip_pkgs:
+

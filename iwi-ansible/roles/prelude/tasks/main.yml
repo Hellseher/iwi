@@ -1,0 +1,62 @@
+---
+
+- name: "apt check"
+  raw: command -v apt | grep -q bin && echo -n APT || echo -n nil
+  register: if_apt
+  changed_when: if_apt.stdout == 'APT'
+- name: "apt-get check"
+  raw: command -v apt-get | grep -q bin && echo -n APT_GET || echo -n nil
+  register: if_apt_get
+  changed_when: if_apt_get.stdout == 'APT_GET'
+- name: "dnf check"
+  raw: command -v dnf | grep -q bin && echo -n DNF || echo -n nil
+  register: if_dnf
+  changed_when: if_dnf.stdout == 'DNF'
+- name: "yum check"
+  raw: command -v yum | grep -q bin && echo -n YUM || echo -n nil
+  register: if_yum
+  changed_when: if_yum.stdout == 'YUM'
+- name: "python check"
+  raw: command -v python | grep -q bin && echo -n PYTHON || echo -n nil
+  register: if_python
+  changed_when: if_python.stdout == 'PYTHON'
+
+- name: "apt install python"
+  raw: "apt -y update && apt install -y python-minimal python-setuptools"
+  when:
+    - "'APT' in if_apt.stdout" 
+    - "'nil' in if_python.stdout"
+
+- name: "apt-get install python"
+  raw: "apt-get -y update && apt install -y python-minimal python-setuptools"
+  when:
+    - "'APT_GET' in if_apt_get.stdout" 
+    - "'nil' in if_apt.stdout" 
+    - "'nil' in if_python.stdout"
+
+- name: "dnf install python"
+  raw: "dnf install -qy python2 python-simplejson"
+  when:
+    - "'DNF' in if_dnf.stdout" 
+    - "'nil' in if_python.stdout"
+
+- name: "yum install python"
+  raw: "yum install -qy python2 python-simplejson"
+  when:
+    - "'YUM' in if_yum.stdout" 
+    - "'nil' in if_dnf.stdout" 
+    - "'nil' in if_python.stdout"
+
+- name: "control python check"
+  raw: command -v python | grep -q bin && echo -n PYTHON || echo -n nil
+  register: if_python
+  changed_when: if_python.stdout == 'PYTHON'
+
+- meta: end_play
+  when: "'nil' in if_python.stdout"
+
+- name: "gathering facts"
+  setup:
+
+# End of main.yml
+# ------------------------------------------------------------------------------

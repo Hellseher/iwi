@@ -1,68 +1,72 @@
 ---
 
-rpm:
-  pkg:
-    editors:
-      - emacs
-      - vim
-    shells:
-      - zsh
-      - fish
-      - screen
-      - tmux
-    core:
-      - redhat-lsb
-      - libselinux-python
-    devel:
-      - '@Development tools'
-      - binutils
-      - cmake
-      - ctags
-      - fontconfig-devel
-      - freetype-devel
-      - gcc
-      - gdb
-      - git
-      - global
-      - mingw-w64-tools
-      - perf
-      - python2-pip
-      - python3-pip
-      - strace
-      - xclip
-    net:
-      - nmap
-      - tcpdump
-      - wget
-      - rsync
-    arch:
-      - zip
-      - bzip2
-      - cpio
-      - tar
-      - gzip
-      - xz
-    search:
-      - ack
-      - the_silver_searcher
-      - fdupes
-      - jq
-    media:
-      - rawtherapee
-      - thunderbird
-      - gimp
-      - inkscape
-      - krita
-      - freemind
-    gnome:
-      - gnome-tweak-tool
-  libs:
-    - curlpp
-  repo:
+dnf:
+  fedora:
+    groups:
+      - { name: "@Buildsystem building group", desc: "" }
+      - { name: "@C Development Tools and Libraries", desc: "includes core development tools" }
+      - { name: "@Development Libraries", desc: "core libraries needed to develop applications" }
+      - { name: "@Development tools", desc: "include general development tools such as git and CVS" }
+      - { name: "@Editors", desc: "source/text editos, this includes Emacs and Vi" }
+      - { name: "@Multimedia", desc: "audio/video framework common to desktops" }
+      - { name: "@Security Lab", desc: "" }
+      - { name: "@Standard", desc: "common set of utilities" }
+      - { name: "@System Tools", desc: "a collection of various tools for the system" }
+      - { name: "@Virtualization", desc: "provides a graphical virtualization environment" }
+      - { name: "@X Software Development", desc: "to develop applications for the X Window System" }
+    pkgs:
+      - { name: "fish", desc: "A friendly interactive shell" }
+      - { name: "tmux", desc: "A terminal multiplexer" }
+      - { name: "redhat-lsb", desc: "Implementation of Linux Standard Base specification" }
+      - { name: "fontconfig-devel", desc: "Font configuration and customization library" }
+      - { name: "global", desc: "Source code tag system" }
+      - { name: "mingw-w64-tools", desc: "Supplementary tools which are part of the mingw-w64 toolchain" }
+      - { name: "perf", desc: "Performance monitoring for the Linux kernel" }
+      - { name: "xclip", desc: "Command line clipboard grabber" }
+      - { name: "ack", desc: "Grep-like text finder" }
+      - { name: "the_silver_searcher", desc: "Super-fast text searching tool (ag)" }
+      - { name: "jq", desc: "Command-line JSON processor" }
+      - { name: "rawtherapee", desc: "Raw image processing software" }
+      - { name: "thunderbird", desc: "Mozilla Thunderbird mail/newsgroup client" }
+      - { name: "gimp", desc: "GNU Image Manipulation Program" }
+      - { name: "inkscape", desc: "Vector-based drawing program using SVG" }
+      - { name: "krita", desc: "Krita is a sketching and painting program" }
+      - { name: "freemind", desc: "Free mind mapping software" }
+      - { name: "gnome-tweak-tool", desc: "A tool to customize advanced GNOME 3 options" }
+      - { name: "libselinux-python", desc: "SELinux python bindings for libselinux" }
+      - { name: "curlpp", desc: "A C++ wrapper for libcURL" }
+      - { name: "pandoc", desc: "Conversion between markup formats" }
+      - { name: "lshw", desc: "Hardware lister" }
+      - { name: "remmina", desc: "Remote Desktop Clent" }
+      - { name: "filezilla", desc: "FTP, FTPS and SFTP client" }
+
+apt:
+  ubuntu:
+    pkg:
+      - { name: "build-essentials", desc: "" }
+      - { name: "linux-tools-generic", desc: "generic Linux kernel tools" }
+      - { name: "linux-tools-common", desc: "Linux kernel version specific tools" }
+      - { name: "fish", desc: "A friendly interactive shell" }
+      - { name: "tmux", desc: "A terminal multiplexer" }
+      - { name: "mingw-w64", desc: "Development files for ?MingGW-w64 targeting Win32" }
+      - { name: "cmake", desc: "cross-platform, open-source make system" }
+      - { name: "xclip", desc: "command line interface to X selections" }
+      - { name: "libfreetype6-dev", desc: "FreeType 2 font engine, development files" }
+      - { name: "libfontconfig1-dev", desc: "generic font configuration library - development" }
+      - { name: "software-properties-common", desc: "manage the repositoreis that you install software from" }
+
+yum:
+  centos:
+    pkg:
+      - { name: "tmux", desc: "A terminal multiplexer" }
+
+pkg:
+  freebsd:
+
+pacman:
+  archlinux:
+
+repo:
     fedora:
       - "https://download1.rpmfusion.org/free/fedora/rpmfusion-free-release-{{ ansible_distribution_version }}.noarch.rpm"
       - "https://download1.rpmfusion.org/nonfree/fedora/rpmfusion-nonfree-release-{{ ansible_distribution_version }}.noarch.rpm"
-
-deb:
-  devel:
-    - build-essential

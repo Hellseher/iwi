@@ -1,0 +1,13 @@
+---
+# File     : fedora_distribution.yml
+# Created  : <2017-12-30 Sat 00:53:34 GMT>
+# Modified :  <2017-12-30 Sat 00:56:10 GMT> Sharlatan
+
+- name: "additional packages"
+  dnf:
+    name: "{{ item.name }}"
+    state: latest
+  with_items: "{{ dnf.fedora.pkgs }}"
+
+# ------------------------------------------------------------------------------
+# End of fedora_distribution.yml
