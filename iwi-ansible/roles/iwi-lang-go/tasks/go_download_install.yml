@@ -1,0 +1,12 @@
+---
+# File     : go_download_install.yml
+# Created  : <2018-1-28 Sun 01:41:52 GMT>
+# Modified : <2018-1-30 Tue 19:36:35 GMT> Sharlatan
+
+- name: "install additional packages Fedora"
+  dnf:
+    name: "{{ item.name }}"
+    state: latest
+  with_items: "{{ dnf.fedora.pkgs }}"
+  when: ansible_distribution == "Fedora"
+...

@@ -1,0 +1,10 @@
+---
+# File : main.yml
+# Created : <2018-1-28 Sun 01:37:28 GMT>
+# Modified : <2018-1-28 Sun 01:40:42 GMT> Sharlatan
+
+dnf:
+  fedora:
+    pkgs:
+      - { name: "golang", desc: "The Go Programming Language" }
+...

@@ -1,4 +1,7 @@
 ---
+# File     : rust_download_install.yml
+# Created  : <2018-1-21 Sun 01:53:48 GMT>
+# Modified : <2018-1-21 Sun 01:54:48 GMT> Sharlatan
 
 - name: "download rustup-init.sh from https://www.rustup.rs"
   get_url:
@@ -7,7 +10,7 @@
     mode: 0755
 
 - block:
-  - name: "install Rust with /tmp/rustup-init.sh, run by {{ ansible_user_id }}"
+  - name: "install Rust with /tmp/rustup-init.sh"
     shell: '/tmp/rustup-init.sh -y' 
 
   - name: "components"
@@ -30,5 +33,10 @@
     shell: ~/.cargo/bin/rustup target add {{ item }}
     with_items: "{{ rust.targets }}"
 
+  - name: "rustup update"
+    shell: rustup update
+
   become: yes
   become_user: "{{ ansible_user_id }}"
+...
+# End of rust_download_install.yml

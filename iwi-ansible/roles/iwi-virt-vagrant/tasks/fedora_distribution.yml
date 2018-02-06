@@ -1,0 +1,23 @@
+---
+# File     : fedora_distribution.yml
+# Created  : <2018-1-09 Tue 23:16:39 GMT>
+# Modified : <2018-1-15 Mon 23:50:10 GMT> Sharlatan
+
+- name: "adding VirtualBox repository"
+  yum_repository:
+    name: "{{ item.name }}"
+    baseurl: "{{ item.baseurl }}"
+    enabled: "{{ item.enabled }}"
+    description: "{{ item.description }}"
+    gpgcheck: "{{ item.gpgcheck }}"
+    repo_gpgcheck: "{{ item.repo_gpgcheck }}"
+    gpgkey: "{{ item.gpgkey }}"
+  with_items: "{{ repo.fedora }}"
+
+- name: "install additional packages"
+  dnf:
+    name: "{{ item.name }}"
+    state: latest
+  with_items: "{{ dnf.fedora.pkgs }}"
+...
+# End of fedora_distribution.yml

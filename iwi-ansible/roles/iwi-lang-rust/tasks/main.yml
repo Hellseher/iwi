@@ -1,4 +1,7 @@
 ---
+# File     : main.yml
+# Created  : <2018-1-21 Sun 01:45:54 GMT>
+# Modified : <2018-1-21 Sun 02:01:44 GMT> Sharlatan
 
 - name: "download and install Rust"
   include_tasks: "rust_download_install.yml"
@@ -6,6 +9,5 @@
   include_tasks: "rust_env.yml"
 - name: "install applications"
   include_tasks: "rust_apps.yml"
-
-- name: "rustup update"
-  shell: rustup update
+...
+# End of main.yml

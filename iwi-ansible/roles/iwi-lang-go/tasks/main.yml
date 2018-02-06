@@ -1,0 +1,13 @@
+---
+# File     : main.yml
+# Created  : <2018-1-21 Sun 02:05:32 GMT>
+# Modified : <2018-1-28 Sun 01:40:42 GMT> Sharlatan
+
+- name: "download and install Go"
+  include_tasks: "go_download_install.yml"
+# - name: "add to shell completion and eviroment"
+#   include_tasks: "go_env.yml"
+# - name: "install applications"
+#   include_tasks: "go_apps.yml"
+...
+# End of main.yml

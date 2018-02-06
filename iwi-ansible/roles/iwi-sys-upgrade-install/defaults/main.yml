@@ -15,30 +15,33 @@ dnf:
       - { name: "@Virtualization", desc: "provides a graphical virtualization environment" }
       - { name: "@X Software Development", desc: "to develop applications for the X Window System" }
     pkgs:
-      - { name: "fish", desc: "A friendly interactive shell" }
-      - { name: "tmux", desc: "A terminal multiplexer" }
-      - { name: "redhat-lsb", desc: "Implementation of Linux Standard Base specification" }
-      - { name: "fontconfig-devel", desc: "Font configuration and customization library" }
-      - { name: "global", desc: "Source code tag system" }
-      - { name: "mingw-w64-tools", desc: "Supplementary tools which are part of the mingw-w64 toolchain" }
-      - { name: "perf", desc: "Performance monitoring for the Linux kernel" }
-      - { name: "xclip", desc: "Command line clipboard grabber" }
       - { name: "ack", desc: "Grep-like text finder" }
-      - { name: "the_silver_searcher", desc: "Super-fast text searching tool (ag)" }
-      - { name: "jq", desc: "Command-line JSON processor" }
-      - { name: "rawtherapee", desc: "Raw image processing software" }
-      - { name: "thunderbird", desc: "Mozilla Thunderbird mail/newsgroup client" }
-      - { name: "gimp", desc: "GNU Image Manipulation Program" }
-      - { name: "inkscape", desc: "Vector-based drawing program using SVG" }
-      - { name: "krita", desc: "Krita is a sketching and painting program" }
-      - { name: "freemind", desc: "Free mind mapping software" }
-      - { name: "gnome-tweak-tool", desc: "A tool to customize advanced GNOME 3 options" }
-      - { name: "libselinux-python", desc: "SELinux python bindings for libselinux" }
       - { name: "curlpp", desc: "A C++ wrapper for libcURL" }
-      - { name: "pandoc", desc: "Conversion between markup formats" }
-      - { name: "lshw", desc: "Hardware lister" }
-      - { name: "remmina", desc: "Remote Desktop Clent" }
       - { name: "filezilla", desc: "FTP, FTPS and SFTP client" }
+      - { name: "fish", desc: "A friendly interactive shell" }
+      - { name: "fontconfig-devel", desc: "Font configuration and customization library" }
+      - { name: "freemind", desc: "Free mind mapping software" }
+      - { name: "gimp", desc: "GNU Image Manipulation Program" }
+      - { name: "global", desc: "Source code tag system" }
+      - { name: "gnome-tweak-tool", desc: "A tool to customize advanced GNOME 3 options" }
+      - { name: "inkscape", desc: "Vector-based drawing program using SVG" }
+      - { name: "jq", desc: "Command-line JSON processor" }
+      - { name: "krita", desc: "Krita is a sketching and painting program" }
+      - { name: "libselinux-python", desc: "SELinux python bindings for libselinux" }
+      - { name: "lshw", desc: "Hardware lister" }
+      - { name: "mingw-w64-tools", desc: "Supplementary tools which are part of the mingw-w64 toolchain" }
+      - { name: "nasm", desc: "A portable x86 assembler which uses Intel-like syntax" }
+      - { name: "pandoc", desc: "Conversion between markup formats" }
+      - { name: "pax-utils", desc: "ELF utils that can check files for security relevant properties" }
+      - { name: "perf", desc: "Performance monitoring for the Linux kernel" }
+      - { name: "perl-Image-ExifTool", desc: "Utility for reading and writing image meta info" }
+      - { name: "rawtherapee", desc: "Raw image processing software" }
+      - { name: "redhat-lsb", desc: "Implementation of Linux Standard Base specification" }
+      - { name: "remmina", desc: "Remote Desktop Clent" }
+      - { name: "the_silver_searcher", desc: "Super-fast text searching tool (ag)" }
+      - { name: "thunderbird", desc: "Mozilla Thunderbird mail/newsgroup client" }
+      - { name: "tmux", desc: "A terminal multiplexer" }
+      - { name: "xclip", desc: "Command line clipboard grabber" }
 
 apt:
   ubuntu:

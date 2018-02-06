@@ -1,0 +1,32 @@
+---
+# File     : main.yml
+# Created  : <2018-1-09 Tue 23:12:42 GMT>
+# Modified : <2018-1-16 Tue 00:42:42 GMT> Sharlatan
+
+dnf:
+  fedora:
+    pkgs:
+      - { name: "vagrant" }
+      - { name: "VirtualBox" }
+      - { name: "dkms", desc: "Dynamic Kernel Module Support Framework" }
+      - { name: "binutils"  }
+      - { name: "gcc" }
+      - { name: "make" }
+      - { name: "patch" }
+      - { name: "libgomp" }
+      - { name: "glibc-headers" }
+      - { name: "glibc-devel" }
+      - { name: "kernel-headers" }
+      - { name: "kernel-devel" }
+
+repo:
+    fedora:
+      - description: "Fedora $releasever - $basearch - VirtualBox"
+        baseurl: "http://download.virtualbox.org/virtualbox/rpm/fedora/$releasever/$basearch"
+        name: "virtualbox"
+        enabled: yes
+        gpgcheck: yes
+        repo_gpgcheck: yes
+        gpgkey: "https://www.virtualbox.org/download/oracle_vbox.asc"
+...
+# End of main.yml

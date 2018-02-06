@@ -14,3 +14,4 @@ rust:
     - x86_64-pc-windows-gnu
   gits:
     - { dir: "alacritty", git: "https://github.com/jwilm/alacritty.git" }
+...

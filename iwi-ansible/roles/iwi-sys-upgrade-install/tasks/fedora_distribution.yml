@@ -1,4 +1,7 @@
 ---
+# File     : fedora_distribution.yml
+# Created  : <2018-1-14 Sun 23:35:16 GMT>
+# Modified : <2018-1-14 Sun 23:35:28 GMT> Sharlatan
 
 - name: "lates existing packages"
   dnf:
@@ -26,5 +29,6 @@
 - name: "autoremove"
   dnf:
     autoremove: yes
-
+...
+# End of
 # http://docs.ansible.com/ansible/latest/dnf_module.html

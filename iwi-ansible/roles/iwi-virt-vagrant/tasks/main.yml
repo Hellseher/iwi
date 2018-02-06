@@ -1,0 +1,25 @@
+---
+# File     : main.yml
+# Created  :
+# Modified : <2018-1-21 Sun 01:40:30 GMT> Sharlatan
+
+- name: "Fedora distribution"
+  include_tasks: "fedora_distribution.yml"
+  when: ansible_distribution == "Fedora"
+
+- name: "add vagrant user to vboxusers"
+  user:
+    name: vagrant
+    groups: vboxusers
+    state: present
+
+- name: "recompile VirtualBox kernel module"
+  block:
+    - stat:
+        path: /sbin/vboxconfig 
+      register: st
+
+    - shell: /sbin/vboxconfig
+      when: st.stat.exists
+...
+# End of main.yml
