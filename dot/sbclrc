@@ -1,23 +1,37 @@
 ;;;; sbclrc -- configuration file for SBCL
 ;;;; Created  :
-;;;; Modified :
+;;;; Modified : <2018-9-30 Sun 23:35:59 BST> Sharlatan
 ;;;; Author   :
-;;;; Short    :
+;;;; Synopsis    : <
 
 ;;;; Commentary:
 
 ;;;; Code:
 
-;;; The following lines added by ql:add-to-init-file:
+(defvar *usr-sbcl-src-path*)
+(defvar *usr-ql-init-path*)
+(defvar *usr-ql-projects-path*)
+
+(defun from-home-path (path)
+  "Buuild a absolute path to user target directory including $HOME."
+  (merge-pathnames path (user-homedir-pathname)))
+
+(setf *usr-sbcl-src-path* (from-home-path "Data/sft/src/sbcl/")
+      *usr-ql-projects-path* (list
+                              (from-home-path "Projects/hck/Lisp/CommonLisp/")
+                              (from-home-path "Data/sft/src/projects-common-lisp/"))
+      *usr-ql-init-path* (from-home-path "quicklisp/setup.lisp"))
 
 ;; Path to SBCL source code directory
-(sb-ext:set-sbcl-source-location "/home/sharlatan/Data/sft/src/sbcl/")
+(when (probe-file *usr-sbcl-src-path*)
+  (sb-ext:set-sbcl-source-location *usr-sbcl-src-path*))
 
 #-quicklisp
-(let ((quicklisp-init (merge-pathnames ".local/share/quicklisp/setup.lisp"
-                                       (user-homedir-pathname))))
-  (when (probe-file quicklisp-init)
-    (load quicklisp-init)))
+(when (probe-file *usr-ql-init-path*)
+  (load *usr-ql-init-path*))
+
+(when (probe-file *usr-ql-projects-path*)
+  (push *usr-ql-projects-path* ql:*local-project-directories*))
 
 (require :asdf)
 

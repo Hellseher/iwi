@@ -1,0 +1,7 @@
+[core]
+excludesfile = ~/.gitignore
+whitespace=fix,-indent-with-non-tab,trailing-space,cr-at-eol
+
+[user]
+name = Sharlatan
+email = sharlatanus@gmail.com
