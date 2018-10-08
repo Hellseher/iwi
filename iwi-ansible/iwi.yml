@@ -2,7 +2,7 @@
 ---
 # File     : iwi.yml
 # Created  : <2017-12-30 Sat 01:16:52 GMT>
-# Modified : <2018-1-30 Tue 22:23:35 GMT> Sharlatan
+# Modified : <2018-10-08 Mon 23:43:50 BST> Sharlatan
 
 - hosts: self
   gather_facts: False
@@ -10,10 +10,10 @@
   roles:
     - prelude
     - iwi-sys-upgrade-install
-    # - iwi-virt-vagrant
-    # - iwi-lang-python
-    # - iwi-lang-go
-    # - iwi-lang-latex
-    # - iwi-lang-rust
+    - iwi-virt-vagrant
+    - iwi-lang-python
+    - iwi-lang-go
+    - iwi-lang-latex
+    - iwi-lang-rust
 ...
 # End of iwi.yml

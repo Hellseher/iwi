@@ -1,7 +1,12 @@
+# File     : README..org
+# Created  : <2018-10-08 Mon 23:50:01 BST>
+# Modified : <2018-10-08 Mon 23:52:37 BST> Sharlatan
+
 [core]
-excludesfile = ~/.gitignore
-whitespace=fix,-indent-with-non-tab,trailing-space,cr-at-eol
+  excludesfile = ~/.gitignore
+  whitespace=fix,-indent-with-non-tab,trailing-space,cr-at-eol
+  editor = emacs
 
 [user]
-name = Sharlatan
-email = sharlatanus@gmail.com
+  name = Sharlatan
+  email = sharlatanus@gmail.com
