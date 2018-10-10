@@ -344,8 +344,8 @@ you should place your code here."
             "~/Documents/afpnia"))
 
     (setq org-archive-location
-          (concat "W" (format-time-string "%W")
-                  "-" (format-time-string "%m%Y") ".org::"))
+          (concat (format-time-string "%y")
+                  "-w" (format-time-string "%W") "-done.org::"))
 
     (defun org-archive-completed ()
       "Arcive all completed TODO entries from a current file."
