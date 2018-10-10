@@ -1,7 +1,7 @@
 #! /usr/bin/env bash
 # File          : .bashrc
 # Created       : Mon 08 Dec 2014 19:31:26
-# Modified : <2017-10-28 Sat 14:33:17 BST> Sharlatan
+# Modified : <2018-10-11 Thu 00:41:03 BST> Sharlatan
 # Maintainer    : sharlatan, <sharlatanus@gmail.com>
 # Short         : BASH config file
 
@@ -17,6 +17,8 @@ export HISTCONTROL=ignoredups:erasedups
 export INFOPATH="$INFOPATH":/usr/share/info
 export PATH="${PATH}:${HOME}/.cargo/bin:${HOME}/.local/bin"
 export PROMPT_COMMAND="history -a; history -c; history -r; $PROMPT_COMMAND"
+export VISUAL="/usr/bin/emacsclient -cn"
+export EDITOR="$VISUAL"
 
 # ------------------------------------------------------------------------------
 #+SETTINGS
@@ -55,6 +57,13 @@ PROMPT_COMMAND=_prmtcmd
 # ------------------------------------------------------------------------------
 #+FUNCTIONS
 
+edf()
+{ # Open file in a defaul EDITOR
+    local file="$1"
+
+    $EDITOR "$file"
+}
+
 whatp() {
     # Return a name of a package for given command.
     local cmd
@@ -75,8 +84,13 @@ whatd() {
     pckg="$1"
     whatis $(whatc "$pckg")
 }
-## fzf
+
+# ------------------------------------------------------------------------------
+#+FUZZY_SEARCH
+
+# Fuzzy wrappwer for fzf, skim
 # https://github.com/junegunn/fzf
+# https://github.com/lotabout/skim
 fe() {
     # fe [fuzzy pattern] open the selected file with the default editor
     # -Bypass fuzzy finder if ther's only one match (--selected-1)
@@ -85,23 +99,23 @@ fe() {
     cd
     local file
     file=$(fzf-tmux -d 20% --query="$1" --select-1 --exit-0)
-    [ -n "$file" ] && ${EDITOR: -vim} "$file"
+    [ -n "$file" ] && ${EDITOR} "$file"
 }
 
 fd() {
-    #
     # fd - cd to selected directory (excluding hiden)
-    #
-    local dir
-    dir=$(find ${1:-*} -path '*/\.' -prune \
-        -o -type d -print 2> /dev/null | fzf-tmux -d 20% +m) &&
-    cd "$dir"
+
+    if command -v sk 2> /dev/null; then
+        cd && cd $(sk)
+    elif command -v fzf 2> /dev/null; then
+        cd $(fzf)
+    else
+        echo use find in the end
+    fi
 }
 
 fda() {
-    #
     # fda - cd to any (including hiden) directory
-    #
     local dir
     dir=$(find ${1:-.} -type d 2> /dev/null | fzf-tmux -d 20% +m) &&
         cd "$dir"
