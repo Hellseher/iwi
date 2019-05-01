@@ -1,6 +1,6 @@
 ;;; package ---  init.el Emacs configuration
 ;;; Created    : <Tue 10 Mar 2015 11:39:46>
-;;; Modified   : <2019-4-30 Tue 00:55:38 BST> Sharlatan
+;;; Modified   : <2019-5-02 Thu 00:01:41 BST> Sharlatan
 ;;; Author     : sharlatan
 
 ;;; Commentary:
@@ -15,10 +15,12 @@
 ;;
 
 (require 'package)
+
 (setq package-archives
       `(,@package-archives
         ("melpa" . "https://melpa.org/packages/")
         ("org" . "https://orgmode.org/elpa/")))
+
 (package-initialize)
 
 (setq package-enable-at-startup nil)
@@ -27,8 +29,7 @@
   (package-refresh-contents)
   (package-install 'use-package))
 
-(eval-when-compile
-  (require 'use-package))
+(eval-when-compile (require 'use-package))
 
 (put 'use-package 'lisp-indent-function 1)
 (setq use-package-always-ensure t)
@@ -37,19 +38,39 @@
 (setq use-package-compute-statistics t)
 
 ;; part-of-emacs: t
-;; info: collection of functions to make convenient handling installed system packages.
-;; git: https://gitlab.com/jabranham/system-packages
+;; info: C premitive functions.
+(use-package emacs
+  :ensure nil
+  :init
+  (put 'narrow-to-region 'disabled nil)
+  (put 'downcase-region 'disabled nil)
+  :custom
+  (scroll-step 1)
+  (inhibit-startup-screen t "Don't show splash screen")
+  (use-dialog-box nil "Disable dialog boxes")
+  (enable-recursive-minibuffers t "Allow minibuffer commands in the minibuffer")
+  (indent-tabs-mode nil "Spaces!")
+  (tab-width 4)
+  (debug-on-quit nil))
+
+;; part-of-emacs: t
+;; info: functions to manage system packages.
 (use-package system-packages
   :ensure t
   :custom
   (system-packages-noconfirm t))
 
+;; part-of-emacs:
+;; info:
 (use-package use-package-ensure-system-package :ensure t)
 
 ;; Keyword
 (use-package diminish :ensure t)
+
 (use-package bind-key :ensure t)
-(use-package quelpa  :ensure t
+
+(use-package quelpa
+  :ensure t
   :defer t
   :custom
   (quelpa-update-melpa-p nil "Don't update the MELPA git repo."))
@@ -71,21 +92,6 @@
   (paradox-enable))
 
 ;; part-of-emacs: t
-(use-package emacs
-  :ensure nil
-  :init
-  (put 'narrow-to-region 'disabled nil)
-  (put 'downcase-region 'disabled nil)
-  :custom
-  (scroll-step 1)
-  (inhibit-startup-screen t "Don't show splash screen")
-  (use-dialog-box nil "Disable dialog boxes")
-  (enable-recursive-minibuffers t "Allow minibuffer commands in the minibuffer")
-  (indent-tabs-mode nil "Spaces!")
-  (tab-width 4)
-  (debug-on-quit nil))
-
-;; part-of-emacs: t
 (use-package files
   :ensure nil
   :hook
@@ -102,6 +108,7 @@
   (version-control t))
 
 ;; part-of-emacs: t
+;; info: Dinamicaly update ts of the file.
 (use-package time-stamp
   :ensure nil
   :hook
@@ -121,15 +128,16 @@
 (use-package iqa
   :ensure t
   :custom
-  (iqa-user-init-file (concat user-emacs-directory "README.org") "Edit README.org by default.")
+  (iqa-user-init-file (concat user-emacs-directory "init.el"))
   :config
   (iqa-setup-default))
 
 ;; part-of-emacs: t
+;; info: tools for customizing Emacs and Lisp packages
 (use-package cus-edit
-  :ensure nil
+  :ensure t
   :custom
-  (custom-file null-device "Don't store customizations"))
+  (custom-file (concat user-emacs-directory "_customize.el")))
 
 ;; part-of-emacs: nil
 ;; info: View Large Files in Emacs
@@ -155,6 +163,12 @@
   :ensure nil
   :custom
   (uniquify-buffer-name-style 'forward))
+
+;; History
+(use-package saveplace
+  :ensure nil
+  :hook (after-init . save-place-mode))
+
 
 ;;; TRAMP
 ;; It is for transparently accessing remote files from within
@@ -206,6 +220,7 @@
 ;; similar to command shells such as bash, zsh, rc, or 4dos.
 
 ;; part-of-emacs: t
+;; info:
 (use-package eshell
   :defer t
   :ensure nil)
@@ -282,6 +297,8 @@
 ;;; NATURAL-LANGUAGES-SUPPORT
 ;;
 
+;; Spell checkers
+
 (use-package mule
   :ensure nil
   :config
@@ -289,6 +306,8 @@
   (set-terminal-coding-system 'utf-8)
   (set-language-environment "UTF-8"))
 
+;; part-of-emacs: t
+;; info: interface to spell checkers
 (use-package ispell
   :defer t
   :ensure nil
@@ -297,7 +316,7 @@
    '(("russian"
       "[АБВГДЕЁЖЗИЙКЛМНОПРСТУФХЦЧШЩЬЫЪЭЮЯабвгдеёжзийклмнопрстуфхцчшщьыъэюяіїєґ’A-Za-z]"
       "[^АБВГДЕЁЖЗИЙКЛМНОПРСТУФХЦЧШЩЬЫЪЭЮЯабвгдеёжзийклмнопрстуфхцчшщьыъэюяіїєґ’A-Za-z]"
-      "[-']"  nil ("-d" "uk_UA,ru_RU,en_US") nil utf-8)))
+      "[-']"  nil ("-d" "ru_RU,en_US") nil utf-8)))
   (ispell-program-name "hunspell")
   (ispell-dictionary "russian")
   (ispell-really-aspell nil)
@@ -487,7 +506,7 @@
   :ensure t
   :defer t
   :custom
-  (xref-show-xrefs-function #'ivy-xref-show-xrefs "Use Ivy to show xrefs"))
+  (xref-show-xrefs-function #'ivy-xref-show-xrefs))
 
 (use-package counsel
   :ensure t
@@ -796,6 +815,9 @@
 ;;;; PROJECTS
 ;;
 
+(use-package magit
+  :defer t)
+
 (use-package gitconfig-mode
   :defer t)
 
@@ -926,12 +948,12 @@
 ;;   :config
 ;;   (ipretty-mode 1))
 
-;; (use-package nameless
-;;   :hook
-;;   (emacs-lisp-mode .  nameless-mode)
-;;   :custom
-;;   (nameless-global-aliases '())
-;;   (nameless-private-prefix t))
+(use-package nameless
+  :hook
+  (emacs-lisp-mode .  nameless-mode)
+  :custom
+  (nameless-global-aliases '())
+  (nameless-private-prefix t))
 
 ;; ;; bind-key can't bind to keymaps
 ;; (use-package erefactor
@@ -979,144 +1001,4 @@
 ;;   :defer t)
 
 (provide 'init)
-;;; init.el ends here
-;;; File:           init.el
 ;;;
-;;; Created       :  Tue 10 Mar 2015 11:39:46
-;;; Last Modified :  Thu 11 Feb 2016 02:49:19
-;;; Maintainer    :  sharlatan
-;;; Credits       :  http://aaronbedra.com/emacs.d/
-;;;               :  http://vinitkumar.me/articles/2014/05/04/Setting-Up-Emacs-For-Development/
-;;;               :  https://github.com/purcell/emacs.d/blob/master/init.el
-;;;               :  http://ergoemacs.org/emacs/emacs_tabs_space_indentation_setup.html
-;;;
-;;;
-;;;-=:[ PACKAGES ]:=----------------------------------------------------{{{
-;; Package manager setup
-(require 'package)
-(add-to-list 'package-archives
-                          '("melpa" . "https://melpa.org/packages/"))
-
-; --[ list of required packages
-(package-initialize)
-(defvar abedra/packages '(auto-complete
-                          autopair
-                          clojure-mode
-                          coffee-mode
-                          csharp-mode
-                          deft
-                          erlang
-                          evil
-                          feature-mode
-                          flycheck
-						  folding
-                          go-mode
-                          graphviz-dot-mode
-                          haml-mode
-                          haskell-mode
-                          htmlize
-                          idris-mode
-                          markdown-mode
-                          marmalade
-                          nodejs-repl
-                          o-blog
-                          org
-                          paredit
-                          php-mode
-						  powerline
-                          puppet-mode
-                          restclient
-                          rvm
-                          scala-mode
-                          smex
-                          sml-mode
-                          solarized-theme
-                          web-mode
-                          writegood-mode
-                          yaml-mode)
-  "Default packages")
-
-(setq inferior-lisp-program "sbcl")
-(load (expand-file-name "~/.cl/slime-helper.el"))
-
-(defun abedra/packages-installed-p ()
-    (loop for pkg in abedra/packages
-                  when (not (package-installed-p pkg)) do  (return nil)
-                          finally (return t)))
-
-(unless (abedra/packages-installed-p)
-    (message "%s" "Refreshing package database...")
-      (package-refresh-contents)
-        (dolist (pkg abedra/packages)
-              (when (not (package-installed-p pkg))
-                      (package-install pkg))))
-
-;; ---[ Enable packages
-(require 'folding)
-(require 'linum)
-(require 'server)
-(require 'font-lock)
-(require 'cedet)
-(require 'powerline)
-(require 'auto-complete-config)
-(require 'ansi-color)
-(require 'evil)             ; Vim-mode for Emacs
-(require 'autopair)         ; makes sure that brace structures (), [], {}
-(require 'neotree)          ; NERDTree for Emacs
-;;< END OF PLUGINS INSTAL >--------------------------------------------------}}}
-
-;;-=:[ PACKAGES SETTINGS ]:=--------------------------------------------------{{{
-(evil-mode 1)
-(ac-config-default) ; auto-complete
-(global-set-key [f8] 'neotree-toggle)
-;;< END OF PLUGINS SETTINGS >------------------------------------------------}}}
-
-;;-=:[ EMACS SETTINGS ]:=----------------------------------------------------{{{
-;;---[ user details
-(setq column-number-mode t)
-(setq user-full-name "Sharlatan")
-(setq user-mail-address "sharlatanus@gmail.com")
-(powerline-default-theme)
-;;
-;;
-;; ----[ highlighting
-(delete-selection-mode t)
-(transient-mark-mode t)
-(setq x-select-enable-clipboard t)
-
-(setq-default indicate-empty-lines t)
-(when (not indicate-empty-lines)
-  (toggle-indicate-empty-lines))
-
-
-(if window-system
-      (load-theme 'solarized-light t)
-        (load-theme 'wombat t))
-
-;; ----[ indenting
-(setq-default tab-width 4)
-(setq tab-width 4)
-(setq-default tab-always-indent t)
-
-;; Inhibit startup/splash screen
-(setq inhibit-splash-screen   t
-      ingibit-startup-message nil
-      initial-major-mode 'org-mode)
-; Scroll bar, Tool bar, Menu bar
-(tool-bar-mode -1)
-(menu-bar-mode -1)
-(scroll-bar-mode -1)
-;;---:[ lines ]---
-(line-number-mode   t)
-(global-linum-mode  t)
-(column-number-mode t)
-(setq linum-format " %d ")
-;;--[ window separators
-(let ((display-table (or standard-display-table (make-display-table))))
-    (set-display-table-slot display-table 'vertical-border (make-glyph-code ?│))
-      (setq standard-display-table display-table))
-
-;;---[ Server mode
-(unless (server-running-p)
-          (server-start))
-;< END OF EMACS SETTINGS >--------------------------------------------------}}}
