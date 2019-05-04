@@ -1,6 +1,6 @@
-;;; package ---  init.el Emacs configuration
+;; package ---  init.el Emacs configuration
 ;;; Created    : <Tue 10 Mar 2015 11:39:46>
-;;; Modified   : <2019-5-02 Thu 00:01:41 BST> Sharlatan
+;;; Modified   : <2019-5-04 Sat 12:49:23 BST> Sharlatan
 ;;; Author     : sharlatan
 
 ;;; Commentary:
@@ -38,7 +38,7 @@
 (setq use-package-compute-statistics t)
 
 ;; part-of-emacs: t
-;; info: C premitive functions.
+;; synopsis: C premitive functions.
 (use-package emacs
   :ensure nil
   :init
@@ -54,27 +54,37 @@
   (debug-on-quit nil))
 
 ;; part-of-emacs: t
-;; info: functions to manage system packages.
+;; synopsis: functions to manage system packages.
 (use-package system-packages
   :ensure t
   :custom
   (system-packages-noconfirm t))
 
-;; part-of-emacs:
-;; info:
+;; part-of-emacs: nil
+;; synopsis: auto install system packages
+;; url: https://github.com/waymondo/use-package-ensure-system-package
 (use-package use-package-ensure-system-package :ensure t)
 
-;; Keyword
+;; part-of-emacs: t
+;; synopsis: Diminished modes are minor modes with no modeline display
 (use-package diminish :ensure t)
 
+;; part-of-emacs: nil
+;; synopsis: A simple way to manage personal keybindings
 (use-package bind-key :ensure t)
 
+;; part-of-emacs: nil
+;; sysnopsis: Emacs Lisp packages built directly from source
+;; url: https://framagit.org/steckerhalter/quelpa
 (use-package quelpa
   :ensure t
   :defer t
   :custom
   (quelpa-update-melpa-p nil "Don't update the MELPA git repo."))
 
+;; part-of-emacs: nil
+;; synopsis: quelpa handler for use-package
+;; URL: https://framagit.org/steckerhalter/quelpa-use-packag
 (use-package quelpa-use-package :ensure t)
 
 
@@ -82,9 +92,8 @@
 ;;
 
 ;; part-of-emacs: nil
-;; info: A modern Packages Menu. Colored, with package ratings, and customizable.
-;; git: https://github.com/Malabarba/paradox
-;; melpa: https://melpa.org/#/paradox
+;; synopsis: A modern Packages Menu. Colored, with package ratings, and customizable.
+;; url: https://github.com/Malabarba/paradox
 (use-package paradox
   :ensure t
   :defer 1
@@ -92,6 +101,14 @@
   (paradox-enable))
 
 ;; part-of-emacs: t
+;; synopsis: Minibuffer completion functions
+(use-package minibuffer
+  :ensure t
+  :bind
+  (("C-M-return" . exit-minibuffer)))
+
+;; part-of-emacs: t
+;; synopsis: file input and output commands for Emacs
 (use-package files
   :ensure nil
   :hook
@@ -108,23 +125,24 @@
   (version-control t))
 
 ;; part-of-emacs: t
-;; info: Dinamicaly update ts of the file.
+;; synopsis: Dinamicaly update ts of the file.
 (use-package time-stamp
   :ensure nil
   :hook
   (before-save . time-stamp)
   :custom
-  (time-stamp-pattern "8/Modified[ \t]*:\\\\?[ \t]*<%04Y-%:m-%02d %03a %02H:%02M:%02S %Z> %u\\\\?$"))
+  (time-stamp-pattern
+   "8/Modified[ \t]*:\\\\?[ \t]*<%04Y-%:m-%02d %03a %02H:%02M:%02S %Z> %u\\\\?$"))
 
 ;; part-of-emacs: t
+;; synopsis: revert buffers when files on disk change
 (use-package autorevert
   :ensure nil
   :diminish auto-revert-mode)
 
 ;; part-of-emacs: nil
-;; info: Init file(and directory) Quick Acces
-;; git: https://github.com/emacsmirror/iqa
-;; melpa:
+;; synopsis: Init file(and directory) Quick Acces
+;; url: https://github.com/emacsmirror/iqa
 (use-package iqa
   :ensure t
   :custom
@@ -133,16 +151,15 @@
   (iqa-setup-default))
 
 ;; part-of-emacs: t
-;; info: tools for customizing Emacs and Lisp packages
+;; synopsis: tools for customizing Emacs and Lisp packages
 (use-package cus-edit
   :ensure t
   :custom
   (custom-file (concat user-emacs-directory "_customize.el")))
 
 ;; part-of-emacs: nil
-;; info: View Large Files in Emacs
-;; git:
-;; melpa:
+;; synopsis: View Large Files in Emacs
+;; URL: https://github.com/m00natic/vlfi
 (use-package vlf
   :ensure t
   :after (ivy counsel)
@@ -150,7 +167,7 @@
   (ivy-add-actions  'counsel-find-file '(("l" vlf "view large file"))))
 
 ;; part-of-eamcs: t
-;; info: EasyPG Assistant
+;; synopsis: EasyPG Assistant
 (use-package epa
   :defer t
   :ensure nil
@@ -159,6 +176,7 @@
   (epa-pinentry-mode nil))
 
 ;; part-of-emacs: t
+;; synopsis: unique buffer names dependent on file name
 (use-package uniquify
   :ensure nil
   :custom
@@ -220,7 +238,7 @@
 ;; similar to command shells such as bash, zsh, rc, or 4dos.
 
 ;; part-of-emacs: t
-;; info:
+;; synopsis:
 (use-package eshell
   :defer t
   :ensure nil)
@@ -237,7 +255,7 @@
   (eshell-smart-space-goes-to-end t))
 
 ;; part-of-emacs: nil
-;; info:
+;; synopsis:
 ;; link:
 (use-package esh-help
   :ensure t
@@ -245,7 +263,7 @@
   (setup-esh-help-eldoc))
 
 ;; part-of-emacs: nil
-;; info: fish-like history autosuggestions in eshell
+;; synopsis: fish-like history autosuggestions in eshell
 ;; link: https://github.com/dieggsy/esh-autosuggest
 (use-package esh-autosuggest
   :hook (eshell-mode . esh-autosuggest-mode)
@@ -307,7 +325,7 @@
   (set-language-environment "UTF-8"))
 
 ;; part-of-emacs: t
-;; info: interface to spell checkers
+;; synopsis: interface to spell checkers
 (use-package ispell
   :defer t
   :ensure nil
@@ -668,7 +686,7 @@
 ;;; ORG-MODE
 
 ;; part-of-emacs: t
-;; info:
+;; synopsis:
 ;; git:
 ;; melpa:
 (use-package org
@@ -678,10 +696,11 @@
   :custom
   (org-babel-load-languages
    '((R . t)
+     (shell . t)
      (restclient . t))))
 
 ;; part-of-emacs: t
-;; info:
+;; synopsis:
 ;; git:
 (use-package org-bullets
   :custom
@@ -690,8 +709,8 @@
   (org-mode . org-bullets-mode))
 
 ;; part-of-emacs: nil
-;; info: An org-mode extension to restclient.el
-;; git: https://github.com/alf/ob-restclient.el
+;; synopsis: An org-mode extension to restclient.el
+;; url: https://github.com/alf/ob-restclient.el
 ;; melpa:
 (use-package ob-restclient
   :after org restclient)
@@ -740,7 +759,7 @@
   :init (setq markdown-command "markdown"))
 
 ;; part-of-emacs: nil
-;; info: it adds interaction R, S-Plus, SAS, Stata and OpenBUGS/JAGS.
+;; synopsis: it adds interaction R, S-Plus, SAS, Stata and OpenBUGS/JAGS.
 ;; homepage: https://ess.r-project.org/
 (use-package ess
   :defer t)
@@ -825,8 +844,8 @@
   :defer t)
 
 ;; part-of-emacs: nil
-;; info: Browse target page on github/bitbucket from emacs buffers
-;; git: https://github.com/rmuslimov/browse-at-remote
+;; synopsis: Browse target page on github/bitbucket from emacs buffers
+;; url: https://github.com/rmuslimov/browse-at-remote
 (use-package browse-at-remote
   :after link-hint
   :bind
@@ -835,7 +854,7 @@
         ("k" . browse-at-remote-kill)))
 
 ;; part-of-emacs: t
-;; info:
+;; synopsis:
 (use-package smerge-mode
   :defer t
   :ensure nil
