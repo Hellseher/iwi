@@ -1,29 +1,35 @@
-;; package ---  init.el Emacs configuration
+;;; package ---  init.el Emacs configuration
 ;;; Created    : <Tue 10 Mar 2015 11:39:46>
-;;; Modified   : <2019-5-04 Sat 12:49:23 BST> Sharlatan
+;;; Modified   : <2019-5-18 Sat 19:47:12 BST> Sharlatan
 ;;; Author     : sharlatan
 
 ;;; Commentary:
 ;;
 ;; This build is wraped around `use-package macro which helps to
 ;; control the consitance infrostructure of the Emacs system.
-
-;;; Code:
-
-
-;;; CORE
 ;;
+;; If you add some changes reload init.el with `M-x eval-buffer' or
+;; `M-x load-file ~/.emacs.d/init.el'
+;;
+;;; Code:
+
+;;; CORE ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
+;;
+;;
+;;
+;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
+
+(defconst emacs-start-time (current-time))
 
 (require 'package)
 
-(setq package-archives
+(setq package-enable-at-startup nil
+      package-archives
       `(,@package-archives
         ("melpa" . "https://melpa.org/packages/")
         ("org" . "https://orgmode.org/elpa/")))
 
 (package-initialize)
-
-(setq package-enable-at-startup nil)
 
 (unless (package-installed-p 'use-package)
   (package-refresh-contents)
@@ -32,10 +38,16 @@
 (eval-when-compile (require 'use-package))
 
 (put 'use-package 'lisp-indent-function 1)
-(setq use-package-always-ensure t)
-(setq use-package-verbose t)
-(setq use-package-minimum-reported-time 0.01)
-(setq use-package-compute-statistics t)
+
+(setq use-package-always-ensure t
+      use-package-verbose t
+      use-package-minimum-reported-time 0.01
+      use-package-compute-statistics t)
+
+;;; core-libs
+(use-package f     :defer t)
+(use-package dash  :defer t)
+(use-package s     :defer t)
 
 ;; part-of-emacs: t
 ;; synopsis: C premitive functions.
@@ -52,6 +64,13 @@
   (indent-tabs-mode nil "Spaces!")
   (tab-width 4)
   (debug-on-quit nil))
+
+;;; USE-PACKAGE-EXTENSIONS ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
+;;
+;; Set of required addionals keywords and fucntion to extand
+;; `use-package' functionality.
+;;
+;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 
 ;; part-of-emacs: t
 ;; synopsis: functions to manage system packages.
@@ -65,17 +84,21 @@
 ;; url: https://github.com/waymondo/use-package-ensure-system-package
 (use-package use-package-ensure-system-package :ensure t)
 
-;; part-of-emacs: t
+;; part-of-emacs: nil
 ;; synopsis: Diminished modes are minor modes with no modeline display
+;; url: https://github.com/myrjola/diminish.el
+;; purpose: to enable `:deminish' keyword in `use-package'
 (use-package diminish :ensure t)
 
 ;; part-of-emacs: nil
 ;; synopsis: A simple way to manage personal keybindings
+;; purpose: to enable `:bind' keyworkd in `use-package'
 (use-package bind-key :ensure t)
 
 ;; part-of-emacs: nil
 ;; sysnopsis: Emacs Lisp packages built directly from source
 ;; url: https://framagit.org/steckerhalter/quelpa
+;; purpose: to enable `:quelpa' keyworkd in `use-package'
 (use-package quelpa
   :ensure t
   :defer t
@@ -86,10 +109,11 @@
 ;; synopsis: quelpa handler for use-package
 ;; URL: https://framagit.org/steckerhalter/quelpa-use-packag
 (use-package quelpa-use-package :ensure t)
-
 
-;;; GLOGAL-CONFIRUATIONS
+;;; GLOGAL-CONFIRUATIONS ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 ;;
+;;
+;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 
 ;; part-of-emacs: nil
 ;; synopsis: A modern Packages Menu. Colored, with package ratings, and customizable.
@@ -99,13 +123,6 @@
   :defer 1
   :config
   (paradox-enable))
-
-;; part-of-emacs: t
-;; synopsis: Minibuffer completion functions
-(use-package minibuffer
-  :ensure t
-  :bind
-  (("C-M-return" . exit-minibuffer)))
 
 ;; part-of-emacs: t
 ;; synopsis: file input and output commands for Emacs
@@ -125,6 +142,19 @@
   (version-control t))
 
 ;; part-of-emacs: t
+;; sysnopsis: basic editing commands for Emacs
+(use-package simple
+  :ensure nil
+  :custom
+  (kill-ring-max 300)
+  :diminish
+  ((visual-line-mode . " ↩")
+   (auto-fill-function . " ↵"))
+  :config
+  (column-number-mode t)
+  (toggle-truncate-lines 1))
+
+;; part-of-emacs: t
 ;; synopsis: Dinamicaly update ts of the file.
 (use-package time-stamp
   :ensure nil
@@ -132,6 +162,7 @@
   (before-save . time-stamp)
   :custom
   (time-stamp-pattern
+
    "8/Modified[ \t]*:\\\\?[ \t]*<%04Y-%:m-%02d %03a %02H:%02M:%02S %Z> %u\\\\?$"))
 
 ;; part-of-emacs: t
@@ -153,9 +184,8 @@
 ;; part-of-emacs: t
 ;; synopsis: tools for customizing Emacs and Lisp packages
 (use-package cus-edit
-  :ensure t
   :custom
-  (custom-file (concat user-emacs-directory "_customize.el")))
+  (custom-file null-device))
 
 ;; part-of-emacs: nil
 ;; synopsis: View Large Files in Emacs
@@ -182,41 +212,44 @@
   :custom
   (uniquify-buffer-name-style 'forward))
 
-;; History
-(use-package saveplace
-  :ensure nil
-  :hook (after-init . save-place-mode))
+;; part-of-emacs: t
+;; synopsis: save minibuffer history
+(use-package savehist
+  :unless noninteractive
+  :config
+  (savehist-mode 1))
 
+;; part-of-emacs: t
+;; synopsis: automatically save place in files
+(use-package saveplace
+  :unless noninteractive
+  :config
+  (save-place-mode 1))
 
-;;; TRAMP
+;;; TRAMP ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
+;;
 ;; It is for transparently accessing remote files from within
 ;; Emacs. TRAMP enables an easy, convenient, and consistent interface
 ;; to remote files as if they are local files. TRAMP's
 ;; transparency extends to editing, version control, and dired.
+;;
+;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 
+;; part-of-emacs: t
+;; synopsis:
 (use-package tramp
-  :ensure nil
-  :defer t
+  :defer 5
   :custom
   (tramp-backup-directory-alist backup-directory-alist)
   (tramp-default-method "ssh")
-  (tramp-default-proxies-alist nil))
+  (tramp-default-proxies-alist nil)
+  :config
+  (put 'temporary-file-directory 'standard-value '("/tmp")))
 
 (use-package sudo-edit
   :ensure t
   :bind
   (:map ctl-x-map ("M-s" . sudo-edit)))
-
-(use-package simple
-  :ensure nil
-  :custom
-  (kill-ring-max 300)
-  :diminish
-  ((visual-line-mode . " ↩")
-   (auto-fill-function . " ↵"))
-  :config
-  (column-number-mode t)
-  (toggle-truncate-lines 1))
 
 (use-package ibuffer
   :ensure nil
@@ -760,7 +793,7 @@
 
 ;; part-of-emacs: nil
 ;; synopsis: it adds interaction R, S-Plus, SAS, Stata and OpenBUGS/JAGS.
-;; homepage: https://ess.r-project.org/
+;; url: https://ess.r-project.org/
 (use-package ess
   :defer t)
 
@@ -829,14 +862,23 @@
 ;;                (ibuffer-vc-set-filter-groups-by-vc-root)
 ;;                (unless (eq ibuffer-sorting-mode 'alphabetic)
 ;;                  (ibuffer-do-sort-by-alphabetic)))))
-
 
-;;;; PROJECTS
+;;;; PROJECTS ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 ;;
+;; Set of packages for better productivities with all kind of
+;; projects. Collection of snippets, autocmplite, git etc.
+;;
+;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 
+;; part-of-emacs: nil
+;; synopsis: a git porcelain inside emacs
+;; url: https://github.com/magit/magit
 (use-package magit
-  :defer t)
+  :bind (("C-x g" . magit-status)))
 
+;; part-of-emacs:
+;; synopsis:
+;; url:
 (use-package gitconfig-mode
   :defer t)
 
@@ -854,12 +896,15 @@
         ("k" . browse-at-remote-kill)))
 
 ;; part-of-emacs: t
-;; synopsis:
+;; synopsis: minor mode to resolve diff3 conflicts
 (use-package smerge-mode
   :defer t
   :ensure nil
   :diminish smerge-mode)
 
+;; part-of-emacs: nil
+;; synopsis: emacs package for highlighting uncommitted changes
+;; url: https://github.com/dgutov/diff-hl
 (use-package diff-hl
   :hook
   ((magit-post-refresh . diff-hl-magit-post-refresh)
@@ -867,9 +912,13 @@
    (org-mode . diff-hl-mode)
    (dired-mode . diff-hl-dired-mode)))
 
-;; (use-package smart-comment
-;;   :bind ("M-;" . smart-comment))
+;; part-of-emacs: nil
+;; synopsis: smarter commenting for Emacs.
+;; url: https://github.com/paldepind/smart-comment
+(use-package smart-comment
+  :bind ("M-;" . smart-comment))
 
+;; part-of-emacs: nil
 (use-package projectile
   :bind
   (:map mode-specific-map ("p" . projectile-command-map))
@@ -924,6 +973,9 @@
 ;;   :hook
 ;;   (find-file . auto-insert))
 
+;; part-of-emacs: nil
+;; synopsis: yet another snippet extension for emacs
+;; url: https://github.com/joaotavora/yasnippet
 (use-package yasnippet
   :ensure t
   :diminish yas-minor-mode
@@ -933,6 +985,12 @@
   (yas-reload-all)
   :hook
   (prog-mode  . yas-minor-mode))
+
+;; part-of-emacs: nil
+;; synopsis: yasnippet official snippet collections
+;; url: https://github.com/AndreaCrotti/yasnippet-snippets
+(use-package yasnippet-snippets
+  :ensure t)
 
 (use-package flycheck
   :diminish flycheck-mode
@@ -1019,5 +1077,10 @@
 ;; (use-package emamux
 ;;   :defer t)
 
+(let ((elapsed (float-time (time-subtract (current-time)
+                                          emacs-start-time))))
+  (message "Loading %s...done (%.3fs)" load-file-name elapsed))
+
 (provide 'init)
-;;;
+
+;;; init.el ends here
