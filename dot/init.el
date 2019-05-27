@@ -1,6 +1,6 @@
 ;;; package ---  init.el Emacs configuration
 ;;; Created    : <Tue 10 Mar 2015 11:39:46>
-;;; Modified   : <2019-5-18 Sat 19:47:12 BST> Sharlatan
+;;; Modified   : <2019-5-28 Tue 00:40:45 BST> Sharlatan
 ;;; Author     : sharlatan
 
 ;;; Commentary:
@@ -15,7 +15,8 @@
 
 ;;; CORE ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 ;;
-;;
+;; Initial configurateion to make `use-package' main configuration
+;; macro. Load dependancies libraries.
 ;;
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 
@@ -39,15 +40,14 @@
 
 (put 'use-package 'lisp-indent-function 1)
 
-(setq use-package-always-ensure t
-      use-package-verbose t
+(setq use-package-verbose t
       use-package-minimum-reported-time 0.01
       use-package-compute-statistics t)
 
 ;;; core-libs
-(use-package f     :defer t)
-(use-package dash  :defer t)
-(use-package s     :defer t)
+(use-package f     :defer t) ; API for working with files and directories
+(use-package dash  :defer t) ; List library. NO `cl' required.
+(use-package s     :defer t) ; String manipulation library.
 
 ;; part-of-emacs: t
 ;; synopsis: C premitive functions.
@@ -81,12 +81,12 @@
 
 ;; part-of-emacs: nil
 ;; synopsis: auto install system packages
-;; url: https://github.com/waymondo/use-package-ensure-system-package
+;; URL: https://github.com/waymondo/use-package-ensure-system-package
 (use-package use-package-ensure-system-package :ensure t)
 
 ;; part-of-emacs: nil
 ;; synopsis: Diminished modes are minor modes with no modeline display
-;; url: https://github.com/myrjola/diminish.el
+;; URL: https://github.com/myrjola/diminish.el
 ;; purpose: to enable `:deminish' keyword in `use-package'
 (use-package diminish :ensure t)
 
@@ -97,7 +97,7 @@
 
 ;; part-of-emacs: nil
 ;; sysnopsis: Emacs Lisp packages built directly from source
-;; url: https://framagit.org/steckerhalter/quelpa
+;; URL: https://framagit.org/steckerhalter/quelpa
 ;; purpose: to enable `:quelpa' keyworkd in `use-package'
 (use-package quelpa
   :ensure t
@@ -112,12 +112,13 @@
 
 ;;; GLOGAL-CONFIRUATIONS ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 ;;
+;; Mode agnostic configuration, related to majority of functionality.
 ;;
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 
 ;; part-of-emacs: nil
-;; synopsis: A modern Packages Menu. Colored, with package ratings, and customizable.
-;; url: https://github.com/Malabarba/paradox
+;; synopsis: A packages menu, colored, with package ratings, and customizable.
+;; URL: https://github.com/Malabarba/paradox
 (use-package paradox
   :ensure t
   :defer 1
@@ -129,7 +130,8 @@
 (use-package files
   :ensure nil
   :hook
-  (before-save . delete-trailing-whitespace)
+  ((before-save . delete-trailing-whitespace)
+   (before-save . time-stamp))
   :custom
   (require-final-newline t)
   (backup-by-copying t)
@@ -155,14 +157,11 @@
   (toggle-truncate-lines 1))
 
 ;; part-of-emacs: t
-;; synopsis: Dinamicaly update ts of the file.
+;; synopsis: dinamicaly update time stamp of the file.
 (use-package time-stamp
-  :ensure nil
-  :hook
-  (before-save . time-stamp)
+  :defer t
   :custom
   (time-stamp-pattern
-
    "8/Modified[ \t]*:\\\\?[ \t]*<%04Y-%:m-%02d %03a %02H:%02M:%02S %Z> %u\\\\?$"))
 
 ;; part-of-emacs: t
@@ -173,7 +172,7 @@
 
 ;; part-of-emacs: nil
 ;; synopsis: Init file(and directory) Quick Acces
-;; url: https://github.com/emacsmirror/iqa
+;; URL: https://github.com/emacsmirror/iqa
 (use-package iqa
   :ensure t
   :custom
@@ -184,11 +183,12 @@
 ;; part-of-emacs: t
 ;; synopsis: tools for customizing Emacs and Lisp packages
 (use-package cus-edit
+  :defer t
   :custom
   (custom-file null-device))
 
 ;; part-of-emacs: nil
-;; synopsis: View Large Files in Emacs
+;; synopsis: view large files in emacs
 ;; URL: https://github.com/m00natic/vlfi
 (use-package vlf
   :ensure t
@@ -197,7 +197,7 @@
   (ivy-add-actions  'counsel-find-file '(("l" vlf "view large file"))))
 
 ;; part-of-eamcs: t
-;; synopsis: EasyPG Assistant
+;; synopsis: easypg assistant
 (use-package epa
   :defer t
   :ensure nil
@@ -236,7 +236,7 @@
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 
 ;; part-of-emacs: t
-;; synopsis:
+;; synopsis: transparent remote access, multiple protocol
 (use-package tramp
   :defer 5
   :custom
@@ -246,15 +246,13 @@
   :config
   (put 'temporary-file-directory 'standard-value '("/tmp")))
 
+;; part-of-emacs: nil
+;; synopsis: open files as another user.
+;; URL: https://github.com/nflath/sudo-edit
 (use-package sudo-edit
   :ensure t
   :bind
   (:map ctl-x-map ("M-s" . sudo-edit)))
-
-(use-package ibuffer
-  :ensure nil
-  :bind
-  ([remap list-buffers] . ibuffer))
 
 (use-package exec-path-from-shell
   :ensure t
@@ -271,7 +269,7 @@
 ;; similar to command shells such as bash, zsh, rc, or 4dos.
 
 ;; part-of-emacs: t
-;; synopsis:
+;; synopsis: the emacs command shell
 (use-package eshell
   :defer t
   :ensure nil)
@@ -303,13 +301,18 @@
   :ensure t)
 
 
-;;; DIRED
+;;; DIRED ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
+;;
 ;; It makes an Emacs buffer containing a listing of a directory,
 ;; and optionally some of its subdirectories as well. You can use the
 ;; normal Emacs commands to move around in this buffer, and special
 ;; Dired commands to operate on the listed files. Dired works with
 ;; both local and remote directories.
+;;
+;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 
+;; part-of-emacs: t
+;; synopsis:
 (use-package dired
   :ensure nil
   :custom (dired-dwim-target t "guess a target directory")
@@ -332,6 +335,16 @@
   :hook
   (dired-mode . diredfl-mode))
 
+;; part-of-emacs: t
+;; synopsis: operate on buffers like dired
+(use-package ibuffer
+  :ensure nil
+  :bind
+  ([remap list-buffers] . ibuffer))
+
+;; part-of-emacs: nil
+;; synopsis: asynchronous processing in emacs
+;; URL: https://github.com/jwiegley/emacs-async
 (use-package async
   :ensure t
   :init
@@ -367,7 +380,7 @@
    '(("russian"
       "[АБВГДЕЁЖЗИЙКЛМНОПРСТУФХЦЧШЩЬЫЪЭЮЯабвгдеёжзийклмнопрстуфхцчшщьыъэюяіїєґ’A-Za-z]"
       "[^АБВГДЕЁЖЗИЙКЛМНОПРСТУФХЦЧШЩЬЫЪЭЮЯабвгдеёжзийклмнопрстуфхцчшщьыъэюяіїєґ’A-Za-z]"
-      "[-']"  nil ("-d" "ru_RU,en_US") nil utf-8)))
+      "[-']"  nil ("-d" "en_GB") nil utf-8)))
   (ispell-program-name "hunspell")
   (ispell-dictionary "russian")
   (ispell-really-aspell nil)
@@ -380,32 +393,53 @@
   :ensure nil
   :custom
   (flyspell-delay 1))
-
 
-;;; UI
+;;; UI ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 ;;
+;; Everything wich concerns visual repsentation of Emacs.
+;;
+;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 
+(use-package zenburn-theme    :ensure t :config (load-theme 'zenburn))
+(use-package solarized-theme  :ensure t :defer t)
+(use-package doom-themes      :ensure t :defer t)
+
+;; part-of-emacs: nil
+;; synopsis: a minimal and morden modeline.
+;; URL: https://github.com/seagle0128/doom-modeline
+(use-package doom-modeline
+  :ensure t
+  :hook
+  (after-init . doom-modeline-mode)
+  :custom
+  (doom-modeline-major-mode-icon t)
+  (doom-modeline-buffer-file-name-style 'buffer-name)
+  (doom-modeline-icon t)
+  (doom-modeline-height 20))
+
+;; part-of-emacs: t
+;; sysnopsis: tools for declaring and initializing options
+(use-package custom
+  :ensure nil
+  :custom
+  (custom-safe-themes t "Treat all themes as safe"))
+
+;; part-of-emacs: t
+;; synopsis:
 (use-package faces
   :ensure nil
   :defer 0.1
   :custom
-  (face-font-family-alternatives '(("Hack" "Consolas" "Monaco" "Monospace")))
+  (face-font-family-alternatives '(("Hack"
+                                    "Consolas"
+                                    "Monaco"
+                                    "Monospace")))
   :config
   (set-face-attribute 'default
                       nil
                       :family (caar face-font-family-alternatives)
                       :weight 'regular
                       :height 120))
-
-(use-package custom
-  :ensure nil
-  :custom
-  (custom-safe-themes t "Treat all themes as safe"))
-
-(use-package zenburn-theme
-  :ensure t
-  :config
-  (load-theme 'zenburn))
 
 (use-package tool-bar
   :ensure nil
@@ -445,6 +479,9 @@
   :quelpa
   (font-lock+ :repo "emacsmirror/font-lock-plus" :fetcher github))
 
+;; part-of-emacs: nil
+;; synopsis: A library for inserting Developer icons.
+;; URL: https://github.com/domtronn/all-the-icons.el
 (use-package all-the-icons
   :ensure t
   :defer t
@@ -453,11 +490,13 @@
         `(,@all-the-icons-mode-icon-alist
           (package-menu-mode all-the-icons-octicon "package" :v-adjust 0.0))))
 
+;; part-of-emacs: nil
 (use-package all-the-icons-dired
   :ensure t
   :hook
   (dired-mode . all-the-icons-dired-mode))
 
+;; part-of-emacs: nil
 (use-package all-the-icons-ivy
   :ensure t
   :after ivy
@@ -465,16 +504,6 @@
   (all-the-icons-ivy-buffer-commands '() "Don't use for buffers.")
   :config
   (all-the-icons-ivy-setup))
-
-(use-package doom-modeline
-  :ensure t
-  :hook
-  (after-init . doom-modeline-init)
-  :custom
-  (doom-modeline-major-mode-icon t)
-  (doom-modeline-buffer-file-name-style 'buffer-name)
-  (doom-modeline-icon t)
-  (doom-modeline-height 25))
 
 (use-package dashboard
   :ensure t
@@ -490,6 +519,8 @@
                      (agenda . 5)
                      (registers . 5))))
 
+;; part-of-emacs: t
+;; synopsis: Restore old window configurations.
 (use-package winner
   :ensure nil
   :config
@@ -510,16 +541,25 @@
   :hook
   (prog-mode . highlight-numbers-mode))
 
+;; part-of-emacs: nil
+;; sysnopsis:  Display ^L page breaks as tidy horizontal lines
+;; URL: https://github.com/purcell/page-break-lines
 (use-package page-break-lines
   :ensure t
   :config
   (global-page-break-lines-mode))
 
+;; part-of-emacs: nil
+;; synopsis: Highlight brackets according to their depth
+;; URL: https://github.com/Fanael/rainbow-delimiters
 (use-package rainbow-delimiters
   :ensure t
   :hook
   (prog-mode . rainbow-delimiters-mode))
 
+;; part-of-emacs: nil
+;; synopsis:  Highlight identifiers according to their names.
+;; URL: https://github.com/Fanael/rainbow-identifiers
 (use-package rainbow-identifiers
   :ensure t
   :custom
@@ -716,12 +756,14 @@
   :custom
   (calendar-week-start-day 1))
 
-;;; ORG-MODE
+;;; ORG-MODE ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
+;;
+;;
+;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 
 ;; part-of-emacs: t
-;; synopsis:
-;; git:
-;; melpa:
+;; synopsis: Outline-based notes management and organizer.
+;; URL: https://orgmode.org
 (use-package org
   :mode (("\\.org$" . org-mode))
   :defer t
@@ -732,9 +774,16 @@
      (shell . t)
      (restclient . t))))
 
+;; part-of-emacs: nil
+;; synopsis: org exporter for pandoc.
+;; URL: https://github.com/kawabata/ox-pandoc
+(use-package ox-pandoc
+  :after org-plus-contrib
+  :defer 5)
+
 ;; part-of-emacs: t
-;; synopsis:
-;; git:
+;; synopsis: Show bullets in org-mode as UTF-8 characters
+;; URL: https://github.com/emacsorphanage/org-bullets
 (use-package org-bullets
   :custom
   (org-ellipsis "…")
@@ -743,8 +792,7 @@
 
 ;; part-of-emacs: nil
 ;; synopsis: An org-mode extension to restclient.el
-;; url: https://github.com/alf/ob-restclient.el
-;; melpa:
+;; URL: https://github.com/alf/ob-restclient.el
 (use-package ob-restclient
   :after org restclient)
 
@@ -753,8 +801,17 @@
   (org-mode . org-password-manager-key-bindings))
 
 
-;;; LANGUAGE-SUPPORT
+;;; LANGUAGE-SUPPORT ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 ;;
+;; Supported programming and markup languages:
+;; + Rust
+;; + Perl
+;; + Shell/Bash
+;; + Python
+;; + YAML
+;; + JSON
+;;
+;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 
 (use-package lsp-rust
   :ensure t
@@ -763,18 +820,27 @@
   :init
   (add-hook 'rust-mode-hook #'lsp-rust-enable))
 
+;; part-of-emacs: nil
+;; synopsis: A major emacs mode for editing Rust source code
+;; URL: https://github.com/rust-lang/rust-mode
 (use-package rust-mode
   :ensure t
   :mode ("\\.rs\\'" . rust-mode))
 
+;; part-of-emacs: nil
+;; synopsis: code completion, goto-definition and docs browsing for Rust via racer
+;; URL: https://github.com/racer-rust/emacs-racer
 (use-package racer
   :ensure t
   :after rust-mode
   :diminish racer-mode
   :init
   (add-hook 'rust-mode-hook #'racer-mode)
-  (add-hook 'racer-mode-hook (lambda () (setq eldoc-documentation-function nil))))
+  (add-hook 'racer-mode-hook (lambda ()
+                               (setq eldoc-documentation-function nil))))
 
+;; part-of-emacs: t
+;; synopsis: Lisp editing commands for Emacs
 (use-package lisp
   :ensure nil
   :hook
@@ -793,10 +859,12 @@
 
 ;; part-of-emacs: nil
 ;; synopsis: it adds interaction R, S-Plus, SAS, Stata and OpenBUGS/JAGS.
-;; url: https://ess.r-project.org/
+;; URL: https://ess.r-project.org/
 (use-package ess
-  :defer t)
+  :ensure t)
 
+;; part-of-emacs: t
+;; synopsis: perl code editing commands for emacs
 (use-package cperl-mode
   :mode
   ("\\.pl\\'" . cperl-mode))
@@ -871,14 +939,28 @@
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 
 ;; part-of-emacs: nil
+;; synopsis: Manage and navigate projects in Emacs easily
+;; URL: https://github.com/bbatsov/projectile
+(use-package projectile
+  :bind
+  (:map mode-specific-map ("p" . projectile-command-map))
+  :custom
+  (projectile-project-root-files-functions
+   '(projectile-root-local
+     projectile-root-top-down
+     projectile-root-bottom-up
+     projectile-root-top-down-recurring))
+  (projectile-completion-system 'ivy))
+
+;; part-of-emacs: nil
 ;; synopsis: a git porcelain inside emacs
-;; url: https://github.com/magit/magit
+;; URL: https://github.com/magit/magit
 (use-package magit
   :bind (("C-x g" . magit-status)))
 
 ;; part-of-emacs:
 ;; synopsis:
-;; url:
+;; URL:
 (use-package gitconfig-mode
   :defer t)
 
@@ -887,7 +969,7 @@
 
 ;; part-of-emacs: nil
 ;; synopsis: Browse target page on github/bitbucket from emacs buffers
-;; url: https://github.com/rmuslimov/browse-at-remote
+;; URL: https://github.com/rmuslimov/browse-at-remote
 (use-package browse-at-remote
   :after link-hint
   :bind
@@ -904,7 +986,7 @@
 
 ;; part-of-emacs: nil
 ;; synopsis: emacs package for highlighting uncommitted changes
-;; url: https://github.com/dgutov/diff-hl
+;; URL: https://github.com/dgutov/diff-hl
 (use-package diff-hl
   :hook
   ((magit-post-refresh . diff-hl-magit-post-refresh)
@@ -914,21 +996,9 @@
 
 ;; part-of-emacs: nil
 ;; synopsis: smarter commenting for Emacs.
-;; url: https://github.com/paldepind/smart-comment
+;; URL: https://github.com/paldepind/smart-comment
 (use-package smart-comment
   :bind ("M-;" . smart-comment))
-
-;; part-of-emacs: nil
-(use-package projectile
-  :bind
-  (:map mode-specific-map ("p" . projectile-command-map))
-  :custom
-  (projectile-project-root-files-functions
-   '(projectile-root-local
-     projectile-root-top-down
-     projectile-root-bottom-up
-     projectile-root-top-down-recurring))
-  (projectile-completion-system 'ivy))
 
 (use-package counsel-projectile
   :after counsel projectile
@@ -975,7 +1045,7 @@
 
 ;; part-of-emacs: nil
 ;; synopsis: yet another snippet extension for emacs
-;; url: https://github.com/joaotavora/yasnippet
+;; URL: https://github.com/joaotavora/yasnippet
 (use-package yasnippet
   :ensure t
   :diminish yas-minor-mode
@@ -988,7 +1058,7 @@
 
 ;; part-of-emacs: nil
 ;; synopsis: yasnippet official snippet collections
-;; url: https://github.com/AndreaCrotti/yasnippet-snippets
+;; URL: https://github.com/AndreaCrotti/yasnippet-snippets
 (use-package yasnippet-snippets
   :ensure t)
 
@@ -1080,7 +1150,5 @@
 (let ((elapsed (float-time (time-subtract (current-time)
                                           emacs-start-time))))
   (message "Loading %s...done (%.3fs)" load-file-name elapsed))
-
-(provide 'init)
 
 ;;; init.el ends here
