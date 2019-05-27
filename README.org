@@ -1,16 +1,17 @@
 # File     : README..org
 # Created  : Sun 10 Jan 2016 21:23:39
-# Modified : <2017-12-03 Sun 00:06:11 GMT> Sharlatan
+# Modified : <2019-5-02 Thu 20:02:52 BST> Sharlatan
 
 #+TITLE: IWI
-/Install Working Inventory/
 #+AUTHOR: Sharlatan <sharlatanus@gmail.com>
+/Install Working Inventory/
 
 * Synopsis
 
-The aim of IWI is to make tuning of GNU/Linux machine more consistent. If you
-have your own dotfiles, necessary list of packages you using constantly or you
-want to create a set of packages for specific purposes, you can use IWI.
+The aim of IWI is to make tuning of GNU/Linux machine more consistent and
+controlled. If you have your own dotfiles, necessary list of packages you using
+constantly or you want to create a set of packages for specific purposes, you
+can use IWI.
 -----
 
 * Manifest
@@ -20,15 +21,21 @@ tree -L 2
 #+END_SRC
 
 #+RESULTS:
-#+BEGIN_SRC org
+#+begin_src org
 .
 ├── dot
 │   ├── bashrc
-│   ├── emacs.d
+│   ├── config
+│   ├── gitconfig
+│   ├── gitignore
+│   ├── init.el
 │   ├── sbclrc
+│   ├── sbclrc.fasl
 │   ├── spacemacs
+│   ├── stumpwm.d
 │   ├── tmux.conf
-│   └── vimrc
+│   ├── vimrc
+│   └── xmodmaprc
 ├── iwi-ansible
 │   ├── ansible.cfg
 │   ├── group_vars
@@ -44,8 +51,8 @@ tree -L 2
 ├── LICENSE
 └── README.org
 
-9 directories, 12 files
-#+END_SRC
+10 directories, 17 files
+#+end_src
 
 ** Packages
 
@@ -61,12 +68,13 @@ tree -L 2
 | Rust | terminal   | alacritty |
 
 ** Shells support
+
 ** Editors support
 
-* Chose your way!
+* Chose your way
 ** iwi-shell-bash
 It's just a BASH script with extra config files looks like a list of packages
-separated by sets. 
+separated by sets.
 
 ** iwi-ansible
 Fully automated Ansible playbook.
@@ -81,34 +89,24 @@ Fully automated Ansible playbook.
 #+END_SRC
 
 #+RESULTS:
-#+BEGIN_SRC org
+#+begin_src org
 
 playbook: ./iwi-ansible/iwi.yml
 
   play #1 (self): self	TAGS: []
     tasks:
-      apt check	TAGS: []
-      apt-get check	TAGS: []
-      dnf check	TAGS: []
-      yum check	TAGS: []
-      python check	TAGS: []
-      apt install python	TAGS: []
-      apt-get install python	TAGS: []
-      dnf install python	TAGS: []
-      yum install python	TAGS: []
-      control python check	TAGS: []
-      gathering facts	TAGS: []
-      iwi-sys-upgrade-install : Fedora distribution	TAGS: []
-      iwi-sys-upgrade-install : Ubuntu distribution	TAGS: []
-      iwi-lang-latex : LaTeX Fedora	TAGS: []
-#+END_SRC
+      test url	TAGS: []
+      debug	TAGS: []
+      debug	TAGS: []
+#+end_src
 
+** iwi-terraform
 * Tested on
 
 #+BEGIN_SRC sh  :results value org :results output replace :exports results
 printf "Workstation\n-----------\n"
-printf "SYS\t: %s\n" "$(uname -sori)" 
-printf "CPU\t: %s\n" "$(grep -m 1 -oP "(?<=model\sname\s:\s).+" /proc/cpuinfo)" 
+printf "SYS\t: %s\n" "$(uname -sori)"
+printf "CPU\t: %s\n" "$(grep -m 1 -oP "(?<=model\sname\s:\s).+" /proc/cpuinfo)"
 printf "DISTR\t: %s\n" "$(lsb_release -sd)"
 echo
 printf "Enviroment\n----------\n"
@@ -118,19 +116,19 @@ printf "ANSIBLE\t: %s\n" "$(ansible --version 2>&1 | head -n1)"
 #+END_SRC
 
 #+RESULTS:
-#+BEGIN_SRC org
+#+begin_src org
 Workstation
 -----------
-SYS	: Linux 4.13.9-300.fc27.x86_64 x86_64 GNU/Linux
+SYS	: Linux 5.0.9-301.fc30.x86_64 x86_64 GNU/Linux
 CPU	: Intel(R) Core(TM) i7-3770S CPU @ 3.10GHz
-DISTR	: "Fedora release 27 (Twenty Seven)"
+DISTR	:
 
 Enviroment
 ----------
-BASH	: GNU bash, version 4.4.12(1)-release (x86_64-redhat-linux-gnu)
-PYTHON	: Python 2.7.14
-ANSIBLE	: ansible 2.4.1.0
-#+END_SRC
+BASH	: GNU bash, version 5.0.2(1)-release (x86_64-redhat-linux-gnu)
+PYTHON	: Python 2.7.16
+ANSIBLE	: ansible 2.7.10
+#+end_src
 
 * References
 -  GNU stow https://www.gnu.org/software/stow/
@@ -139,4 +137,3 @@ ANSIBLE	: ansible 2.4.1.0
 -  Spacewalk http://spacewalk.redhat.com/
 -  OpenQRM http://www.openqrm-enterprise.com/
 -  Ansible https://www.ansible.com/
-
