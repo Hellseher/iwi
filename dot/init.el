@@ -1,6 +1,6 @@
 ;;; package ---  init.el Emacs configuration
 ;;; Created    : <Tue 10 Mar 2015 11:39:46>
-;;; Modified   : <2019-5-28 Tue 00:40:45 BST> Sharlatan
+;;; Modified   : <2019-6-01 Sat 00:30:55 BST> Sharlatan
 ;;; Author     : sharlatan
 
 ;;; Commentary:
@@ -11,6 +11,9 @@
 ;; If you add some changes reload init.el with `M-x eval-buffer' or
 ;; `M-x load-file ~/.emacs.d/init.el'
 ;;
+;; - https://shrysr.github.io/docs/sr-config/
+;; - http://www.coli.uni-saarland.de/~slemaguer/emacs/main.html
+;;
 ;;; Code:
 
 ;;; CORE ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
@@ -19,8 +22,6 @@
 ;; macro. Load dependancies libraries.
 ;;
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
-
-(defconst emacs-start-time (current-time))
 
 (require 'package)
 
@@ -220,7 +221,7 @@
   (savehist-mode 1))
 
 ;; part-of-emacs: t
-;; synopsis: automatically save place in files
+;; synopsis: Automatically save place of cursor in files.
 (use-package saveplace
   :unless noninteractive
   :config
@@ -400,9 +401,10 @@
 ;;
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 
-(use-package zenburn-theme    :ensure t :config (load-theme 'zenburn))
+(use-package zenburn-theme    :ensure t :config (load-theme 'zenburn t))
 (use-package solarized-theme  :ensure t :defer t)
 (use-package doom-themes      :ensure t :defer t)
+(use-package gruvbox-theme    :ensure t :defer t)
 
 ;; part-of-emacs: nil
 ;; synopsis: a minimal and morden modeline.
@@ -416,13 +418,6 @@
   (doom-modeline-buffer-file-name-style 'buffer-name)
   (doom-modeline-icon t)
   (doom-modeline-height 20))
-
-;; part-of-emacs: t
-;; sysnopsis: tools for declaring and initializing options
-(use-package custom
-  :ensure nil
-  :custom
-  (custom-safe-themes t "Treat all themes as safe"))
 
 ;; part-of-emacs: t
 ;; synopsis:
@@ -491,12 +486,14 @@
           (package-menu-mode all-the-icons-octicon "package" :v-adjust 0.0))))
 
 ;; part-of-emacs: nil
+;; synopsis:
 (use-package all-the-icons-dired
   :ensure t
   :hook
   (dired-mode . all-the-icons-dired-mode))
 
 ;; part-of-emacs: nil
+;; synopsis:
 (use-package all-the-icons-ivy
   :ensure t
   :after ivy
@@ -505,6 +502,9 @@
   :config
   (all-the-icons-ivy-setup))
 
+;; part-of-emacs: nil
+;; synopsis: A startup screen extracted from Spacemacs.
+;; URL: https://github.com/emacs-dashboard/emacs-dashboard
 (use-package dashboard
   :ensure t
   :config
@@ -517,7 +517,10 @@
                      (bookmarks . 5)
                      (projects . 5)
                      (agenda . 5)
-                     (registers . 5))))
+                     (registers . 5)))
+  (dashboard-set-heading-icons t)
+  (dashboard-set-file-icons t)
+  (dashboard-center-content t))
 
 ;; part-of-emacs: t
 ;; synopsis: Restore old window configurations.
@@ -577,11 +580,14 @@
   :hook prog-mode)
 
 
-;;; NAVIGATION-AND-AUTOCOMPLETE
+;;; NAVIGATION ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
+;;
+;; Native navigation inside active buffer, jump to line, jump to
+;; symbol, jump to word, jump to error. Move around menu.
+;;
+;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 
-;; counsel-M-x can use this one
-(use-package smex :ensure t)
-
+;; part-of-emacs: t
 (use-package ivy
   :ensure t
   :diminish ivy-mode
@@ -593,12 +599,18 @@
   :config
   (ivy-mode t))
 
+(use-package ivy-yasnippet
+  :ensure t)
+
 (use-package ivy-xref
   :ensure t
   :defer t
   :custom
   (xref-show-xrefs-function #'ivy-xref-show-xrefs))
 
+;; part-of-emacs: t
+;; synopsis: Various completion functions using Ivy.
+;; URL: https://github.com/abo-abo/swiper
 (use-package counsel
   :ensure t
   :bind
@@ -639,8 +651,6 @@
   :init
   (counsel-mode))
 
-(use-package swiper :ensure t)
-
 (use-package ivy-rich
   :ensure t
   :custom
@@ -648,13 +658,27 @@
   :config
   (ivy-rich-mode 1))
 
+(use-package recentf
+  :custom
+  (recentf-auto-cleanup 30)
+  :config
+  (run-with-idle-timer 30 t 'recentf-save-list))
+
+;; counsel-M-x can use this one
+(use-package smex :ensure t)
+
+(use-package swiper :ensure t)
+
 (use-package mb-depth
   :ensure nil
   :config
   (minibuffer-depth-indicate-mode 1))
 
+;; part-of-emacs: t
+;; synopsis: Jump to arbitrary positions in visible text and select text quickly.
+;; URL: https://github.com/abo-abo/avy
 (use-package avy
-  :ensure t
+  :defer t
   :config
   (avy-setup-default)
   :bind
@@ -666,11 +690,6 @@
   :ensure t
   :bind
   ([remap zap-to-char] . avy-zap-to-char))
-
-(use-package ace-jump-buffer
-  :ensure t
-  :bind
-  (("M-g b" . ace-jump-buffer)))
 
 (use-package ace-window
   :ensure t
@@ -733,7 +752,11 @@
   (keyfreq-mode 1)
   (keyfreq-autosave-mode 1))
 
+;; part-of-emacs: t
+;; synopsis: Display available keybindings in popup.
+;; URL: https://github.com/justbur/emacs-which-key
 (use-package which-key
+  :defer nil
   :diminish which-key-mode
   :config
   (which-key-mode))
@@ -778,7 +801,7 @@
 ;; synopsis: org exporter for pandoc.
 ;; URL: https://github.com/kawabata/ox-pandoc
 (use-package ox-pandoc
-  :after org-plus-contrib
+  :after org
   :defer 5)
 
 ;; part-of-emacs: t
@@ -795,37 +818,33 @@
 ;; URL: https://github.com/alf/ob-restclient.el
 (use-package ob-restclient
   :after org restclient)
-
-(use-package org-password-manager
-  :hook
-  (org-mode . org-password-manager-key-bindings))
-
 
 ;;; LANGUAGE-SUPPORT ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
+;;
+;; Most of the language support should include at least -
+;; autocompletion, syntax higlighting, code navigation and
+;; documentation search
 ;;
 ;; Supported programming and markup languages:
 ;; + Rust
 ;; + Perl
-;; + Shell/Bash
 ;; + Python
+;; + Shell/Bash
 ;; + YAML
 ;; + JSON
+;; + TOML
 ;;
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
-
-(use-package lsp-rust
-  :ensure t
-  :disabled t
-  :after lsp-mode
-  :init
-  (add-hook 'rust-mode-hook #'lsp-rust-enable))
 
 ;; part-of-emacs: nil
 ;; synopsis: A major emacs mode for editing Rust source code
 ;; URL: https://github.com/rust-lang/rust-mode
 (use-package rust-mode
   :ensure t
-  :mode ("\\.rs\\'" . rust-mode))
+  :mode
+  ("\\.[Rr][Ss]\\'" . rust-mode)
+  :custom
+  (rust-format-on-save t))
 
 ;; part-of-emacs: nil
 ;; synopsis: code completion, goto-definition and docs browsing for Rust via racer
@@ -833,11 +852,21 @@
 (use-package racer
   :ensure t
   :after rust-mode
-  :diminish racer-mode
-  :init
-  (add-hook 'rust-mode-hook #'racer-mode)
-  (add-hook 'racer-mode-hook (lambda ()
-                               (setq eldoc-documentation-function nil))))
+  :diminish (racer-mode . "\u24e1")
+  :hook
+  ((rust-mode . racer-mode)
+   (racer-mode . eldoc-mode))
+  :custom
+  (racer-rust-src-path ""))
+
+;; part-of-emacs: nil
+;; synopsis:
+;; URL:
+(use-package cargo
+  :ensure t
+  :after rust-mode
+  :hook
+  (rust-mode . cargo-minor-mode))
 
 ;; part-of-emacs: t
 ;; synopsis: Lisp editing commands for Emacs
@@ -958,6 +987,12 @@
 (use-package magit
   :bind (("C-x g" . magit-status)))
 
+;; part-of-emacs: nil
+;; synopsis: Project management for Emacs package development.
+;; URL: http://github.com/cask/cask
+(use-package cask
+  :ensure t)
+
 ;; part-of-emacs:
 ;; synopsis:
 ;; URL:
@@ -968,7 +1003,7 @@
   :defer t)
 
 ;; part-of-emacs: nil
-;; synopsis: Browse target page on github/bitbucket from emacs buffers
+;; synopsis: Browse target page on github/bitbucket from Emacs buffers.
 ;; URL: https://github.com/rmuslimov/browse-at-remote
 (use-package browse-at-remote
   :after link-hint
@@ -1017,6 +1052,9 @@
 ;;   (dumb-jump-selector 'ivy)
 ;;   (dumb-jump-prefer-searcher 'ag))
 
+;; part-of-emacs: t
+;; synopsis: Modular text completion framework.
+;; URL: http://company-mode.github.io/
 (use-package company
   :diminish company-mode
   :bind
@@ -1026,38 +1064,40 @@
   :hook
   (after-init . global-company-mode))
 
-;; (use-package company-quickhelp
-;;   :defer t
-;;   :custom
-;;   (company-quickhelp-delay 3)
-;;   :config
-;;   (company-quickhelp-mode 1))
+;; part-of-emacs: nil
+;; synopsis: Popup documentation for completion candidates.
+;; URL: https://www.github.com/expez/company-quickhelp
+(use-package company-quickhelp
+  :defer t
+  :custom
+  (company-quickhelp-delay 3)
+  :config
+  (company-quickhelp-mode 1))
 
 ;; (use-package company-shell
 ;;   :defer t
 ;;   :config
 ;;   (add-to-list 'company-backends 'company-shell))
 
-;; (use-package autoinsert
-;;   :ensure nil
-;;   :hook
-;;   (find-file . auto-insert))
+(use-package autoinsert
+  :ensure nil
+  :hook
+  (find-file . auto-insert))
 
 ;; part-of-emacs: nil
-;; synopsis: yet another snippet extension for emacs
+;; synopsis: Yet another snippet extension for Emacs.
 ;; URL: https://github.com/joaotavora/yasnippet
 (use-package yasnippet
   :ensure t
   :diminish yas-minor-mode
-  :custom
-  (yas-prompt-functions '(yas-completing-prompt yas-ido-prompt))
   :config
   (yas-reload-all)
+  (add-to-list 'yas-snippet-dirs (concat user-emacs-directory "snippets"))
   :hook
   (prog-mode  . yas-minor-mode))
 
 ;; part-of-emacs: nil
-;; synopsis: yasnippet official snippet collections
+;; synopsis: Yasnippet official snippet collections.
 ;; URL: https://github.com/AndreaCrotti/yasnippet-snippets
 (use-package yasnippet-snippets
   :ensure t)
@@ -1067,6 +1107,9 @@
   :hook
   (prog-mode . flycheck-mode))
 
+;; part-of-emacs: nil
+;; synopsis: Jump to and fix syntax errors using `flycheck' with `avy'.
+;; URL: https://github.com/magicdirac/avy-flycheck
 (use-package avy-flycheck
   :defer t
   :config
@@ -1147,8 +1190,5 @@
 ;; (use-package emamux
 ;;   :defer t)
 
-(let ((elapsed (float-time (time-subtract (current-time)
-                                          emacs-start-time))))
-  (message "Loading %s...done (%.3fs)" load-file-name elapsed))
 
 ;;; init.el ends here
