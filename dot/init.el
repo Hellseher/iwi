@@ -1,6 +1,6 @@
 ;;; package ---  init.el Emacs configuration
 ;;; Created    : <Tue 10 Mar 2015 11:39:46>
-;;; Modified   : <2019-6-01 Sat 00:30:55 BST> Sharlatan
+;;; Modified   : <2019-6-05 Wed 00:45:08 BST> Sharlatan
 ;;; Author     : sharlatan
 
 ;;; Commentary:
@@ -25,11 +25,18 @@
 
 (require 'package)
 
-(setq package-enable-at-startup nil
-      package-archives
+(setq package-archives
       `(,@package-archives
         ("melpa" . "https://melpa.org/packages/")
-        ("org" . "https://orgmode.org/elpa/")))
+        ("org" . "https://orgmode.org/elpa/")
+        ("melpa-stable" . "https://stable.melpa.org/packages/")))
+
+(setq package-enable-at-startup nil
+      file-name-handler-alist nil
+      message-log-max 16384
+      gc-cons-threshold 402653184
+      gc-cons-percentage 0.6
+      auto-window-vscroll nil)
 
 (package-initialize)
 
@@ -68,36 +75,39 @@
 
 ;;; USE-PACKAGE-EXTENSIONS ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 ;;
-;; Set of required addionals keywords and fucntion to extand
+;; Set of required addionals keywords and fucntions to extand
 ;; `use-package' functionality.
 ;;
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 
 ;; part-of-emacs: t
-;; synopsis: functions to manage system packages.
+;; synopsis: Functions to manage system packages.
+;; URL: https://gitlab.com/jabranham/system-packages
+;; purpose: `:ensure-system-package' allows to ensure system binaries exist.
 (use-package system-packages
   :ensure t
   :custom
-  (system-packages-noconfirm t))
+  (system-packages-noconfirm t "Don't ask user confirmation to install package")
+  (system-packages-use-sudo t))
 
 ;; part-of-emacs: nil
-;; synopsis: auto install system packages
+;; synopsis: Auto install system packages.
 ;; URL: https://github.com/waymondo/use-package-ensure-system-package
 (use-package use-package-ensure-system-package :ensure t)
 
 ;; part-of-emacs: nil
-;; synopsis: Diminished modes are minor modes with no modeline display
+;; synopsis: Diminished modes are minor modes with no modeline display.
 ;; URL: https://github.com/myrjola/diminish.el
 ;; purpose: to enable `:deminish' keyword in `use-package'
 (use-package diminish :ensure t)
 
 ;; part-of-emacs: nil
-;; synopsis: A simple way to manage personal keybindings
+;; synopsis: A simple way to manage personal keybindings.
 ;; purpose: to enable `:bind' keyworkd in `use-package'
 (use-package bind-key :ensure t)
 
 ;; part-of-emacs: nil
-;; sysnopsis: Emacs Lisp packages built directly from source
+;; sysnopsis: Emacs Lisp packages built directly from source.
 ;; URL: https://framagit.org/steckerhalter/quelpa
 ;; purpose: to enable `:quelpa' keyworkd in `use-package'
 (use-package quelpa
@@ -107,7 +117,7 @@
   (quelpa-update-melpa-p nil "Don't update the MELPA git repo."))
 
 ;; part-of-emacs: nil
-;; synopsis: quelpa handler for use-package
+;; synopsis: quelpa handler for use-package.
 ;; URL: https://framagit.org/steckerhalter/quelpa-use-packag
 (use-package quelpa-use-package :ensure t)
 
@@ -127,7 +137,7 @@
   (paradox-enable))
 
 ;; part-of-emacs: t
-;; synopsis: file input and output commands for Emacs
+;; synopsis: File input and output commands for Emacs.
 (use-package files
   :ensure nil
   :hook
@@ -145,7 +155,7 @@
   (version-control t))
 
 ;; part-of-emacs: t
-;; sysnopsis: basic editing commands for Emacs
+;; sysnopsis: Basic editing commands for Emacs.
 (use-package simple
   :ensure nil
   :custom
@@ -158,7 +168,7 @@
   (toggle-truncate-lines 1))
 
 ;; part-of-emacs: t
-;; synopsis: dinamicaly update time stamp of the file.
+;; synopsis: Dinamicaly update time stamp of the file.
 (use-package time-stamp
   :defer t
   :custom
@@ -166,7 +176,7 @@
    "8/Modified[ \t]*:\\\\?[ \t]*<%04Y-%:m-%02d %03a %02H:%02M:%02S %Z> %u\\\\?$"))
 
 ;; part-of-emacs: t
-;; synopsis: revert buffers when files on disk change
+;; synopsis: Revert buffers when files on disk change.
 (use-package autorevert
   :ensure nil
   :diminish auto-revert-mode)
@@ -182,14 +192,14 @@
   (iqa-setup-default))
 
 ;; part-of-emacs: t
-;; synopsis: tools for customizing Emacs and Lisp packages
+;; synopsis: Tools for customizing Emacs and Lisp packages.
 (use-package cus-edit
   :defer t
   :custom
   (custom-file null-device))
 
 ;; part-of-emacs: nil
-;; synopsis: view large files in emacs
+;; synopsis: View large files in Emacs.
 ;; URL: https://github.com/m00natic/vlfi
 (use-package vlf
   :ensure t
@@ -198,7 +208,7 @@
   (ivy-add-actions  'counsel-find-file '(("l" vlf "view large file"))))
 
 ;; part-of-eamcs: t
-;; synopsis: easypg assistant
+;; synopsis: EasyPG assistant.
 (use-package epa
   :defer t
   :ensure nil
@@ -207,14 +217,14 @@
   (epa-pinentry-mode nil))
 
 ;; part-of-emacs: t
-;; synopsis: unique buffer names dependent on file name
+;; synopsis: Unique buffer names dependent on file name.
 (use-package uniquify
   :ensure nil
   :custom
   (uniquify-buffer-name-style 'forward))
 
 ;; part-of-emacs: t
-;; synopsis: save minibuffer history
+;; synopsis: Save minibuffer history.
 (use-package savehist
   :unless noninteractive
   :config
@@ -237,7 +247,7 @@
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 
 ;; part-of-emacs: t
-;; synopsis: transparent remote access, multiple protocol
+;; synopsis: Transparent Remote Access, Multiple Protocol.
 (use-package tramp
   :defer 5
   :custom
@@ -248,13 +258,16 @@
   (put 'temporary-file-directory 'standard-value '("/tmp")))
 
 ;; part-of-emacs: nil
-;; synopsis: open files as another user.
+;; synopsis: Open files as another user.
 ;; URL: https://github.com/nflath/sudo-edit
 (use-package sudo-edit
   :ensure t
   :bind
   (:map ctl-x-map ("M-s" . sudo-edit)))
 
+;; part-of-emacs: nil
+;; synopsis: Get environment variables such as $PATH from the shell.
+;; URL: https://github.com/purcell/exec-path-from-shell
 (use-package exec-path-from-shell
   :ensure t
   :defer 0.1
@@ -262,20 +275,24 @@
   (exec-path-from-shell-initialize))
 
 
-;;; ESHELL
+;;; ESHELL ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
+;;
 ;; It is a shell-like command interpreter implemented in Emacs
 ;; Lisp. It invokes no external processes except for those requested
 ;; by the user. It is intended to be an alternative to the IELM (see
 ;; Emacs Lisp Interaction) REPL for Emacs and with an interface
 ;; similar to command shells such as bash, zsh, rc, or 4dos.
+;;
+;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 
 ;; part-of-emacs: t
-;; synopsis: the emacs command shell
+;; synopsis: The Emacs command shell.
 (use-package eshell
   :defer t
   :ensure nil)
 
 ;; part-of-emacs: t
+;; synopsis:h
 (use-package em-smart
   :defer t
   :ensure nil
@@ -401,13 +418,18 @@
 ;;
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 
-(use-package zenburn-theme    :ensure t :config (load-theme 'zenburn t))
-(use-package solarized-theme  :ensure t :defer t)
-(use-package doom-themes      :ensure t :defer t)
-(use-package gruvbox-theme    :ensure t :defer t)
+(use-package zenburn-theme
+  :ensure t
+  :config
+  (load-theme 'zenburn t))
+
+;; additional-themes
+(use-package doom-themes                          :ensure t :defer t)
+(use-package gruvbox-theme                        :ensure t :defer t)
+(use-package color-theme-sanityinc-solarized-dark :ensure t :defer t)
 
 ;; part-of-emacs: nil
-;; synopsis: a minimal and morden modeline.
+;; synopsis: A minimal and morden modeline.
 ;; URL: https://github.com/seagle0128/doom-modeline
 (use-package doom-modeline
   :ensure t
@@ -417,7 +439,8 @@
   (doom-modeline-major-mode-icon t)
   (doom-modeline-buffer-file-name-style 'buffer-name)
   (doom-modeline-icon t)
-  (doom-modeline-height 20))
+  (doom-modeline-height 10)
+  (doom-modeline-bar-width 3))
 
 ;; part-of-emacs: t
 ;; synopsis:
@@ -447,6 +470,9 @@
   :config
   (scroll-bar-mode -1))
 
+;; part-of-emacs:
+;; synopsis:
+;; URL:
 (use-package menu-bar
   :ensure nil
   :config
@@ -481,6 +507,7 @@
   :ensure t
   :defer t
   :config
+  (all-the-icons-install-fonts)
   (setq all-the-icons-mode-icon-alist
         `(,@all-the-icons-mode-icon-alist
           (package-menu-mode all-the-icons-octicon "package" :v-adjust 0.0))))
@@ -510,9 +537,7 @@
   :config
   (dashboard-setup-startup-hook)
   :custom
-  (initial-buffer-choice '(lambda ()
-                            (setq initial-buffer-choice nil)
-                            (get-buffer "*dashboard*")))
+  (initial-buffer-choice '(lambda () (get-buffer "*dashboard*")))
   (dashboard-items '((recents  . 5)
                      (bookmarks . 5)
                      (projects . 5)
@@ -779,8 +804,9 @@
   :custom
   (calendar-week-start-day 1))
 
-;;; ORG-MODE ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
+;;; DOCUMENTING ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 ;;
+;; Document editing/vewing, formatting and organazings configurations.
 ;;
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 
@@ -798,14 +824,14 @@
      (restclient . t))))
 
 ;; part-of-emacs: nil
-;; synopsis: org exporter for pandoc.
+;; synopsis: Org exporter for pandoc.
 ;; URL: https://github.com/kawabata/ox-pandoc
 (use-package ox-pandoc
   :after org
   :defer 5)
 
-;; part-of-emacs: t
-;; synopsis: Show bullets in org-mode as UTF-8 characters
+;; part-of-emacs: nil
+;; synopsis: Show bullets in org-mode as UTF-8 characters.
 ;; URL: https://github.com/emacsorphanage/org-bullets
 (use-package org-bullets
   :custom
@@ -814,10 +840,25 @@
   (org-mode . org-bullets-mode))
 
 ;; part-of-emacs: nil
+;; synopsis: Create an aggregated Org table from another one.
+;; URL: https://github.com/tbanel/orgaggregate
+(use-package orgtbl-aggregate
+  :ensure t)
+
+;; part-of-emacs: nil
 ;; synopsis: An org-mode extension to restclient.el
 ;; URL: https://github.com/alf/ob-restclient.el
 (use-package ob-restclient
   :after org restclient)
+
+;; part-of-emacs: nil
+;; synopsis:
+;; URL:
+(use-package pdf-tools
+  :ensure t
+  :config
+  (pdf-tools-install)
+  (setq-default pdf-view-display-size 'fit-page))
 
 ;;; LANGUAGE-SUPPORT ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 ;;
@@ -1189,6 +1230,26 @@
 
 ;; (use-package emamux
 ;;   :defer t)
+
+;;; CUSTOM-FUNCTIONS ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
+;;
+;; Additional functio which do not belong to any of the packages and
+;; could be added on the fly but `eval-defun' to the main functionality.
+;;
+;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 
+(defun exzellenz/hiorisontal-line ()
+  "Insert dashed horisotnal line till 80th column.
+It's commented out by current default comment symbol."
+  (interactive)
+  (progn
+    (insert-char #x002D 78)
+    (comment-region (line-beginning-position) (line-end-position))))
 
+(defun exzellenz/timestamp ()
+  "Insert timestamp YmdHMS."
+  (interactive)
+  (insert (format-time-string "%y%m%d%H%M%S")))
+
+(provide 'init.el)
 ;;; init.el ends here
