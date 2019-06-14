@@ -1,37 +1,34 @@
 ;;;; sbclrc -- configuration file for SBCL
-;;;; Created  :
-;;;; Modified : <2018-9-30 Sun 23:35:59 BST> Sharlatan
-;;;; Author   :
-;;;; Synopsis    : <
+;;;; Created   :
+;;;; Modified  : <2019-6-14 Fri 21:09:53 BST> Sharlatan
+;;;; Author    : Sharlatan <sharlatanus@gmail.com>
 
 ;;;; Commentary:
 
 ;;;; Code:
 
-(defvar *usr-sbcl-src-path*)
-(defvar *usr-ql-init-path*)
-(defvar *usr-ql-projects-path*)
+(defvar *user-sbcl-src-path*)
+(defvar *user-quicklisp-init-path*)
+(defvar *user-quicklisp-projects-path*)
 
 (defun from-home-path (path)
-  "Buuild a absolute path to user target directory including $HOME."
+  "Build a absolute path to user target directory including $HOME."
   (merge-pathnames path (user-homedir-pathname)))
 
-(setf *usr-sbcl-src-path* (from-home-path "Data/sft/src/sbcl/")
-      *usr-ql-projects-path* (list
-                              (from-home-path "Projects/hck/Lisp/CommonLisp/")
-                              (from-home-path "Data/sft/src/projects-common-lisp/"))
-      *usr-ql-init-path* (from-home-path "quicklisp/setup.lisp"))
+(setf *user-sbcl-src-path* (from-home-path ".local/src/sbcl/")
+      *user-quicklisp-projects-path* (from-home-path "Projects/hck/Lisp/CommonLisp/")
+      *user-quicklisp-init-path* (from-home-path ".local/share/common-lisp/setup.lisp"))
 
 ;; Path to SBCL source code directory
-(when (probe-file *usr-sbcl-src-path*)
-  (sb-ext:set-sbcl-source-location *usr-sbcl-src-path*))
+(when (probe-file *user-sbcl-src-path*)
+  (sb-ext:set-sbcl-source-location *user-sbcl-src-path*))
 
 #-quicklisp
-(when (probe-file *usr-ql-init-path*)
-  (load *usr-ql-init-path*))
+(when (probe-file *user-quicklisp-init-path*)
+  (load *user-quicklisp-init-path*))
 
-(when (probe-file *usr-ql-projects-path*)
-  (push *usr-ql-projects-path* ql:*local-project-directories*))
+(when (probe-file *user-quicklisp-projects-path*)
+  (push *user-quicklisp-projects-path* ql:*local-project-directories*))
 
 (require :asdf)
 
@@ -45,4 +42,3 @@
       (call-next-method))))
 
 ;;;; sbclrc ends here
-
