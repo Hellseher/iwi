@@ -1,6 +1,6 @@
 ;;; package ---  init.el Emacs configuration
 ;;; Created    : <Tue 10 Mar 2015 11:39:46>
-;;; Modified   : <2019-6-15 Sat 00:32:36 BST> Sharlatan
+;;; Modified   : <2019-6-15 Sat 23:25:24 BST> Sharlatan
 ;;; Author     : sharlatan <sharlatanus@gmail.com>
 
 ;;; Commentary:
@@ -10,6 +10,14 @@
 ;;
 ;; If you add some changes reload init.el with `M-x eval-buffer' or
 ;; `M-x load-file ~/.emacs.d/init.el'
+;;
+;; Main functionality:
+;; + *-mode              -- Syntax highlight and indention
+;; + `company'           -- Code auto completion
+;; + `company-quickhelp' -- Inline documentation
+;; + `flyspell'          -- Sintax check
+;; + `flycheck'          -- Error checking
+;; + `M-.'               -- Jump to definition
 ;;
 ;;; Debugging:
 ;;
@@ -154,7 +162,7 @@
 (use-package files
   :ensure nil
   :hook
-  ((before-save . delete-trailing-whitespace)
+  ((before-save . whitespace-cleanup)
    (before-save . time-stamp))
   :custom
   (require-final-newline t)
@@ -243,10 +251,9 @@
 ;; part-of-emacs: t
 ;; synopsis: Save mini buffer history.
 (use-package savehist
-  :defer t
-  :unless noninteractive
-  :config
-  (savehist-mode 1))
+  :ensure nil
+  :hook
+  (after-init . savehist-mode))
 
 ;; part-of-emacs: t
 ;; synopsis: Automatically save place of cursor in files.
@@ -461,14 +468,16 @@
 ;;
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 
-(use-package zenburn-theme
-  :ensure t
-  :config
-  (load-theme 'zenburn t))
-
 ;; additional-themes
-(use-package doom-themes                          :ensure t :defer t)
-(use-package gruvbox-theme                        :ensure t :defer t)
+(use-package zenburn-theme :ensure t :defer t)
+(use-package doom-themes   :ensure t :defer t)
+(use-package gruvbox-theme :ensure t :defer t)
+
+;; current theme
+(use-package custom
+  :ensure nil
+  :config
+  (load-theme 'doom-nord t))
 
 ;; part-of-emacs: nil
 ;; synopsis: A minimal and modern modeline.
@@ -485,7 +494,7 @@
   (doom-modeline-bar-width 3))
 
 ;; part-of-emacs: t
-;; synopsis:
+;; synopsis: Control how Emacs displays text in buffers.
 (use-package faces
   :ensure nil
   :defer 0.1
@@ -526,17 +535,16 @@
   :bind
   ([S-f10] . menu-bar-mode))
 
-;; part-of-emacs:
-;; synopsis:
-;; URL:
+;; part-of-emacs: t
+;; synopsis: Shows frames that display text information at the mouse position.
 (use-package tooltip
   :defer t
   :ensure nil
   :custom
   (tooltip-mode -1))
 
-;; part-of-emacs:
-;; synopsis:
+;; part-of-emacs: t
+;; synopsis: Display time, load and mail indicator in mode line of Emacs.
 (use-package time
   :defer t
   :ensure nil
@@ -652,8 +660,8 @@
   (rainbow-identifiers-choose-face-function
    #'rainbow-identifiers-cie-l*a*b*-choose-face)
   :hook
-  (emacs-lisp-mode . rainbow-identifiers-mode)
-  (prog-mode . rainbow-identifiers-mode))
+  (emacs-lisp-mode . rainbow-identifiers-mode))
+
 
 ;; part-of-emacs: t
 ;; synopsis: Colorize color names in buffers.
@@ -661,7 +669,8 @@
   :ensure t
   :diminish rainbow-mode
   :hook
-  (prog-mode . rainbow-mode))
+  ((org-mode . rainbow-mode)
+   (emacs-lisp-mode . rainbow-mode)))
 
 
 ;;; NAVIGATION-COMPLETION ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
@@ -684,8 +693,16 @@
   :hook
   (after-init . global-company-mode)
   :custom
-  (company-idle-delay 0.2)
+  (company-idle-delay 0.6)
   (company-minimum-prefix-length 1))
+
+;; part-of-emacs:
+;; synopsis:
+;; URL:
+(use-package company-quickhelp
+  :ensure t
+  :hook
+  (global-company-mode . company-quickhelp-mode))
 
 ;; part-of-emacs: t
 ;; synopsis: Incremental Vertical completYon.
@@ -779,11 +796,19 @@
   :config
   (run-with-idle-timer 30 t 'recentf-save-list))
 
-;; counsel-M-x can use this one
+;; part-of-emacs:
+;; synopsis:
+;; URL:
 (use-package smex :ensure t)
 
+;; part-of-emacs:
+;; synopsis:
+;; URL:
 (use-package swiper :ensure t)
 
+;; part-of-emacs:
+;; synopsis:
+;; URL:
 (use-package mb-depth
   :ensure nil
   :config
@@ -801,11 +826,17 @@
    ("M-g M-g" . avy-goto-line)
    ("M-s M-s" . avy-goto-word-1)))
 
+;; part-of-emacs:
+;; synopsis:
+;; URL:
 (use-package avy-zap
   :ensure t
   :bind
   ([remap zap-to-char] . avy-zap-to-char))
 
+;; part-of-emacs:
+;; synopsis:
+;; URL:
 (use-package ace-window
   :ensure t
   :custom
@@ -814,6 +845,9 @@
   :bind
   (("M-o" . ace-window)))
 
+;; part-of-emacs:
+;; synopsis:
+;; URL:
 (use-package link-hint
   :ensure t
   :bind
@@ -825,6 +859,9 @@
    ("o" . link-hint-open-link)
    ("c" . link-hint-copy-link)))
 
+;; part-of-emacs:
+;; synopsis:
+;; URL:
 (use-package ace-link
   :ensure t
   :after link-hint ; to use prefix keymap
@@ -834,62 +871,84 @@
   :config
   (ace-link-setup-default))
 
+;; part-of-emacs:
+;; synopsis:
+;; URL:
 (use-package select
   :ensure nil
   :custom
   (selection-coding-system 'utf-8)
   (select-enable-clipboard t "Use the clipboard"))
 
+;; part-of-emacs:
+;; synopsis:
+;; URL:
 (use-package expand-region
   :ensure t
+  :after (org)
   :bind
   ("C-=" . er/expand-region))
 
+;; part-of-emacs:
+;; synopsis:
+;; URL:
 (use-package edit-indirect
   :ensure t
   :bind
   (:map mode-specific-map
         ("r" . edit-indirect-region)))
 
+;; part-of-emacs:
+;; synopsis:
+;; URL:
 (use-package clipmon
   :ensure t
   :config
   (clipmon-mode))
 
+;; part-of-emacs:
+;; synopsis:
+;; URL:
 (use-package man
   :ensure nil
   :custom-face
   (Man-overstrike ((t (:inherit font-lock-type-face :bold t))))
   (Man-underline ((t (:inherit font-lock-keyword-face :underline t)))))
 
-;; part-of-meacs:
+;; part-of-emacs: nil
+;; synopsis: Track command frequencies.
+;; URL:
 (use-package keyfreq
   :ensure t
   :config
   (keyfreq-mode 1)
   (keyfreq-autosave-mode 1))
 
-;; part-of-emacs: t
+;; part-of-emacs: nil
 ;; synopsis: Display available keybindings in popup.
 ;; URL: https://github.com/justbur/emacs-which-key
 (use-package which-key
+  :ensure t
   :defer 10
   :diminish which-key-mode
   :config
   (which-key-mode 1))
 
+;; part-of-emacs: nil
+;; synopsis: Show free keybindings for modkeys or prefixes.
+;; URL: https://github.com/Fuco1/free-keys
 (use-package free-keys
+  :ensure t
   :commands free-keys)
 
+;; part-of-emacs: nil
+;; synopsis: Better *help* buffer interface.
+;; URL: https://github.com/Wilfred/helpful
 (use-package helpful
-  :defer t)
-
-(use-package multitran
-  :defer t)
-
-(use-package imgbb
   :ensure t)
 
+;; part-of-emacs: t
+;; synopsis: Callendar functions.
 (use-package calendar
   :ensure nil
   :defer t
@@ -976,12 +1035,6 @@
 ;; + Shell/Bash
 ;; + Data-siralization: YAML, JSON, CSV, TOML
 ;;
-;; Main functionality:
-;; + *-mode    -- Syntax gighlight and indention
-;; + company-* -- Code auto completion
-;; + eldoc-mod -- Inline documentation
-;; + flycheck  -- Error checking
-;; + `M-.'     -- Jump to definition
 ;;
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 
@@ -1106,7 +1159,7 @@
   :ensure nil
   :defer t
   :mode
-  (".sbclrc\\'" . lisp-mode)
+  ("\\'.sbclrc\\'" . lisp-mode)
   :hook
   (after-save . check-parens))
 
@@ -1116,10 +1169,18 @@
 (use-package nameless
   :ensure t
   :hook
-  (emacs-lisp-mode .  nameless-mode)
+  (emacs-lisp-mode . nameless-mode)
   :custom
   (nameless-global-aliases '())
   (nameless-private-prefix t))
+
+;; part-of-emacs:
+;; synopsis:
+;; URL:
+(use-package geiser
+  :ensure t
+  :config
+  (setq geiser-active-implementations '(guile)))
 
 ;; part-of-emacs: nil
 ;; synopsis: Superior Lisp Interaction Mode for Emacs.
@@ -1155,10 +1216,35 @@
 ;; Wikipedia
 
 ;; part-of-emacs: t
-;; synopsis: Perl code editing commands for emacs
+;; synopsis: Perl code editing commands for Emacs.
 (use-package cperl-mode
   :mode
   ("\\.pl\\'" . cperl-mode))
+
+;;;; Python
+;;
+;; ~$ pip install jedi
+;; ~$ pip install flake8
+;; ~$ pip install autopep8
+;; ~$ pip install yapf
+;; ~$ pip install black
+
+;; part-of-emacs: t
+;; synopsis: Python's flying circus support for Emacs.
+(use-package python
+  :ensure t
+  :defer t
+  :mode
+  ("\\.py\\'" . python-mode))
+
+;; part-of-emacs:
+;; synopsis: Emacs Python Development Environment.
+;; URL: https://github.com/jorgenschaefer/elpy
+(use-package elpy
+  :ensure t
+  :after python
+  :config
+  (elpy-enable))
 
 ;;;; Shell
 
@@ -1221,12 +1307,13 @@
 
 ;;;; Markup
 
-;; (use-package markdown-mode
-;;   :ensure-system-package markdown
-;;   :mode (("\\`README\\.md\\'" . gfm-mode)
-;;          ("\\.md\\'"          . markdown-mode)
-;;          ("\\.markdown\\'"    . markdown-mode))
-;;   :init (setq markdown-command "markdown"))
+
+(use-package markdown-mode
+  :ensure t
+  :mode (("\\`README\\.md\\'" . gfm-mode)
+         ("\\.md\\'"          . markdown-mode)
+         ("\\.markdown\\'"    . markdown-mode))
+  :init (setq markdown-command "markdown"))
 
 ;; (use-package htmlize
 ;;   :defer t
