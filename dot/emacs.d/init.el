@@ -1,6 +1,6 @@
 ;;; package ---  init.el Emacs configuration
 ;;; Created    : <Tue 10 Mar 2015 11:39:46>
-;;; Modified   : <2019-6-15 Sat 23:25:24 BST> Sharlatan
+;;; Modified   : <2019-6-20 Thu 00:04:41 BST> Sharlatan
 ;;; Author     : sharlatan <sharlatanus@gmail.com>
 
 ;;; Commentary:
@@ -10,6 +10,15 @@
 ;;
 ;; If you add some changes reload init.el with `M-x eval-buffer' or
 ;; `M-x load-file ~/.emacs.d/init.el'
+;;
+;; Some of the packages requestes to install system pakcages to enable
+;; their functionality:
+;;
+;; | jedi | elpy
+;; | flake8 | elpy
+;; | autopep80 | elpy
+;; | yapf1 | elpy
+;; | black2 | elpy
 ;;
 ;; Main functionality:
 ;; + *-mode              -- Syntax highlight and indention
@@ -34,7 +43,9 @@
 ;;
 ;; - https://shrysr.github.io/docs/sr-config/
 ;; - http://www.coli.uni-saarland.de/~slemaguer/emacs/main.html
-;;
+;; - https://github.com/syl20bnr/spacemacs
+;; - https://github.com/hlissner/doom-emacs
+
 ;;; Code:
 
 ;;; CORE ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
@@ -91,7 +102,8 @@
   (enable-recursive-minibuffers t "Allow minibuffer commands in the minibuffer")
   (indent-tabs-mode nil "Spaces!")
   (tab-width 4)
-  (debug-on-quit nil))
+  (debug-on-quit nil)
+  (make-pointer-invisible t))
 
 ;;; USE-PACKAGE-EXTENSIONS ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 ;;
@@ -426,7 +438,7 @@
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 
 ;; part-of-emacs: t
-;; synopsis:
+;; synopsis: Basic commands for multilingual environment.
 (use-package mule
   :ensure nil
   :config
@@ -512,14 +524,14 @@
                       :box nil))
 
 ;; part-of-emacs: t
-;; synopsis:
+;; synopsis: Setting up the tool bar.
 (use-package tool-bar
   :ensure nil
   :config
   (tool-bar-mode -1))
 
 ;; part-of-emacs: t
-;; synopsis:
+;; synopsis: Window system-independent scroll bar support.
 (use-package scroll-bar
   :defer t
   :ensure nil
@@ -527,7 +539,7 @@
   (scroll-bar-mode -1))
 
 ;; part-of-emacs: t
-;; synopsis:
+;; synopsis: define a default menu bar.
 (use-package menu-bar
   :ensure nil
   :config
@@ -566,7 +578,8 @@
           (package-menu-mode all-the-icons-octicon "package" :v-adjust 0.0))))
 
 ;; part-of-emacs: nil
-;; synopsis:
+;; synopsis: Shows icons for each file in dired mode.
+;; URL: https://github.com/jtbm37/all-the-icons-dired
 (use-package all-the-icons-dired
   :ensure t
   :hook
@@ -609,17 +622,15 @@
   :config
   (winner-mode 1))
 
-;; part-of-emacs:
-;; synopsis:
-;; URL:
+;; part-of-emacs: t
+;; synopsis: Highlight matching paren.
 (use-package paren
   :ensure nil
   :config
   (show-paren-mode t))
 
-;; part-of-emacs:
-;; synopsis:
-;; URL:
+;; part-of-emacs: t
+;; synopsis: Highlight current line.
 (use-package hl-line
   :ensure nil
   :hook
@@ -660,8 +671,8 @@
   (rainbow-identifiers-choose-face-function
    #'rainbow-identifiers-cie-l*a*b*-choose-face)
   :hook
-  (emacs-lisp-mode . rainbow-identifiers-mode))
-
+  (emacs-lisp-mode . rainbow-identifiers-mode)
+  (scheme-mode . rainbow-identifiers-mode))
 
 ;; part-of-emacs: t
 ;; synopsis: Colorize color names in buffers.
@@ -696,9 +707,9 @@
   (company-idle-delay 0.6)
   (company-minimum-prefix-length 1))
 
-;; part-of-emacs:
-;; synopsis:
-;; URL:
+;; part-of-emacs: nil
+;; synopsis: Popup documentation for completion candidates.
+;; URL: https://www.github.com/expez/company-quickhelp
 (use-package company-quickhelp
   :ensure t
   :hook
@@ -789,26 +800,15 @@
   (counsel-mode))
 
 ;; part-of-emacs: t
-;; synopsis:
+;; synopsis: Setup a menu of recently opened files.
 (use-package recentf
   :custom
   (recentf-auto-cleanup 30)
   :config
   (run-with-idle-timer 30 t 'recentf-save-list))
 
-;; part-of-emacs:
-;; synopsis:
-;; URL:
-(use-package smex :ensure t)
-
-;; part-of-emacs:
-;; synopsis:
-;; URL:
-(use-package swiper :ensure t)
-
-;; part-of-emacs:
-;; synopsis:
-;; URL:
+;; part-of-emacs: t
+;; synopsis: Indicate minibuffer-depth in prompt
 (use-package mb-depth
   :ensure nil
   :config
@@ -822,9 +822,12 @@
   :config
   (avy-setup-default)
   :bind
-  (("C-:" .   avy-goto-char-timer)
-   ("M-g M-g" . avy-goto-line)
-   ("M-s M-s" . avy-goto-word-1)))
+  (:map mode-specific-map
+        :prefix-map avy-prefix-map
+        :prefix "j"
+        ("j" .   avy-goto-char-timer)
+        ("l" . avy-goto-line)
+        ("w" . avy-goto-word-1)))
 
 ;; part-of-emacs:
 ;; synopsis:
@@ -871,18 +874,17 @@
   :config
   (ace-link-setup-default))
 
-;; part-of-emacs:
-;; synopsis:
-;; URL:
+;; part-of-emacs: t
+;; synopsis: Lisp portion of standard selection support.
 (use-package select
   :ensure nil
   :custom
   (selection-coding-system 'utf-8)
   (select-enable-clipboard t "Use the clipboard"))
 
-;; part-of-emacs:
-;; synopsis:
-;; URL:
+;; part-of-emacs: nil
+;; synopsis: Increase selected region by semantic units
+;; URL: https://github.com/magnars/expand-region.el
 (use-package expand-region
   :ensure t
   :after (org)
@@ -1164,6 +1166,14 @@
   (after-save . check-parens))
 
 ;; part-of-emacs: nil
+;; synopsis: Syntax highlighting of known Elisp symbols.
+;; URL: https://github.com/Fanael/highlight-defined
+(use-package highlight-defined
+  :ensure t
+  :custom
+  (highlight-defined-face-use-itself t))
+
+;; part-of-emacs: nil
 ;; synopsis: Hide package namespace in your emacs-lisp code.
 ;; URL: https://github.com/Malabarba/nameless
 (use-package nameless
@@ -1174,9 +1184,24 @@
   (nameless-global-aliases '())
   (nameless-private-prefix t))
 
-;; part-of-emacs:
-;; synopsis:
-;; URL:
+;; part-of-emacs: nil
+;; synopsis: Interactive Emacs Lisp pretty-printing.
+;; URL: https://framagit.org/steckerhalter/ipretty
+(use-package ipretty
+  :ensure t
+  :config
+  (ipretty-mode 1))
+
+;; part-of-emacs: nil
+;; synopsis: Suggest elisp functions that give the output requested.
+;; URL: https://github.com/Wilfred/suggest.el
+(use-package suggest
+  :ensure t
+  :defer t)
+
+;; part-of-emacs: nil
+;; synopsis: GNU Emacs and Scheme talk to each other.
+;; URL: https://www.nongnu.org/geiser/
 (use-package geiser
   :ensure t
   :config
@@ -1188,14 +1213,15 @@
 (use-package slime
   :ensure t
   :config
-  (setq inferior-lisp-program (executable-find "sbcl")))
+  (setq inferior-lisp-program (executable-find "sbcl"))
+  (setq slime-contribs '(slime-fancy)))
 
 ;; part-of-emacs: nil
 ;; synopsis: Slime commpletion backend for company mode.
-;; URL:
+;; URL: https://github.com/anwyn/slime-company
 (use-package slime-company
   :ensure t
-  :after slime)
+  :after (slime))
 
 ;;;; R
 ;; R - is a programming language and free software environment for
@@ -1223,11 +1249,6 @@
 
 ;;;; Python
 ;;
-;; ~$ pip install jedi
-;; ~$ pip install flake8
-;; ~$ pip install autopep8
-;; ~$ pip install yapf
-;; ~$ pip install black
 
 ;; part-of-emacs: t
 ;; synopsis: Python's flying circus support for Emacs.
@@ -1497,53 +1518,6 @@
   :config
   (avy-flycheck-setup))
 
-;; (use-package highlight-defined
-;;   :ensure t
-;;   :custom
-;;   (highlight-defined-face-use-itself t)
-;;   :hook
-;;   (emacs-lisp-mode . highlight-defined-mode))
-
-;; (use-package highlight-quoted
-;;   :ensure t
-;;   :hook
-;;   (emacs-lisp-mode . highlight-quoted-mode))
-
-;; (use-package eros
-;;   :hook
-;;   (emacs-lisp-mode . eros-mode))
-
-;; (use-package suggest
-;;   :defer t)
-
-;; (use-package ipretty
-;;   :config
-;;   (ipretty-mode 1))
-
-;; ;; bind-key can't bind to keymaps
-;; (use-package erefactor
-;;   :defer t)
-
-;; (use-package kibit-helper
-;;   :defer t)
-
-;; (use-package conkeror-minor-mode
-;;   :defer t
-;;   :hook
-;;   (js-mode . (lambda ()
-;;                (when (string-match "conkeror" (or (buffer-file-name) ""))
-;;                  (conkeror-minor-mode 1)))))
-
-;; (use-package graphql-mode
-;;   :mode "\\.graphql\\'"
-;;   :custom
-;;   (graphql-url "http://localhost:8000/api/graphql/query"))
-
-;; (use-package executable
-;;   :ensure nil
-;;   :hook
-;;   (after-save . executable-make-buffer-file-executable-if-script-p))
-
 ;; part-of-emacs: nil
 ;; synopsis: An interactive HTTP client for Emacs.
 ;; URL: https://github.com/pashky/restclient.el
@@ -1552,17 +1526,23 @@
   :mode
   ("\\.http\\'" . restclient-mode))
 
-;; (use-package restclient-test
-;;   :hook
-;;   (restclient-mode-hook . restclient-test-mode))
+;; part-of-emacs: nil
+;; synopsis: Run tests with restclient.el
+;; URL: https://github.com/simenheg/restclient-test.ely
+(use-package restclient-test
+  :ensure t
+  :hook
+  (restclient-mode-hook . restclient-test-mode))
 
-;; (use-package company-restclient
-;;   :after (company restclient)
-;;   :config
-;;   (add-to-list 'company-backends 'company-restclient))
+;; part-of-emacs: nil
+;; synopsis: company-mode completion back-end for restclient-mode.
+;; URL: https://github.com/iquiw/company-restclient
+(use-package company-restclient
+  :ensure t
+  :after (company restclient)
+  :config
+  (add-to-list 'company-backends 'company-restclient))
 
-;; (use-package emamux
-;;   :defer t)
 
 ;;; CUSTOM-FUNCTIONS ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 ;;
