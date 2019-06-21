@@ -1,6 +1,6 @@
 ;;; package ---  init.el Emacs configuration
 ;;; Created    : <Tue 10 Mar 2015 11:39:46>
-;;; Modified   : <2019-6-20 Thu 00:04:41 BST> Sharlatan
+;;; Modified   : <2019-6-21 Fri 01:58:14 BST> Sharlatan
 ;;; Author     : sharlatan <sharlatanus@gmail.com>
 
 ;;; Commentary:
@@ -153,7 +153,7 @@
 ;; URL: https://framagit.org/steckerhalter/quelpa-use-packag
 (use-package quelpa-use-package :ensure t)
 
-;;; GLOGAL-CONFIRUATIONS ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
+;;; GLOBAL-CONFIRUATIONS ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 ;;
 ;; Mode agnostic configuration, related to majority of functionality.
 ;;
@@ -274,6 +274,14 @@
   :unless noninteractive
   :config
   (save-place-mode 1))
+
+;; part-of-emacs: t
+;; synopsis: Callendar functions.
+(use-package calendar
+  :ensure nil
+  :defer t
+  :custom
+  (calendar-week-start-day 1))
 
 ;;; TRAMP ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 ;;
@@ -586,8 +594,8 @@
   (dired-mode . all-the-icons-dired-mode))
 
 ;; part-of-emacs: nil
-;; synopsis:
-;; URL:
+;; synopsis: Shows icons while using ivy and counsel.
+;; URL: https://github.com/asok/all-the-icons-ivy
 (use-package all-the-icons-ivy
   :ensure t
   :after ivy
@@ -689,6 +697,8 @@
 ;; Native navigation inside active buffer, jump to line, jump to
 ;; symbol, jump to word, jump to error. Move around menu.
 ;;
+;; General completion is built round `ivy' and `comapny' frameworks.
+;;
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 
 ;; part-of-emacs: t
@@ -731,9 +741,12 @@
 
 ;; part-of-emacs: nil
 ;; synopsis:
-;; URL:
+;; URL: https://github.com/mkcms/ivy-yasnippet
 (use-package ivy-yasnippet
-  :ensure t)
+  :ensure t
+  :defer 10
+  :bind
+  (("C-c y y" . ivy-yasnippet)))
 
 ;; part-of-emacs: nil
 ;; synopsis:
@@ -771,8 +784,6 @@
    ("a" . counsel-apropos)
    ("b" . counsel-bookmark)
    ("B" . counsel-bookmarked-directory)
-   ("c w" . counsel-colors-web)
-   ("c e" . counsel-colors-emacs)
    ("d" . counsel-dired-jump)
    ("f" . counsel-file-jump)
    ("F" . counsel-faces)
@@ -789,15 +800,17 @@
    ("p" . counsel-package)
    ("r" . counsel-recentf)
    ("s g" . counsel-grep)
-   ("s r" . counsel-rg)
-   ("s s" . counsel-ag)
    ("t" . counsel-org-tag)
    ("v" . counsel-set-variable)
    ("w" . counsel-wmctrl)
    :map help-map
    ("F" . counsel-describe-face))
   :init
-  (counsel-mode))
+  (counsel-mode)
+  :config
+  (with-eval-after-load 'helpful
+    (setq counsel-describe-function-function #'helpful-callable)
+    (setq counsel-describe-variable-function #'helpful-variable)))
 
 ;; part-of-emacs: t
 ;; synopsis: Setup a menu of recently opened files.
@@ -829,17 +842,17 @@
         ("l" . avy-goto-line)
         ("w" . avy-goto-word-1)))
 
-;; part-of-emacs:
-;; synopsis:
-;; URL:
+;; part-of-emacs: nil
+;; synopsis: Zap to char using
+;; URL: https://github.com/cute-jumper/avy-zap
 (use-package avy-zap
   :ensure t
   :bind
   ([remap zap-to-char] . avy-zap-to-char))
 
-;; part-of-emacs:
-;; synopsis:
-;; URL:
+;; part-of-emacs: t
+;; synopsis: Quickly switch windows.
+;; URL: https://github.com/abo-abo/ace-window
 (use-package ace-window
   :ensure t
   :custom
@@ -848,9 +861,9 @@
   :bind
   (("M-o" . ace-window)))
 
-;; part-of-emacs:
-;; synopsis:
-;; URL:
+;; part-of-emacs: nil
+;; synopsis: Use avy to open, copy, etc. visible links.
+;; URL: https://github.com/noctuid/link-hint.el
 (use-package link-hint
   :ensure t
   :bind
@@ -862,12 +875,12 @@
    ("o" . link-hint-open-link)
    ("c" . link-hint-copy-link)))
 
-;; part-of-emacs:
-;; synopsis:
-;; URL:
+;; part-of-emacs: nil
+;; synopsis: Quickly follow links.
+;; URL: https://github.com/abo-abo/ace-link
 (use-package ace-link
   :ensure t
-  :after link-hint ; to use prefix keymap
+  :after link-hint
   :bind
   (:map link-hint-keymap
         ("l" . counsel-ace-link))
@@ -883,6 +896,15 @@
   (select-enable-clipboard t "Use the clipboard"))
 
 ;; part-of-emacs: nil
+;; synopsis: Jump to definition for multiple languages.
+;; URL: https://github.com/jacktasia/dumb-jump
+(use-package dumb-jump
+  :ensure t
+  :custom
+  (dumb-jump-selector 'ivy)
+  (dumb-jump-prefer-searcher 'grep))
+
+;; part-of-emacs: nil
 ;; synopsis: Increase selected region by semantic units
 ;; URL: https://github.com/magnars/expand-region.el
 (use-package expand-region
@@ -891,35 +913,26 @@
   :bind
   ("C-=" . er/expand-region))
 
-;; part-of-emacs:
-;; synopsis:
-;; URL:
+;; part-of-emacs: nil
+;; synopsis: Edit regions in separate buffers.
+;; URL: https://github.com/Fanael/edit-indirect
 (use-package edit-indirect
   :ensure t
   :bind
   (:map mode-specific-map
         ("r" . edit-indirect-region)))
 
-;; part-of-emacs:
-;; synopsis:
-;; URL:
+;; part-of-emacs: nil
+;; synopsis: Watch system clipboard, add changes to kill ring/autoinsert.
+;; URL: https://github.com/bburns/clipmon
 (use-package clipmon
   :ensure t
   :config
   (clipmon-mode))
 
-;; part-of-emacs:
-;; synopsis:
-;; URL:
-(use-package man
-  :ensure nil
-  :custom-face
-  (Man-overstrike ((t (:inherit font-lock-type-face :bold t))))
-  (Man-underline ((t (:inherit font-lock-keyword-face :underline t)))))
-
 ;; part-of-emacs: nil
 ;; synopsis: Track command frequencies.
-;; URL:
+;; URL: https://github.com/dacap/keyfreq
 (use-package keyfreq
   :ensure t
   :config
@@ -942,20 +955,6 @@
 (use-package free-keys
   :ensure t
   :commands free-keys)
-
-;; part-of-emacs: nil
-;; synopsis: Better *help* buffer interface.
-;; URL: https://github.com/Wilfred/helpful
-(use-package helpful
-  :ensure t)
-
-;; part-of-emacs: t
-;; synopsis: Callendar functions.
-(use-package calendar
-  :ensure nil
-  :defer t
-  :custom
-  (calendar-week-start-day 1))
 
 ;;; DOCUMENTING ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 ;;
@@ -1021,6 +1020,20 @@
   :config
   (pdf-tools-install)
   (setq-default pdf-view-display-size 'fit-page))
+
+;; part-of-emacs: nil
+;; synopsis: Better *help* buffer interface.
+;; URL: https://github.com/Wilfred/helpful
+(use-package helpful
+  :ensure t)
+
+;; part-of-emacs: t
+;; synopsis: Browse UNIX manual pages.
+(use-package man
+  :ensure nil
+  :custom-face
+  (Man-overstrike ((t (:inherit font-lock-type-face :bold t))))
+  (Man-underline ((t (:inherit font-lock-keyword-face :underline t)))))
 
 ;;; LANGUAGE-SUPPORT ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 ;;
@@ -1083,7 +1096,7 @@
   (rust-format-on-save t))
 
 ;; part-of-emacs: nil
-;; synopsis: Code completion, goto-definition and docs browsing for Rust via racer.
+;; synopsis: Code completion, goto-definition and docs browsing for Rust.
 ;; URL: https://github.com/racer-rust/emacs-racer
 (use-package racer
   :ensure t
@@ -1097,11 +1110,11 @@
 ;; synopsis: Emacs Minor Mode for Cargo, Rust's Package Manager.
 ;; URL: https://github.com/kwrooijen/cargo.el
 (use-package cargo
-  :ensure t
+  :ensure nil
   :hook
   (rust-mode . cargo-minor-mode))
 
-;; part-of-emacs:
+;; part-of-emacs: nil
 ;; synopsis:
 ;; URL:
 (use-package flycheck-rust
@@ -1258,7 +1271,7 @@
   :mode
   ("\\.py\\'" . python-mode))
 
-;; part-of-emacs:
+;; part-of-emacs: nil
 ;; synopsis: Emacs Python Development Environment.
 ;; URL: https://github.com/jorgenschaefer/elpy
 (use-package elpy
@@ -1287,27 +1300,45 @@
 
 ;;;; Data-serialization formats
 
+;; part-of-emacs: nil
+;; synopsis:
+;; URL:
 (use-package csv-mode
+  :ensure t
   :mode
   (("\\.[Cc][Ss][Vv]\\'" . csv-mode)))
 
+;; part-of-emacs: nil
+;; synopsis:
+;; URL:
 (use-package toml-mode
   :ensure t
   :mode
-  (("\\.toml\\'" . toml-mode)
-   ("\\.tml\\'" . toml-mode)))
+  (("\\.[Tt][Oo][Mm][Ll]\\'" . toml-mode)
+   ("\\.[Tt][Mm][Ll]\\'" . toml-mode)))
 
+;; part-of-emacs: nil
+;; synopsis:
+;; URL:
 (use-package json-mode
   :ensure t
   :mode ("\\.json\\'" . json-mode))
 
+;; part-of-emacs: nil
+;; synopsis:
+;; URL:
 (use-package yaml-mode
   :ensure t
   :mode
   (("\\.yml\\'" . yaml-mode)
    ("\\.yaml\\'" . yaml-mode)))
 
+
+;; part-of-emacs: nil
+;; synopsis:
+;; URL:
 (use-package ssh-config-mode
+  :ensure t
   :init
   (autoload 'ssh-config-mode "ssh-config-mode" t)
   :mode
@@ -1318,50 +1349,33 @@
   :hook
   (ssh-config-mode . turn-on-font-lock))
 
+;; part-of-emacs: nil
+;; synopsis:
+;; URL:
 (use-package plantuml-mode
   :ensure t
   :mode
   (("\\.plantuml\\'" . plantuml-mode)))
 
+;; part-of-emacs: nil
+;; synopsis:
+;; URL:
 (use-package lua-mode
+  :ensure t
   :defer t)
 
 ;;;; Markup
 
-
+;; part-of-emacs: nil
+;; synopsis:
+;; URL:
 (use-package markdown-mode
   :ensure t
-  :mode (("\\`README\\.md\\'" . gfm-mode)
-         ("\\.md\\'"          . markdown-mode)
-         ("\\.markdown\\'"    . markdown-mode))
-  :init (setq markdown-command "markdown"))
-
-;; (use-package htmlize
-;;   :defer t
-;;   :custom
-;;   (org-html-htmlize-output-type 'css)
-;;   (org-html-htmlize-font-prefix "org-"))
-
-;; (use-package ibuffer-vc
-;;   :config
-;;   (define-ibuffer-column icon
-;;     (:name "Icon" :inline t)
-;;     (all-the-icons-ivy--icon-for-mode major-mode))
-;;   :custom
-;;   (ibuffer-formats
-;;    '((mark modified read-only vc-status-mini " "
-;;            (name 18 18 :left :elide)
-;;            " "
-;;            (size 9 -1 :right)
-;;            " "
-;;            (mode 16 16 :left :elide)
-;;            " "
-;;            filename-and-process)) "include vc status info")
-;;   :hook
-;;   (ibuffer . (lambda ()
-;;                (ibuffer-vc-set-filter-groups-by-vc-root)
-;;                (unless (eq ibuffer-sorting-mode 'alphabetic)
-;;                  (ibuffer-do-sort-by-alphabetic)))))
+  :mode
+  (("\\.md\\'"          . markdown-mode)
+   ("\\.markdown\\'"    . markdown-mode))
+  :init
+  (setq markdown-command "markdown"))
 
 ;;;; PROJECTS ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 ;;
@@ -1401,16 +1415,18 @@
   :ensure t
   :bind (("C-x g" . magit-status)))
 
-;; part-of-emacs:
+;; part-of-emacs: nil
 ;; synopsis:
 ;; URL:
 (use-package gitconfig-mode
+  :ensure t
   :defer t)
 
-;; part-of-emacs:
+;; part-of-emacs: nil
 ;; synopsis:
 ;; URL:
 (use-package gitignore-mode
+  :ensure t
   :defer t)
 
 ;; part-of-emacs: nil
@@ -1443,24 +1459,12 @@
    (dired-mode . diff-hl-dired-mode)))
 
 ;; part-of-emacs: nil
-;; synopsis: smarter commenting for Emacs.
+;; synopsis: Smarter commenting for Emacs.
 ;; URL: https://github.com/paldepind/smart-comment
 (use-package smart-comment
   :ensure t
   :defer t
   :bind ("M-;" . smart-comment))
-
-;; (use-package ag
-;;   :defer t
-;;   :ensure-system-package (ag . silversearcher-ag)
-;;   :custom
-;;   (ag-highlight-search t "Highlight the current search term."))
-
-;; (use-package dumb-jump
-;;   :defer t
-;;   :custom
-;;   (dumb-jump-selector 'ivy)
-;;   (dumb-jump-prefer-searcher 'ag))
 
 ;; part-of-emacs: nil
 ;; synopsis: Pop-up documentation for completion candidates.
