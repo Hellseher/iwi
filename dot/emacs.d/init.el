@@ -1,6 +1,6 @@
 ;;; package ---  init.el Emacs configuration
 ;;; Created    : <Tue 10 Mar 2015 11:39:46>
-;;; Modified   : <2019-6-21 Fri 01:58:14 BST> Sharlatan
+;;; Modified   : <2019-6-28 Fri 22:51:02 BST> Sharlatan
 ;;; Author     : sharlatan <sharlatanus@gmail.com>
 
 ;;; Commentary:
@@ -103,7 +103,9 @@
   (indent-tabs-mode nil "Spaces!")
   (tab-width 4)
   (debug-on-quit nil)
-  (make-pointer-invisible t))
+  (make-pointer-invisible t)
+  :config
+  (setq-default mode-line-format nil))
 
 ;;; USE-PACKAGE-EXTENSIONS ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 ;;
@@ -680,6 +682,7 @@
    #'rainbow-identifiers-cie-l*a*b*-choose-face)
   :hook
   (emacs-lisp-mode . rainbow-identifiers-mode)
+  (lisp-mode . rainbow-identifiers-mode)
   (scheme-mode . rainbow-identifiers-mode))
 
 ;; part-of-emacs: t
@@ -740,7 +743,7 @@
   (ivy-mode t))
 
 ;; part-of-emacs: nil
-;; synopsis:
+;; synopsis: Preview yasnippets with `ivy'.
 ;; URL: https://github.com/mkcms/ivy-yasnippet
 (use-package ivy-yasnippet
   :ensure t
@@ -749,8 +752,8 @@
   (("C-c y y" . ivy-yasnippet)))
 
 ;; part-of-emacs: nil
-;; synopsis:
-;; URL:
+;; synopsis: Ivy interface for xref results.
+;; URL: https://github.com/alexmurray/ivy-xref
 (use-package ivy-xref
   :ensure t
   :defer t
@@ -815,8 +818,9 @@
 ;; part-of-emacs: t
 ;; synopsis: Setup a menu of recently opened files.
 (use-package recentf
+  :ensure nil
   :custom
-  (recentf-auto-cleanup 30)
+  (recentf-auto-cleanup 'never)
   :config
   (run-with-idle-timer 30 t 'recentf-save-list))
 
@@ -970,15 +974,14 @@
   :defer t
   :mode (("\\.org$" . org-mode))
   :config
-  (add-to-list 'org-babel-load-languages
-               '((clojure . t)
-                 (C . t)
-                 (R . t)
-                                        ;     (eacs-list .t)
-                 (perl . t)
-                 (python . t)
-                 (shell . t)
-                 (restclient . t))))
+  (org-babel-do-load-languages 'org-babel-load-languages
+                               '((clojure . t)
+                                 (C . t)
+                                 (R . t)
+                                 (perl . t)
+                                 (python . t)
+                                 (shell . t)
+                                 (restclient . t))))
 
 ;; part-of-emacs: nil
 ;; synopsis: Org exporter for pandoc.
@@ -1053,22 +1056,22 @@
 ;;
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 
-;; part-of-emacs: t
-;; synopsis: Semantic buffer evaluator.
-(use-package semantic
-  :ensure nil
-  :custom
-  (global-semanticdb-minor-mode 1)
-  (global-semantic-idle-scheduler-mode 1)
-  :config
-  (semantic-mode 1))
+;; ;; part-of-emacs: t
+;; ;; synopsis: Semantic buffer evaluator.
+;; (use-package semantic
+;;   :ensure nil
+;;   :custom
+;;   (global-semanticdb-minor-mode 1)
+;;   (global-semantic-idle-scheduler-mode 1)
+;;   :config
+;;   (semantic-mode 1))
 
-;; part-of-emacs: t
-;; synopsis: Company-mode completion backend using Semantic.
-;; URL:
-(use-package company-semantic
-  :ensure nil
-  :defer t)
+;; ;; part-of-emacs: t
+;; ;; synopsis: Company-mode completion backend using Semantic.
+;; ;; URL:
+;; (use-package company-semantic
+;;   :ensure nil
+;;   :defer t)
 
 
 ;;;; Rust: https://www.rust-lang.org/
@@ -1130,6 +1133,13 @@
 ;; Stroustrup as an extension of the C programming language, or "C
 ;; with Classes" © Wikipedia
 
+;; part-of-emacs: t
+;; synopsis:
+(use-package cc-mode
+  :ensure nil
+  :custom
+  (c-basic-offset 4))
+
 ;; part-of-emacs: nil
 ;; synopsis: Company mode backend for C/C++ header files.
 ;; URL: https://github.com/randomphrase/company-c-headers
@@ -1174,7 +1184,7 @@
   :ensure nil
   :defer t
   :mode
-  ("\\'.sbclrc\\'" . lisp-mode)
+  ("sbclrc" . lisp-mode)
   :hook
   (after-save . check-parens))
 
@@ -1218,7 +1228,11 @@
 (use-package geiser
   :ensure t
   :config
-  (setq geiser-active-implementations '(guile)))
+  (setq geiser-active-implementations '(guile))
+  (add-to-list 'geiser-guile-load-path '("~/.local/src/guile")))
+
+(use-package guix
+  :ensure t)
 
 ;; part-of-emacs: nil
 ;; synopsis: Superior Lisp Interaction Mode for Emacs.
