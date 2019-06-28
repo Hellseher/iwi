@@ -1,0 +1,17 @@
+# File      : main.yml
+# Created   : <2018-10-09 Tue 00:02:09 BST>
+# Modified  : <2018-10-09 Tue 00:12:11 BST> Sharlatan
+# Author    : Sharlatan
+# Synopsis  : <>
+---
+- name: "scan dot files"
+  find:
+    paths: "{{ dot_path }}"
+    recurse: yes
+  register: dot_files
+
+- debug:
+    msg:
+      - "{{ dot_files }}"
+...
+# End of main.yml
