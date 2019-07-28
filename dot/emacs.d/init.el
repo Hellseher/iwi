@@ -1,6 +1,6 @@
 ;;; package ---  init.el Emacs configuration
 ;;; Created    : <Tue 10 Mar 2015 11:39:46>
-;;; Modified   : <2019-6-28 Fri 22:51:02 BST> Sharlatan
+;;; Modified   : <2019-7-28 Sun 21:38:11 BST> Sharlatan
 ;;; Author     : sharlatan <sharlatanus@gmail.com>
 
 ;;; Commentary:
@@ -11,14 +11,13 @@
 ;; If you add some changes reload init.el with `M-x eval-buffer' or
 ;; `M-x load-file ~/.emacs.d/init.el'
 ;;
-;; Some of the packages requestes to install system pakcages to enable
-;; their functionality:
+;; Some of the Emacs packages depends on system ones.
 ;;
-;; | jedi | elpy
-;; | flake8 | elpy
-;; | autopep80 | elpy
-;; | yapf1 | elpy
-;; | black2 | elpy
+;;  jedi      | elpy
+;;  flake8    | elpy
+;;  autopep80 | elpy
+;;  yapf1     | elpy
+;;  black2    | elpy
 ;;
 ;; Main functionality:
 ;; + *-mode              -- Syntax highlight and indention
@@ -31,13 +30,13 @@
 ;;; Debugging:
 ;;
 ;; 1. Run Emacs in clean mode from your shell, without any
-;; configurations.\
+;; configurations.
 ;;
 ;;    emacs --init-debug -q
 ;;
-;; 2. Then evaluate each S-exp one by pressing `C-M-x', to navigate by
-;;    S-exp use default keybindings `C-M-n' (forward-list) and
-;;    `C-M-p'(backward-list) Previous.
+;; 2. Then evaluate each S-exp one by pressing `C-M-x' (eval-defun),
+;;    to navigate by S-exp use default keybindings `C-M-n'
+;;    (forward-list) and `C-M-p'(backward-list) Previous.
 ;;
 ;;; References:
 ;;
@@ -55,6 +54,18 @@
 ;;
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 
+(require 'package)
+
+;;:FIXME: https://debbugs.gnu.org/cgi/bugreport.cgi?bug=34341
+(setq gnutls-algorithm-priority "NORMAL:-VERS-TLS1.3")
+
+(setq package-archives
+      `(,@package-archives
+        ("melpa" . "https://melpa.org/packages/")
+        ("org" . "https://orgmode.org/elpa/")))
+
+(package-initialize)
+
 (setq package-enable-at-startup nil
       ;file-name-handler-alist t
       message-log-max 16384
@@ -62,19 +73,11 @@
       gc-cons-percentage 0.6
       auto-window-vscroll nil)
 
-(require 'package)
-
-(package-initialize)
-
-(setq package-archives
-      `(,@package-archives
-        ("melpa" . "https://melpa.org/packages/")
-        ("org" . "https://orgmode.org/elpa/")))
-
 (unless (package-installed-p 'use-package)
   (package-refresh-contents)
-  (package-install 'use-package)
-  (eval-when-compile (require 'use-package)))
+  (package-install 'use-package))
+
+(eval-when-compile (require 'use-package))
 
 ;(put 'use-package 'lisp-indent-function 1)
 
@@ -103,9 +106,7 @@
   (indent-tabs-mode nil "Spaces!")
   (tab-width 4)
   (debug-on-quit nil)
-  (make-pointer-invisible t)
-  :config
-  (setq-default mode-line-format nil))
+  (make-pointer-invisible t))
 
 ;;; USE-PACKAGE-EXTENSIONS ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 ;;
@@ -336,7 +337,6 @@
 ;; part-of-emacs: t
 ;; synopsis: The Emacs command shell.
 (use-package eshell
-  :defer t
   :ensure nil)
 
 ;; part-of-emacs: t
@@ -363,9 +363,9 @@
 ;; synopsis: Fish-like history auto suggestions in eshell
 ;; URL: https://github.com/dieggsy/esh-autosuggest
 (use-package esh-autosuggest
-  :hook (eshell-mode . esh-autosuggest-mode)
-  :ensure t)
-
+  :ensure t
+  :hook
+  (eshell-mode . esh-autosuggest-mode))
 
 ;;; DIRED ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 ;;
@@ -381,9 +381,8 @@
 ;; synopsis: Directory-browsing commands.
 (use-package dired
   :ensure nil
-  :custom (dired-dwim-target t "guess a target directory")
-  :hook
-  (dired-mode . dired-hide-details-mode))
+  :custom
+  (dired-dwim-target t "guess a target directory"))
 
 ;; part-of-emacs: nil
 ;; synopsis: Show dired as sidebar.
@@ -532,6 +531,11 @@
                       :weight 'regular
                       :height 120
                       :box nil))
+
+(use-package fill-column-indicator
+  :ensure t
+  :config
+  (setq fci-column 80))
 
 ;; part-of-emacs: t
 ;; synopsis: Setting up the tool bar.
@@ -685,7 +689,7 @@
   (lisp-mode . rainbow-identifiers-mode)
   (scheme-mode . rainbow-identifiers-mode))
 
-;; part-of-emacs: t
+;; part-of-emacs: nil
 ;; synopsis: Colorize color names in buffers.
 (use-package rainbow-mode
   :ensure t
@@ -1019,9 +1023,10 @@
 ;; synopsis: Support library for PDF documents.
 ;; URL: https://github.com/politza/pdf-tools
 (use-package pdf-tools
-  :ensure t
+  :pin manual
+  :mode ("\\.pdf\\'" . pdf-tools-install)
+  :defer t
   :config
-  (pdf-tools-install)
   (setq-default pdf-view-display-size 'fit-page))
 
 ;; part-of-emacs: nil
@@ -1228,8 +1233,7 @@
 (use-package geiser
   :ensure t
   :config
-  (setq geiser-active-implementations '(guile))
-  (add-to-list 'geiser-guile-load-path '("~/.local/src/guile")))
+  (setq geiser-active-implementations '(guile)))
 
 (use-package guix
   :ensure t)
@@ -1314,11 +1318,11 @@
 
 ;;;; Data-serialization formats
 
-;; part-of-emacs: nil
+;; part-of-emacs: t
 ;; synopsis:
 ;; URL:
 (use-package csv-mode
-  :ensure t
+  :ensure nil
   :mode
   (("\\.[Cc][Ss][Vv]\\'" . csv-mode)))
 
