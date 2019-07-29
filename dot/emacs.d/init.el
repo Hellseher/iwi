@@ -1,6 +1,6 @@
 ;;; package ---  init.el Emacs configuration
 ;;; Created    : <Tue 10 Mar 2015 11:39:46>
-;;; Modified   : <2019-7-28 Sun 21:38:11 BST> Sharlatan
+;;; Modified   : <2019-7-29 Mon 22:46:19 BST> Sharlatan
 ;;; Author     : sharlatan <sharlatanus@gmail.com>
 
 ;;; Commentary:
@@ -917,7 +917,6 @@
 ;; URL: https://github.com/magnars/expand-region.el
 (use-package expand-region
   :ensure t
-  :after (org)
   :bind
   ("C-=" . er/expand-region))
 
@@ -974,7 +973,7 @@
 ;; synopsis: Outline-based notes management and organizer.
 ;; URL: https://orgmode.org
 (use-package org
-  :ensure org-plus-contrib
+  ;:ensure org-plus-contrib
   :defer t
   :mode (("\\.org$" . org-mode))
   :config
