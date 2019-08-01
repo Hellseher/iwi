@@ -2,15 +2,15 @@
 ;; Path      : /etc/config.scm
 ;; Author    : Sharlatan <sharlatanus@gmail.com>
 ;; Created   : <2019-6-02 Sun 11:08:17 BST>
-;; Modified  : <2019-8-01 Thu 23:07:36 BST> Sharlatan
+;; Modified  : <2019-8-01 Thu 23:28:43 BST> Sharlatan
 
 ;; URL: https://github.com/Hellseher/iwi
 
 ;;; Cometary
 ;;
 ;; After running 'guix system reconfigure /etc/config.scm you'll get
-;; + systems with GNOME desktop manger and optional StumpWM window manager.
-;; + 2 available browser install globally - IceCat and Next
+;; + a system with GNOME desktop manager and optional StumpWM window manager.
+;; + 2 available browsers installed globally - IceCat and Next
 
 
 (use-modules (gnu)
