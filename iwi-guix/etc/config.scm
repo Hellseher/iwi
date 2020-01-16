@@ -2,13 +2,50 @@
 ;; Path      : /etc/config.scm
 ;; Author    : Sharlatan <sharlatanus@gmail.com>
 ;; Created   : <2019-6-02 Sun 11:08:17 BST>
-;; Modified  : <2019-8-01 Thu 23:28:43 BST> Sharlatan
+;; Modified  : <2020-1-16 Thu 23:06:51 GMT> Sharlatan
 
 ;; URL: https://github.com/Hellseher/iwi
 
 ;;; Cometary
 ;;
-;; After running 'guix system reconfigure /etc/config.scm you'll get
+;;; Configuration pre-setup
+;;  http://guix.gnu.org/manual/en/html_node/Keyboard-Layout-and-Networking-and-Partitioning.html
+;;
+;; 3 partitions need to be added just before using this system declartion file.
+;; EFI systems. Asume you want to deploy your system on drive /dev/sda:
+;;
+;; #+BEGIN
+;; GUIX>: passwd # reset root password
+;; GUIX>: herd start ssh-daemon
+;;
+;; GUIX>: parted -a opt /dev/sda mkpart primary 0 1024M
+;; GUIX>: parted /dev/sda set 1 esp on
+;; GUIX>: mkfs.fat -F32 /dev/sda1
+;;
+;; GUIX>: parted -a opt /dev/sda mkpart primary 1024M 95%
+;; GUIX>: mkfs.ext4 -L system /dev/sda2
+;;
+;; GUIX>: parted -a opt /dev/sda mkpart primary 95% 100%
+;; GUIX>: mkswap -L SWAP /dev/sda3
+;; GUIX>: swapon /dev/sda3
+;;
+;; GUIX>: mkdir -p /boot/efi
+;; GUIX>: mount /dev/sda1 /boot/efi
+;;
+;; GUIX>: mkdir -p /mnt
+;; GUIX>: mount /dev/sda2 /mnt
+;; GUIX>: herd start cow-ctore /mnt
+;;
+;; GUIX>: mkdir /mnt/etc
+;; HOST>: scp config.scm root@guix:/mnt/etc/
+;; GUIX>: guix systemd init /mnt/etc/config.scm /mnt
+;; #-END
+;;
+;; When all partition are aligned and mounted copy this systemd declaration file
+;; over to the fresh Guix installation. You may start ssh-daemon on Guix system
+;; or use USB media drive to trasfere it.
+;;
+;; After running `guix system init` you'll get:
 ;; + a system with GNOME desktop manager and optional StumpWM window manager.
 ;; + 2 available browsers installed globally - IceCat and Next
 
@@ -39,21 +76,19 @@
    (bootloader grub-efi-bootloader)
    (target "/boot/efi")
    (keyboard-layout keyboard-layout)))
- (swap-devices (list "/dev/sda2"))
+ (swap-devices (list "/dev/sda3"))
  (file-systems
   (cons* (file-system
           (mount-point "/boot/efi")
-          (device (uuid "E689-0CB3" 'fat32))
+          (device "/dev/sda1")
           (type "vfat"))
          (file-system
           (mount-point "/")
-          (device
-           (uuid "9c5b7718-ac49-4f1f-a3c4-5296d91d4c70"
-                 'ext4))
+          (device "/dev/sda2")
           (type "ext4"))
          %base-file-systems))
 
- (host-name "lpt-t420")
+ (host-name "guix-t420")
 
  (users (cons* (user-account
                 (name "hellseher")
