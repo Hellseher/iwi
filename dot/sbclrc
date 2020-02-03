@@ -1,6 +1,6 @@
 ;;;; sbclrc -- configuration file for SBCL
 ;;;; Created   :
-;;;; Modified  : <2019-6-14 Fri 21:09:53 BST> Sharlatan
+;;;; Modified  : <2020-02-03 Mon 23:01:23 GMT>
 ;;;; Author    : Sharlatan <sharlatanus@gmail.com>
 
 ;;;; Commentary:
@@ -8,37 +8,41 @@
 ;;;; Code:
 
 (defvar *user-sbcl-src-path*)
-(defvar *user-quicklisp-init-path*)
+(defvar *user-projects*)
+(defvar *user-quicklisp-init-path-maybe*)
 (defvar *user-quicklisp-projects-path*)
 
 (defun from-home-path (path)
   "Build a absolute path to user target directory including $HOME."
   (merge-pathnames path (user-homedir-pathname)))
 
-(setf *user-sbcl-src-path* (from-home-path ".local/src/sbcl/")
-      *user-quicklisp-projects-path* (from-home-path "Projects/hck/Lisp/CommonLisp/")
-      *user-quicklisp-init-path* (from-home-path ".local/share/common-lisp/setup.lisp"))
+(setf *user-sbcl-src-path* (from-home-path
+                            "code/sbcl/"))
 
-;; Path to SBCL source code directory
+(setf *user-quicklisp-init-path-maybe*
+      (mapcar 'from-home-path
+              '(".local/share/common-lisp/setup.lisp"
+                ".quicklisp/setup.lisp")))
+
+(setf *user-projects*
+      (mapcar 'from-home-path
+              '("code/CommonLisp"
+                ".local/share/common-lisp/quicklisp/"
+                "IPEC/code/web-sgs/")))
+
 (when (probe-file *user-sbcl-src-path*)
   (sb-ext:set-sbcl-source-location *user-sbcl-src-path*))
 
 #-quicklisp
-(when (probe-file *user-quicklisp-init-path*)
-  (load *user-quicklisp-init-path*))
+(loop for ql-init in *user-quicklisp-init-path-maybe*
+   when (probe-file ql-init) do (load ql-init))
 
-(when (probe-file *user-quicklisp-projects-path*)
-  (push *user-quicklisp-projects-path* ql:*local-project-directories*))
+(require "asdf")
 
-(require :asdf)
+(setf asdf:*central-registry* '())
 
-;;; If a fasl was stale, try to recompile and load (once).
-(defmethod asdf:perform :around ((o asdf:load-op)
-                                 (c asdf:cl-source-file))
-  (handler-case (call-next-method o c)
-    ;; If a fasl was stale, try to recompile and load (once).
-    (sb-ext:invalid-fasl ()
-      (asdf:perform (make-instance 'asdf:compile-op) c)
-      (call-next-method))))
+(loop for project in *user-projects*
+   when (probe-file project) do
+   (push project asdf:*central-registry*))
 
 ;;;; sbclrc ends here
