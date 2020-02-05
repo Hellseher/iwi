@@ -2,7 +2,7 @@
 ;; Path      : /etc/config.scm
 ;; Author    : Sharlatan <sharlatanus@gmail.com>
 ;; Created   : <2019-6-02 Sun 11:08:17 BST>
-;; Modified  : <2020-1-16 Thu 23:06:51 GMT> Sharlatan
+;; Modified  : <2020-02-05 Wed 23:57:49 GMT> Sharlatan
 
 ;; URL: https://github.com/Hellseher/iwi
 
@@ -12,7 +12,8 @@
 ;;  http://guix.gnu.org/manual/en/html_node/Keyboard-Layout-and-Networking-and-Partitioning.html
 ;;
 ;; 3 partitions need to be added just before using this system declartion file.
-;; EFI systems. Asume you want to deploy your system on drive /dev/sda:
+;; It is for EFI systems. Asume you want to deploy your system on drive
+;; /dev/sda:
 ;;
 ;; #+BEGIN
 ;; GUIX>: passwd # reset root password
@@ -40,6 +41,15 @@
 ;; HOST>: scp config.scm root@guix:/mnt/etc/
 ;; GUIX>: guix systemd init /mnt/etc/config.scm /mnt
 ;; #-END
+;;
+;; Successful completion looks like this:
+;;
+;; #+BEGIN
+;; initializing operating system under '/mnt'...
+;; copying to '/mnt'...
+;; populating '/mnt'...
+;; bootloader successfully installed on '/boot/efi'
+;; #+END
 ;;
 ;; When all partition are aligned and mounted copy this systemd declaration file
 ;; over to the fresh Guix installation. You may start ssh-daemon on Guix system
@@ -69,6 +79,11 @@
 
 (operating-system
  (locale "en_GB.utf8")
+ (locale-definitions
+  (list (locale-definition (source "en_GB")
+                           (name "en_GB.utf8"))
+        (locale-definition (source "en_GB")
+                           (name "en_GB.utf8"))))
  (timezone "Europe/London")
  (keyboard-layout (keyboard-layout "gb" "extd"))
  (bootloader
@@ -114,7 +129,12 @@
          (service openssh-service-type)
          (set-xorg-configuration
           (xorg-configuration
-           (keyboard-layout keyboard-layout))))
+           (keyboard-layout keyboard-layout)))
+         (service special-files-service-type
+                  ("/user/bin/env")
+                  ,(file-append (canonical-package
+                                 (guix-package base coreutils))
+                                "/bin/env")))
    %desktop-services)))
 
 ;; config.scm ends here
