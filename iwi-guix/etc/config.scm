@@ -2,7 +2,7 @@
 ;; Path      : /etc/config.scm
 ;; Author    : Sharlatan <sharlatanus@gmail.com>
 ;; Created   : <2019-6-02 Sun 11:08:17 BST>
-;; Modified  : <2020-02-05 Wed 23:57:49 GMT> Sharlatan
+;; Modified  : <2020-02-06 Thu 00:03:33 GMT> Sharlatan
 
 ;; URL: https://github.com/Hellseher/iwi
 
@@ -131,10 +131,10 @@
           (xorg-configuration
            (keyboard-layout keyboard-layout)))
          (service special-files-service-type
-                  ("/user/bin/env")
-                  ,(file-append (canonical-package
-                                 (guix-package base coreutils))
-                                "/bin/env")))
+                  '(("/user/bin/env")
+                    ,(file-append (canonical-package
+                                   (guix-package base coreutils))
+                                  "/bin/env"))))
    %desktop-services)))
 
 ;; config.scm ends here
