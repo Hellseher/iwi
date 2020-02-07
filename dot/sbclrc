@@ -1,13 +1,13 @@
 ;;;; sbclrc -- configuration file for SBCL
 ;;;; Created   :
-;;;; Modified  : <2020-02-03 Mon 23:01:23 GMT>
+;;;; Modified  : <2020-02-04 Tue 21:49:23 GMT>
 ;;;; Author    : Sharlatan <sharlatanus@gmail.com>
 
 ;;;; Commentary:
 
 ;;;; Code:
 
-(defvar *user-sbcl-src-path*)
+(defvar *user-sbcl-src-path-maybe*)
 (defvar *user-projects*)
 (defvar *user-quicklisp-init-path-maybe*)
 (defvar *user-quicklisp-projects-path*)
@@ -16,8 +16,10 @@
   "Build a absolute path to user target directory including $HOME."
   (merge-pathnames path (user-homedir-pathname)))
 
-(setf *user-sbcl-src-path* (from-home-path
-                            "code/sbcl/"))
+(setf *user-sbcl-src-path-maybe*
+      (mapcar 'from-home-path
+              '(".local/src/sbcl/"
+                "code/sbcl/")))
 
 (setf *user-quicklisp-init-path-maybe*
       (mapcar 'from-home-path
@@ -28,10 +30,11 @@
       (mapcar 'from-home-path
               '("code/CommonLisp"
                 ".local/share/common-lisp/quicklisp/"
-                "IPEC/code/web-sgs/")))
+                "IPEC/code/iip/")))
 
-(when (probe-file *user-sbcl-src-path*)
-  (sb-ext:set-sbcl-source-location *user-sbcl-src-path*))
+(loop for sb-src in *user-sbcl-src-path-maybe*
+   thereis (when (probe-file sb-src)
+             (sb-ext:set-sbcl-source-location sb-src)))
 
 #-quicklisp
 (loop for ql-init in *user-quicklisp-init-path-maybe*

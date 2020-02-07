@@ -2,7 +2,7 @@
 ;; Path      : /etc/config.scm
 ;; Author    : Sharlatan <sharlatanus@gmail.com>
 ;; Created   : <2019-6-02 Sun 11:08:17 BST>
-;; Modified  : <2020-02-06 Thu 00:03:33 GMT> Sharlatan
+;; Modified  : <2020-02-07 Fri 01:19:56 GMT> Sharlatan
 
 ;; URL: https://github.com/Hellseher/iwi
 
@@ -62,11 +62,16 @@
 
 (use-modules (gnu)
              (gnu packages)
+             (gnu packages wm)
+             (gnu services)
+             (gnu services base)
              (gnu system)
+             (gnu system locale)
              (gnu system nss))
 
 (use-service-modules desktop
                      xorg
+                     base
                      networking
                      ssh)
 
@@ -81,8 +86,6 @@
  (locale "en_GB.utf8")
  (locale-definitions
   (list (locale-definition (source "en_GB")
-                           (name "en_GB.utf8"))
-        (locale-definition (source "en_GB")
                            (name "en_GB.utf8"))))
  (timezone "Europe/London")
  (keyboard-layout (keyboard-layout "gb" "extd"))
@@ -116,7 +119,6 @@
 
  (packages (cons* nss-certs
                   emacs
-                  emacs-exwm
                   emacs-guix
                   stumpwm
                   sbcl-next
