@@ -51,13 +51,9 @@
 ;; our package manager can't deal with; see raxod502/straight.el#279)
 ;(package! builtin-package :recipe (:branch "develop"))
 
+
 
 ;; part-of-emacs: nil
 ;; sysnopsis: Display ^L page breaks as tidy horizontal lines
 ;; URL: https://github.com/purcell/page-break-lines
 (package! page-break-lines)
-
-;; part-of-emacs: nil
-;; synopsis: Superior Lisp Interaction Mode for Emacs.
-;; URL: https://github.com/slime/slime
-(package! slime)

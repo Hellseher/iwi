@@ -6,8 +6,8 @@
 
 ;; These are used for a number of things, particularly for GPG configuration,
 ;; some email clients, file templates and snippets.
-(setq user-full-name "John Doe"
-      user-mail-address "john@doe.com")
+(setq user-full-name "Oleg Bocharov"
+      user-mail-address "oleg.bocharov@ipec.co.uk")
 
 ;; Doom exposes five (optional) variables for controlling fonts in Doom. Here
 ;; are the three important ones:
@@ -49,4 +49,12 @@
 ;; You can also try 'gd' (or 'C-c g d') to jump to their definition and see how
 ;; they are implemented.
 
-(setq time-stamp-pattern "8/Modified[ \t]*:\\\\?[ \t]*<%04Y-%:m-%02d %03a %02H:%02M:%02S %Z> %u\\\\?$")
+(setq time-stamp-pattern "8/Modified[ \t]*:\\\\?[ \t]*<%04Y-%:m-%02d %03a %02H:%02M:%02S %Z>$")
+(setq blink-cursor-mode t)
+
+;; part-of-emacs: nil
+;; sysnopsis: Display ^L page breaks as tidy horizontal lines
+;; URL: https://github.com/purcell/page-break-lines
+(use-package! page-break-lines
+  :config
+  (global-page-break-lines-mode))
