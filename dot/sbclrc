@@ -1,6 +1,6 @@
 ;;;; sbclrc -- configuration file for SBCL
 ;;;; Created   :
-;;;; Modified  : <2020-02-04 Tue 21:49:23 GMT>
+;;;; Modified  : <2020-4-09 Thu 09:12:03 BST>
 ;;;; Author    : Sharlatan <sharlatanus@gmail.com>
 
 ;;;; Commentary:
@@ -29,8 +29,9 @@
 (setf *user-projects*
       (mapcar 'from-home-path
               '("code/CommonLisp"
-                ".local/share/common-lisp/quicklisp/"
-                "IPEC/code/iip/")))
+                "code/ViralityEngine/"
+                ;".local/share/common-lisp/quicklisp/"
+                ;"IPEC/code/iip/")))
 
 (loop for sb-src in *user-sbcl-src-path-maybe*
    thereis (when (probe-file sb-src)

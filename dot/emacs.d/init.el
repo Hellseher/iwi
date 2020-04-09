@@ -1,6 +1,6 @@
 ;;; package ---  init.el Emacs configuration
 ;;; Created    : <Tue 10 Mar 2015 11:39:46>
-;;; Modified   : <2019-7-29 Mon 22:46:19 BST> Sharlatan
+;;; Modified   : <2020-02-15 Sat 09:58:36 GMT> Sharlatan
 ;;; Author     : sharlatan <sharlatanus@gmail.com>
 
 ;;; Commentary:
@@ -159,6 +159,9 @@
 ;;; GLOBAL-CONFIRUATIONS ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 ;;
 ;; Mode agnostic configuration, related to majority of functionality.
+;; + paradox
+;; + files
+;; + smartparens
 ;;
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 
@@ -171,6 +174,31 @@
   (paradox-enable)
   :custom
   (paradox-github-token nil))
+
+;; part-of-emacs: nil
+;; synopsis: Miror mode for Emacs that deals with parens pairs.
+;; URL: https://github.com/Fuco1/smartparens
+(use-package smartparens
+  :ensure t
+  :defer t
+  :diminish smartparens-mode
+  :init
+  (smartparens-global-mode 1)
+  (show-smartparens-mode 1)
+  :config
+  (use-package smartparens-config)
+  :bind
+  ;;; Naviagation
+  (("C-M-a" . sp-beginning-of-sexp)
+   ("C-M-e" . sp-end-of-sexp)
+   ("C-M-f" . sp-forward-sexp)
+   ("C-M-b" . sp-backward-sexp)
+   ;;; Manipulation
+   ("C-M-k" . sp-kill-sexp)
+   ("C-M-w" . sp-copy-sexp)
+   ("M-<delete>" . sp-unwrap-sexp)
+   ("C-<right>" . sp-forward-slurp-sexp)
+   ("C-<left>" . sp-forward-barf-sexp)))
 
 ;; part-of-emacs: t
 ;; synopsis: File input and output commands for Emacs.
@@ -210,7 +238,7 @@
   :defer t
   :custom
   (time-stamp-pattern
-   "8/Modified[ \t]*:\\\\?[ \t]*<%04Y-%:m-%02d %03a %02H:%02M:%02S %Z> %u\\\\?$"))
+   "8/Modified[ \t]*:\\\\?[ \t]*<%04Y-%02m-%02d %03a %02H:%02M:%02S %Z\\\\?[\">]"))
 
 ;; part-of-emacs: t
 ;; synopsis: Revert buffers when files on disk change.
@@ -304,7 +332,12 @@
   (tramp-default-method "ssh")
   (tramp-default-proxies-alist nil)
   :config
-  (put 'temporary-file-directory 'standard-value '("/tmp")))
+  (put 'temporary-file-directory 'standard-value '("/tmp"))
+  (setq tramp-remote-path (append tramp-remote-path
+                                  '("~/.guix-profile/bin"
+                                    "~/.guix-profile/sbin"
+                                    "/run/current-system/profile/bin"
+                                    "/run/current-system/profile/sbin"))))
 
 ;; part-of-emacs: nil
 ;; synopsis: Open files as another user.
@@ -691,6 +724,7 @@
 
 ;; part-of-emacs: nil
 ;; synopsis: Colorize color names in buffers.
+;; URL:
 (use-package rainbow-mode
   :ensure t
   :diminish rainbow-mode
@@ -1015,7 +1049,7 @@
 ;; synopsis: An org-mode extension to `restclient'.
 ;; URL: https://github.com/alf/ob-restclient.el
 (use-package ob-restclient
-  :ensure t
+  :ensure nil
   :after org-mode )
 
 ;; part-of-emacs: nil
@@ -1214,6 +1248,7 @@
 ;; part-of-emacs: nil
 ;; synopsis: Interactive Emacs Lisp pretty-printing.
 ;; URL: https://framagit.org/steckerhalter/ipretty
+
 (use-package ipretty
   :ensure t
   :config
@@ -1234,6 +1269,9 @@
   :config
   (setq geiser-active-implementations '(guile)))
 
+;; part-of-emacs: nil
+;; synopsis: It is the Emacs interface for GNU Guix package manager.
+;; URl: https://emacs-guix.gitlab.io/website/index.html
 (use-package guix
   :ensure t)
 
@@ -1242,9 +1280,16 @@
 ;; URL: https://github.com/slime/slime
 (use-package slime
   :ensure t
+  :defer t
+  :init
+  (setq slime-contribs '(slime-fancy
+                         slime-quicklisp
+                         slime-asdf
+                         slime-sbcl-exts
+                         slime-scratch))
   :config
-  (setq inferior-lisp-program (executable-find "sbcl"))
-  (setq slime-contribs '(slime-fancy)))
+  (slime-setup)
+  (setq inferior-lisp-program (executable-find "sbcl")))
 
 ;; part-of-emacs: nil
 ;; synopsis: Slime commpletion backend for company mode.
@@ -1252,6 +1297,7 @@
 (use-package slime-company
   :ensure t
   :after (slime))
+
 
 ;;;; R
 ;; R - is a programming language and free software environment for
@@ -1512,6 +1558,7 @@
          ("C-c y x" . yas-expand))
   :config
   (yas-reload-all)
+
   (add-to-list 'yas-snippet-dirs (concat user-emacs-directory "snippets"))
   (yas-global-mode 1))
 
@@ -1564,6 +1611,11 @@
   :config
   (add-to-list 'company-backends 'company-restclient))
 
+;; part-of-emacs: nil
+;; synopsis: RSS feed reader
+;; URL:
+(use-package elfeed-org
+  :ensure t)
 
 ;;; CUSTOM-FUNCTIONS ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 ;;
@@ -1586,4 +1638,5 @@ It's commented out by current default comment symbol."
   (insert (format-time-string "%y%m%d%H%M%S")))
 
 (provide 'init.el)
+
 ;;; init.el ends here

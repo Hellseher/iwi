@@ -1,22 +1,22 @@
 " File          : .vimrc
 "
-" Created       : Sun 16 Nov 2014 01:09:50
-" Last Modified : Tue 23 Feb 2016 04:40:40
-" Maintainer    : sharlatan <mailto@olee.co.uk>
-" License       : Same as Vim
-" Credits       : See INFO SOURCES
-" Description   :    This .vimrc file contains a bundle of settings for comfortable
-"               : work with various files (*.py, *.sh, *.vim, *.md, *.c etc.).
-"               : I tried to follow 
-"               :   "The division of the perceived universe into parts and wholes
-"               : is convenient and may be necessary, but no necessity determines
-"               : how it shall be done."
-"               : G. Bateson presupposition from "Mind and nature" 
-"               : [p. 47, ISBN 0-00-654119-4]
-"               :   The file divided into logical parts, which should be
-"               : understood without further explanation. 
-"               : Main settings are folded by [marker] method. 
-"               : To open all folders type {zi}
+" Created     : Sun 16 Nov 2014 01:09:50
+" Modified    : <2018-11-18 Sun 23:44:00 GMT> Sharlatan
+" Maintainer  : sharlatan <mailto@olee.co.uk>
+" License     : Same as Vim
+" Credits     : See INFO SOURCES
+" Description : This .vimrc file contains a bundle of settings for comfortable
+"             : work with various files (*.py, *.sh, *.vim, *.md, *.c etc.).
+"             : I tried to follow 
+"             : "The division of the perceived universe into parts and wholes
+"             : is convenient and may be necessary, but no necessity determines
+"             : how it shall be done."
+"             : G. Bateson presupposition from "Mind and nature" 
+"             : [p. 47, ISBN 0-00-654119-4]
+"             : The file divided into logical parts, which should be
+"             : understood without further explanation. 
+"             : Main settings are folded by [marker] method. 
+"             : To open all folders type {zi}
 
 
 "-=:[ PRESETS ]:=-

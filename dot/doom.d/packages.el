@@ -57,3 +57,4 @@
 ;; sysnopsis: Display ^L page breaks as tidy horizontal lines
 ;; URL: https://github.com/purcell/page-break-lines
 (package! page-break-lines)
+(package! restclient)

@@ -1,14 +1,15 @@
-#! /usr/bin/env bash
-# File          : .bashrc
-# Created       : Mon 08 Dec 2014 19:31:26
-# Modified : <2018-10-11 Thu 00:41:03 BST> Sharlatan
-# Maintainer    : sharlatan, <sharlatanus@gmail.com>
-# Short         : BASH config file
+#!/usr/bin/env bash
+# File       : .bashrc
+# Created    : Mon 08 Dec 2014 19:31:26
+# Modified   : <2019-6-15 Sat 01:42:14 BST> Sharlatan
+# Maintainer : sharlatan, <sharlatanus@gmail.com>
+# Short      : BASH config file
 
 # Source global definitions
 if [ -f /etc/bashrc ]; then
-    . /etc/bashrc
+   . /etc/bashrc
 fi
+
 
 # ------------------------------------------------------------------------------
 #+EXPORTS
@@ -16,9 +17,14 @@ shopt -s histappend
 export HISTCONTROL=ignoredups:erasedups
 export INFOPATH="$INFOPATH":/usr/share/info
 export PATH="${PATH}:${HOME}/.cargo/bin:${HOME}/.local/bin"
-export PROMPT_COMMAND="history -a; history -c; history -r; $PROMPT_COMMAND"
+# export PROMPT_COMMAND="history -a; history -c; history -r; $PROMPT_COMMAND"
 export VISUAL="/usr/bin/emacsclient -cn"
 export EDITOR="$VISUAL"
+
+export PERL5LIB="${HOME}/.local/lib/perl5${PERL5LIB:+:${PERL5LIB}}"
+export PERL_LOCAL_LIB_ROOT="${HOME}/.local/share/perl5${PERL_LOCAL_LIB_ROOT:+:${PERL_LOCAL_LIB_ROOT}}"
+export PERL_MB_OPT="--install_base \"${HOME}/.local/share/perl5\""
+export PERL_MM_OPT="INSTALL_BASE=${HOME}/.local/share/perl5"
 
 # ------------------------------------------------------------------------------
 #+SETTINGS
@@ -30,29 +36,21 @@ export EDITOR="$VISUAL"
 # ├─[PID 23610 CHS 1]-[0.182]
 # └─> ~$
 
-START="$(date +%s)"
-
-_prmtcmd() {
-    local end
-    local NA='\[\e[0m\]'
-    local R='\[\e[0;31m\]'
-    local G='\[\e[0;32m\]'
-    local B='\[\e[1;34m\]'
-
-    end="$(date +%s)"
-
-    PS1="┌─[${G}\u${NA}@\h]"
-    PS1+="-[$(date +"%d/%m/%y W%V %H:%M")]\n"
-    PS1+="├─[${NA}${PWD}${NA}]\n"
-    PS1+="├─[PID $$ CHS $(pgrep -P $$ | wc -l)]"
-    PS1+="-[${G}$((end - START)).$(date +%3N)${NA}]\n"
-    PS1+="└─> ${B}~$ ${NA}"
+_prmtcmd()
+{
+   echo ${PWD} \($(git branch 2>/dev/null|grep '^*'|colrm 1 2)\)
 }
 
-PROMPT_COMMAND=_prmtcmd
-
-
 # History hacks
+_err()
+{ # All errors goes to stderr.
+    printf "[%s]: %s\n" "$(date +%s.%3N)" "$1" >&2
+}
+
+_msg()
+{ # Feedback messages to stdout.
+    printf "[%s]: %s\n" "$(date +%s.%3N)" "$1" >&1
+}
 
 # ------------------------------------------------------------------------------
 #+FUNCTIONS
@@ -68,7 +66,13 @@ whatp() {
     # Return a name of a package for given command.
     local cmd
     cmd="$1"
-    rpm -qf $(which "$cmd")
+    if command -v rpm &>/dev/null; then
+        rpm -qf $(which "$cmd")
+    elif command -v dpkg &>/dev/null; then
+        dpkg-query -S $(which "$cmd")
+    else
+        _err "rpm, dpkd-query not available."
+    fi
 }
 
 whatc() {
@@ -106,7 +110,7 @@ fd() {
     # fd - cd to selected directory (excluding hiden)
 
     if command -v sk 2> /dev/null; then
-        cd && cd $(sk)
+        cd && cd "$(dirname "$(sk --regex)")"
     elif command -v fzf 2> /dev/null; then
         cd $(fzf)
     else
@@ -172,5 +176,8 @@ alias lhead="ls -lhGgo | head"
 alias ltail="ls -lhGgo | tail"
 alias lless='ls -lhGgo | less'
 alias u="cd ..;ls"
+
+# Scheme alias
+alias guile="guile2.2"
 
 # End of .bashrc
