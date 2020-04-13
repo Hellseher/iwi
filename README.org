@@ -17,7 +17,7 @@ can use IWI.
 * Manifest
 ** Structure
 #+BEGIN_SRC sh  :results value org :results output replace :exports results
-tree -L 2
+tree -L 3
 #+END_SRC
 
 #+RESULTS:
@@ -26,32 +26,69 @@ tree -L 2
 ├── dot
 │   ├── bashrc
 │   ├── config
+│   │   ├── alacritty
+│   │   ├── common-lisp
+│   │   ├── fish
+│   │   └── systemd
+│   ├── doom.d
+│   │   ├── config.el
+│   │   ├── init.el
+│   │   └── packages.el
+│   ├── emacs.d
+│   │   └── init.el
 │   ├── gitconfig
 │   ├── gitignore
-│   ├── init.el
 │   ├── sbclrc
 │   ├── sbclrc.fasl
 │   ├── spacemacs
 │   ├── stumpwm.d
+│   │   ├── init.lisp
+│   │   ├── swm-apps.lisp
+│   │   ├── swm-kbd.lisp
+│   │   ├── swm-swank.lisp
+│   │   └── swm-theme.lisp
 │   ├── tmux.conf
 │   ├── vimrc
 │   └── xmodmaprc
 ├── iwi-ansible
 │   ├── ansible.cfg
 │   ├── group_vars
+│   │   └── all.yml
 │   ├── host_vars
+│   │   ├── localhost
+│   │   └── localhost.yml
 │   ├── inventory.ini
 │   ├── iwi.retry
 │   ├── iwi.yml
 │   └── roles
+│       ├── iwi-lang-clojure
+│       ├── iwi-lang-common-lisp
+│       ├── iwi-lang-go
+│       ├── iwi-lang-latex
+│       ├── iwi-lang-misc
+│       ├── iwi-lang-python
+│       ├── iwi-lang-rust
+│       ├── iwi-sys-dotfiles
+│       ├── iwi-sys-upgrade-install
+│       ├── iwi-virt-docker
+│       ├── iwi-virt-vagrant
+│       └── prelude
+├── iwi-guix
+│   └── etc
+│       └── config.scm
 ├── iwi-shell-bash
 │   ├── inv
+│   │   └── pack.inv
 │   ├── iwi
 │   └── utils
+│       ├── bash-built-in
+│       ├── cl-env
+│       ├── comparator.sh
+│       └── parser.sh
 ├── LICENSE
 └── README.org
 
-10 directories, 17 files
+30 directories, 34 files
 #+end_src
 
 ** Packages
@@ -95,9 +132,6 @@ playbook: ./iwi-ansible/iwi.yml
 
   play #1 (self): self	TAGS: []
     tasks:
-      test url	TAGS: []
-      debug	TAGS: []
-      debug	TAGS: []
 #+end_src
 
 ** iwi-terraform
@@ -119,15 +153,15 @@ printf "ANSIBLE\t: %s\n" "$(ansible --version 2>&1 | head -n1)"
 #+begin_src org
 Workstation
 -----------
-SYS	: Linux 5.0.9-301.fc30.x86_64 x86_64 GNU/Linux
+SYS	: Linux 5.5.11-200.fc31.x86_64 x86_64 GNU/Linux
 CPU	: Intel(R) Core(TM) i7-3770S CPU @ 3.10GHz
 DISTR	:
 
 Enviroment
 ----------
-BASH	: GNU bash, version 5.0.2(1)-release (x86_64-redhat-linux-gnu)
-PYTHON	: Python 2.7.16
-ANSIBLE	: ansible 2.7.10
+BASH	: GNU bash, version 5.0.11(1)-release (x86_64-redhat-linux-gnu)
+PYTHON	: Python 3.7.6
+ANSIBLE	: ansible 2.9.6
 #+end_src
 
 * References
