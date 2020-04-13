@@ -1,7 +1,7 @@
 #!/usr/bin/env bash
 # File       : .bashrc
 # Created    : Mon 08 Dec 2014 19:31:26
-# Modified   : <2020-4-13 Mon 12:48:56 BST>
+# Modified   : <2020-4-13 Mon 12:58:32 BST>
 # Maintainer : sharlatan, <sharlatanus@gmail.com>
 # Short      : BASH config file
 
@@ -15,10 +15,15 @@ fi
 # ------------------------------------------------------------------------------
 #+EXPORTS
 shopt -s histappend
+#
+# http://bashrcgenerator.com/
+export PS1="[\u@\h \w]\\$: \[$(tput sgr0)\]"
+
 export HISTCONTROL=ignoredups:erasedups
 export INFOPATH="$INFOPATH":/usr/share/info
 export VISUAL="/usr/bin/emacsclient -cn"
 export EDITOR="$VISUAL"
+
 
 # Guix operating system required exports
 # https://guix.gnu.org/manual/en/html_node/Application-Setup.html
@@ -28,13 +33,6 @@ then
 fi
 # ------------------------------------------------------------------------------
 #+SETTINGS
-
-# Command promt hacks, descriptive output.
-
-# ┌─[sharlatan@base201215]-[22/07/17 W29 13:05]
-# ├─[/home/sharlatan/Projects/my-GitHub/cix/spices]
-# ├─[PID 23610 CHS 1]-[0.182]
-# └─> ~$
 
 _prmtcmd()
 {
