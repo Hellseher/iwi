@@ -1,7 +1,7 @@
 #!/usr/bin/env bash
 # File       : .bashrc
 # Created    : Mon 08 Dec 2014 19:31:26
-# Modified   : <2020-4-13 Mon 12:58:32 BST>
+# Modified   : <2020-4-13 Mon 13:02:04 BST>
 # Maintainer : sharlatan, <sharlatanus@gmail.com>
 # Short      : BASH config file
 
@@ -17,7 +17,7 @@ fi
 shopt -s histappend
 #
 # http://bashrcgenerator.com/
-export PS1="[\u@\h \w]\\$: \[$(tput sgr0)\]"
+export PS1="[\u@\h \w]\\$: "
 
 export HISTCONTROL=ignoredups:erasedups
 export INFOPATH="$INFOPATH":/usr/share/info
@@ -29,6 +29,7 @@ export EDITOR="$VISUAL"
 # https://guix.gnu.org/manual/en/html_node/Application-Setup.html
 if [ -e /gnu/store ]
 then
+    export PS1="[\u@\h \w](guix)\$: "
     export GUIX_LOCPATH="$HOME/.guix-profile/lib/locale"
 fi
 # ------------------------------------------------------------------------------
