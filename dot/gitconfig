@@ -1,6 +1,6 @@
 # File     : README..org
 # Created  : <2018-10-08 Mon 23:50:01 BST>
-# Modified : <2018-10-08 Mon 23:52:37 BST> Sharlatan
+# Modified : <2019-6-15 Sat 00:44:02 BST> Sharlatan
 
 [core]
   excludesfile = ~/.gitignore
@@ -8,5 +8,7 @@
   editor = emacs
 
 [user]
-  name = Sharlatan
-  email = sharlatanus@gmail.com
+  name = Oleg Bocharov
+  email = oleg.bocharov@ipec.co.uk
+
+# End of gitconfig

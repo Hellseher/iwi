@@ -1,0 +1,17 @@
+---
+# File : localhost.yml
+# Crated : <2019-7-22 Mon 22:00:17 BST>
+# Modified : <2019-7-22 Mon 22:16:41 BST> Sharlatan
+
+cfg:
+  hostname: ""
+  dot:
+    path: "../../dot"
+  net:
+  groups:
+  users:
+  deploy:
+  setup:
+
+...
+# End of localhost.yml

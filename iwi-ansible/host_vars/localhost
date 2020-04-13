@@ -1,1 +1,3 @@
+---
 run_user: ansible_user_id
+dot_path: ../../dot
