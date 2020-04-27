@@ -1,52 +1,38 @@
 ;;;; sbclrc -- configuration file for SBCL
 ;;;; Created   :
-;;;; Modified  : <2020-4-09 Thu 09:12:03 BST>
+;;;; Modified  : <2020-4-20 Mon 12:48:31 BST>
 ;;;; Author    : Sharlatan <sharlatanus@gmail.com>
 
 ;;;; Commentary:
 
 ;;;; Code:
 
-(defvar *user-sbcl-src-path-maybe*)
-(defvar *user-projects*)
-(defvar *user-quicklisp-init-path-maybe*)
-(defvar *user-quicklisp-projects-path*)
-
 (defun from-home-path (path)
   "Build a absolute path to user target directory including $HOME."
   (merge-pathnames path (user-homedir-pathname)))
 
-(setf *user-sbcl-src-path-maybe*
-      (mapcar 'from-home-path
-              '(".local/src/sbcl/"
-                "code/sbcl/")))
+(defparameter *user-sbcl-src-path-maybe*
+  (mapcar 'from-home-path
+          '(".local/src/sbcl/"
+            "code/sbcl/")))
 
-(setf *user-quicklisp-init-path-maybe*
-      (mapcar 'from-home-path
-              '(".local/share/common-lisp/setup.lisp"
-                ".quicklisp/setup.lisp")))
+(defparameter *user-quicklisp-init-path-maybe*
+  (mapcar 'from-home-path
+          '(".local/share/common-lisp/setup.lisp" ".quicklisp/setup.lisp")))
 
-(setf *user-projects*
-      (mapcar 'from-home-path
-              '("code/CommonLisp"
-                "code/ViralityEngine/"
-                ;".local/share/common-lisp/quicklisp/"
-                ;"IPEC/code/iip/")))
+(defparameter *user-projects*
+  (mapcar 'from-home-path '("code/CommonLisp" "code/ViralityEngine/")))
 
-(loop for sb-src in *user-sbcl-src-path-maybe*
-   thereis (when (probe-file sb-src)
-             (sb-ext:set-sbcl-source-location sb-src)))
+#+sbcl
+(loop
+  :for sb-src in *user-sbcl-src-path-maybe*
+    :thereis (when (probe-file sb-src)
+               (sb-ext:set-sbcl-source-location sb-src)))
 
 #-quicklisp
-(loop for ql-init in *user-quicklisp-init-path-maybe*
-   when (probe-file ql-init) do (load ql-init))
+(loop
+  :for ql-init :in *user-quicklisp-init-path-maybe*
+  :when (probe-file ql-init) :do (load ql-init))
 
 (require "asdf")
-
-(setf asdf:*central-registry* '())
-
-(loop for project in *user-projects*
-   when (probe-file project) do
-   (push project asdf:*central-registry*))
-
 ;;;; sbclrc ends here

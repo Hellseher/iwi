@@ -58,3 +58,8 @@
 (use-package! page-break-lines
   :config
   (global-page-break-lines-mode))
+
+(after! geiser
+  (setq geiser-active-implementations '(guile))
+  (setq geiser-default-implementation 'guile)
+  (setq geiser-guile-binary (executable-find "guile")))
