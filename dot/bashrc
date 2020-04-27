@@ -1,7 +1,7 @@
 #!/usr/bin/env bash
 # File       : .bashrc
 # Created    : Mon 08 Dec 2014 19:31:26
-# Modified   : <2020-4-27 Mon 14:42:48 BST>
+# Modified   : <2020-4-27 Mon 14:43:44 BST>
 # Maintainer : #Rλatan
 # Short      : BASH config file
 
@@ -35,11 +35,11 @@ then
 
     # https://guix.gnu.org/manual/en/html_node/X_002e509-Certificates.html
     if [ -e "$HOME/.guix-profile/etc/ssl/certs" ]
+    then
        export SSL_CERT_DIR="$HOME/.guix-profile/etc/ssl/certs"
        export SSL_CERT_FILE="$HOME/.guix-profile/etc/ssl/certs/ca-certificates.crt"
        export GIT_SSL_CAINFO="$SSL_CERT_FILE"
-    then
-
+    fi
 
     if [ -n "$GUIX_ENVIRONMENT" ]
     then
