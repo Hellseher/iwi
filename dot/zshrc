@@ -1,0 +1,10 @@
+# File       : .zshrc
+# Created    : <2020-6-26 Fri 15:26:06 BST>
+# Modified   : <2020-6-26 Fri 15:27:28 BST>
+# Maintainer : #Rλatan
+
+# Resolve tramp hang
+# https://www.emacswiki.org/emacs/TrampMode
+[[ $TERM == "dumb" ]] && unsetopt zle && PS1='$ '
+
+# End of zshrc
