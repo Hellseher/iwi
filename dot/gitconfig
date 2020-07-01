@@ -1,6 +1,7 @@
 # File     : README..org
 # Created  : <2018-10-08 Mon 23:50:01 BST>
 # Modified : <2019-6-15 Sat 00:44:02 BST> Sharlatan
+# Author   : #Rλatan <abc@incerto.xyz>
 
 [core]
   excludesfile = ~/.gitignore
@@ -10,5 +11,8 @@
 [user]
   name = Oleg Bocharov
   email = oleg.bocharov@mirrorweb.com
+
+[url "ssh://git@github.com/"]
+      insteadOf = https://github.com/
 
 # End of gitconfig

@@ -1,9 +1,11 @@
 # File     : README..org
 # Created  : Sun 10 Jan 2016 21:23:39
-# Modified : <2019-5-02 Thu 20:02:52 BST> Sharlatan
+# Modified : <2020-7-01 Wed 09:39:09 BST>
+# Author   : #Rλatan <abc@incerto.xyz>
+
 
 #+TITLE: IWI
-#+AUTHOR: Sharlatan <sharlatanus@gmail.com>
+#+AUTHOR: #Rλatan  <abc@incerto.xyz>
 /Install Working Inventory/
 
 * Synopsis
@@ -135,6 +137,7 @@ playbook: ./iwi-ansible/iwi.yml
 #+end_src
 
 ** iwi-terraform
+** iwi-guix
 * Tested on
 
 #+BEGIN_SRC sh  :results value org :results output replace :exports results

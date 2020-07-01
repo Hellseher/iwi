@@ -35,6 +35,25 @@
   (interactive)
   (insert (format-time-string "%s")))
 
+(defun exzellenz/ps-gpg-enter ()
+    "Insert sha512sum of the current file into the current buffer
+    prefixed with org-timestamp."
+  (interactive)
+  ;(insert (shell-command ))
+  )
+
+(defun sort-words (reverse beg end)
+  "Sort words in region alphabetically, in REVERSE if negative.
+    Prefixed with negative \\[universal-argument], sorts in reverse.
+
+    The variable `sort-fold-case' determines whether alphabetic case
+    affects the sort order.
+
+    See `sort-regexp-fields'.
+https://www.emacswiki.org/emacs/SortWords"
+  (interactive "*P\nr")
+  (sort-regexp-fields reverse "\\_<.*?\\_>" "\\&" beg end))
+
 (doom! :input
        ;;chinese
        ;;japanese
@@ -107,7 +126,7 @@
        ansible
        ;;debugger          ; FIXME stepping through code, to help you add bugs
        ;;direnv
-       ;;docker
+       docker
        ;;editorconfig      ; let someone else argue about tabs vs spaces
        ;;ein               ; tame Jupyter notebooks with emacs
        (eval +overlay)     ; run code, run (also, repls)

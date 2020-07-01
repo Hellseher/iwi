@@ -1,4 +1,5 @@
 ;;; $DOOMDIR/config.el -*- lexical-binding: t; -*-
+;;; Modified : <2020-6-28 Sun 23:46:39 BST>
 
 ;; Place your private configuration here! Remember, you do not need to run 'doom
 ;; refresh' after modifying this file!
@@ -6,8 +7,8 @@
 
 ;; These are used for a number of things, particularly for GPG configuration,
 ;; some email clients, file templates and snippets.
-(setq user-full-name "Oleg Bocharov"
-      user-mail-address "oleg.bocharov@ipec.co.uk")
+(setq user-full-name "#Rλatan"
+      user-mail-address "abc@incerto.xyz")
 
 ;; Doom exposes five (optional) variables for controlling fonts in Doom. Here
 ;; are the three important ones:
@@ -63,3 +64,7 @@
   (setq geiser-active-implementations '(guile))
   (setq geiser-default-implementation 'guile)
   (setq geiser-guile-binary (executable-find "guile")))
+
+(after! org
+  (setq org-log-done 'time)
+  (setq org-log-into-drawer t))

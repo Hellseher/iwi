@@ -58,3 +58,4 @@
 ;; URL: https://github.com/purcell/page-break-lines
 (package! page-break-lines)
 (package! restclient)
+(package! json-mode)
