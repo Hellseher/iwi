@@ -1,0 +1,30 @@
+# -*- mode: snippet -*-
+# name: cix-header
+# key: chd_
+# --
+# File           : `(buffer-name)`
+# Created        : `(format-time-string "<%Y-%m-%d %a %T %Z>" (current-time))`
+# Modified       : `(format-time-string "<%Y-%m-%d %a %T %Z>" (current-time))`
+# Author         : `(user-login-name)`
+# Maintainer(s)  :
+# Sinopsis       : <$0>
+
+#+OPTIONS: num:nil
+
+[[file:../README.org*Index][|≣|]]
+#+TITLE: `(replace-regexp-in-string "\.org" "" (replace-regexp-in-string "cix-" "" (buffer-name)))`
+|--------+-|
+|*Author*||
+|*Maintainer(s)*||
+|*Released*||
+|*Source*||
+|*Homepage*||
+|------+-|
+
+
+-----
+* Index
+* Receipts
+* Refreances
+
+# End of `(buffer-name)`

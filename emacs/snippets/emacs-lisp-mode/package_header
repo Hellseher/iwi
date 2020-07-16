@@ -1,0 +1,10 @@
+# -*- mode: snippet -*-
+# contributor: #Rλatan <#Rλatanus@gmail.com>
+# name: package_header
+# key: _ph
+# key: _ph
+# --
+$0
+;; part-of-emacs:
+;; synopsis:
+;; URL:

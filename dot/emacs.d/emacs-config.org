@@ -1,0 +1,48 @@
+# File          : readme.org
+# Created       : mon 08 aug 2016 02:03:48
+# Last Modified : Sat 24 Sep 2016 23:14:25 #Rλatan
+# author        : #Rλatan <#Rλatanus@gmail.com>
+# maintainer    : #Rλatan
+# short         : manual dairy and installation bundle for emacs.
+
+#+OPTIONS: toc:nil
+
+#+TITLE: WDS: Emacs Configuration
+
+#+BEGIN_QUOTE
+In everything I seek to grasp
+The fundamental:
+The daily choice, the daily task,
+The sentimental.
+                                 --Boris Pasternak
+#+END_QUOTE
+
+* Prologue
+It's better to learn it once and  spend less time in google.  The best
+place to begin  with, if you already install emacs  and copy this file
+to one of default directory for emacs settings.
+
+#+NAME: user-init-file-names
+#+BEGIN_SRC elisp
+  (default "~/.emacs")
+  (~/_emacs (file-truename "~/_emacs"))
+  (~/_emacs.el (file-truename "~/_emacs.el"))
+  (~/_emacs.elc (file-truename "~/_emacs.elc"))
+  (~/.emacs (file-truename "~/.emacs"))
+  (~/.emacs.el (file-truename "~/.emacs.el"))
+  (~/.emacs.elc (file-truename "~/.emacs.elc"))
+  (~/.emacs.d/init.el (file-truename "~/.emacs.d/init.el"))
+  (~/.emacs.d/init.elc (file-truename "~/.emacs.d/init.elc"))
+#+END_SRC
+
+** org-mod
+
+** Visual
+
+** Language support
+** References
+- [[https://github.com/purcell/emacs.d][A Reasonable Emacs Config]]
+- [[https://github.com/zahardzhan/well-tuned-emacs][Well Tuned Emacs]]
+- [[https://github.com/sachac/.emacs.d/blob/gh-pages/sacha.org][Sacha Chua's Emacs Configuration]]
+- [[https://github.com/redguardtoo/mastering-emacs-in-one-year-guide][Master Emacs in One Year]]
+- [[https://github.com/howardabrams/dot-files][Howard Abrams dot-files]]
