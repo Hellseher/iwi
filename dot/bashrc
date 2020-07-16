@@ -1,9 +1,9 @@
 #!/usr/bin/env bash
-# File       : .bashrc
+# File       : bashrc
 # Created    : Mon 08 Dec 2014 19:31:26
-# Modified   : <2020-4-27 Mon 14:43:44 BST>
+# Modified   : <2020-07-16 Thu 08:45:36 BST>
 # Maintainer : #Rλatan
-# Short      : BASH config file
+# Synopsis   : <BASH configuration file>
 
 # Source global definitions
 if [ -f /etc/bashrc ]
@@ -16,19 +16,18 @@ fi
 shopt -s histappend
 
 # http://bashrcgenerator.com/
-export PS1="[\u@\h \w]\\$: "
+export PS1="(${OSTYPE})[\u@\h \w]\\$: "
 
 export HISTCONTROL=ignoredups:erasedups
 export INFOPATH="$INFOPATH":/usr/share/info
 export VISUAL="/usr/bin/emacsclient -cn"
 export EDITOR="$VISUAL"
 
-
 # Guix operating system required exports
 # https://guix.gnu.org/manual/en/html_node/Application-Setup.html
 if [ -e /gnu/store ]
 then
-    export PS1="(guix)[\u@\h \w]\$: "
+    export PS1="(guix/${OSTYPE})[\u@\h \w]\$: "
     export GUIX_LOCPATH="$HOME/.guix-profile/lib/locale"
     export GUIX_PROFILE="$HOME/.guix-profile"
     source "$GUIX_PROFILE/etc/profile"
@@ -187,4 +186,4 @@ alias u="cd ..;ls"
 # Scheme alias
 alias guile="guile2.2"
 
-# End of .bashrc
+# End of bashrc
