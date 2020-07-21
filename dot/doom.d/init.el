@@ -35,12 +35,15 @@
   (interactive)
   (insert (format-time-string "%s")))
 
-(defun exzellenz/ps-gpg-enter ()
-    "Insert sha512sum of the current file into the current buffer
-    prefixed with org-timestamp."
+(defun exzellenz/insert-timed-buffer-sha256 ()
+  "Insert sha256sum of the current file into the current buffer
+    prefixed with org-time-stamp."
   (interactive)
-  ;(insert (shell-command ))
-  )
+  (progn
+    (beginning-of-line)
+    (insert "- ")
+    (org-time-stamp '(16) t)
+    (insert (concat ":" (secure-hash 'sha256 (buffer-string)) ":"))))
 
 (defun sort-words (reverse beg end)
   "Sort words in region alphabetically, in REVERSE if negative.

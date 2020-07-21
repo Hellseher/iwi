@@ -1,34 +1,41 @@
 # -*- mode: snippet -*-
 # name: sh_main
-# key: shm_
+# key: shm_                                                         
 # --
 #!/usr/bin/env bash
 # File     : `(buffer-name)`
 # Created  : `(format-time-string "<%Y-%m-%d %a %T %Z>" (current-time))`
 # Modified : `(format-time-string "<%Y-%m-%d %a %T %Z>" (current-time))`
-# Author   : `(user-login-name)`
-# Synopsis :
+# Author   : `(concat user-full-name " <" user-mail-address ">")`
+# Synopsis : <$1>
 
 set -e
 
-# Commentary:
+if [ "${BASH_VERSINFO[0]}" -lt "4" ]
+then
+    echo "Bash 4 or higher is required to proceed. Exit."
+    exit 1
+fi
+
+## Commentary:
 #
 
 # ------------------------------------------------------------------------------
-#+CHANGELOG
-# 0.0.1 :: `(format-time-string "<%Y-%m-%d %a %T %Z>" (current-time))`
+#+CHANGELOG:
+# 0.1.0 :: `(format-time-string "<%Y-%m-%d %a %T %Z>" (current-time))`
 #       + Script initiation.
 #
-# ==============================================================================
 # ------------------------------------------------------------------------------
-#+DEFAUL_CONFIG
+#+DEFAULTS:
 
+SCRIPT_VERSION=0.1.0
+SCRIPT_NAME=`(buffer-name)`
 
-CMD_VER=0.0.1
-CMDNAME=wds-guix-install.sh
-REQUIRE=(dirname readlink)
+REQUIRE=(
+    dirname
+    readlink)
 
-OK=\$'[  \033[32;1mOK\033[0m  ]'
+PASS=\$'[ \033[32;1mPASS\033[0m ]'
 FAIL=\$'[ \033[31;1mFAIL\033[0m ]'
 
 _err()
@@ -37,32 +44,30 @@ _err()
 }
 
 _msg()
-{ # Default message fro stdout.
+{ # Default message to stdout.
     printf "[%s]: %s\n" "\$(date +%s.%3N)" "$1"
 }
 
 chk_require()
-{ # Check that every required command is available.
+{ # Check if every required command is available before proceed to main part.
     declare -a cmds
     declare -a warn
 
-    cmds=(\$\{1\})
-
-    _msg "--- [\$FUNCNAME] ---"
-    [ "\${#cmds}" -eq "0" ] &&
-        { _err "No arguments provided."; return 1; }
-
-    for c in \${cmds[@]}; do
-        command -v "\$c" 2>&1 >/dev/null
-        [ "\$?" -eq "1" ] &&
+    for c in \${REQUIRE[@]}
+    do
+        if ! command -v "\$c" &>/dev/null
+        then
             warn+=("\$c")
+        fi
     done
 
-    [ "\${#warn}" -ne 0 ] &&
-        { _err "\${FAIL} Commands \${warn[*]} are not avialable, install them first.";
-          return 1; }
-
-    _msg "\${OK} verification of required commands completed"
+    if [ "\${#warn}" -ne "0" ]
+    then
+        {
+            _err "\${FAIL} Commands <\${warn[*]}> are not available. Exit."
+            exit 1
+        }
+    fi
 }
 
 # ------------------------------------------------------------------------------
@@ -70,8 +75,8 @@ chk_require()
 
 main()
 {
-    printf "Start %s %sv at %s\n\n" "\$CMDNAME" "\$CMD_VER" "\$(date)"
-    chk_require "\${REQUIRE[*]}"
+    printf "Start %s %sv at %s\n\n" \$SCRIPT_NAME \$SCRIPT_VERSION \$(date)
+    chk_require
 
     ABS_PATH="\$(dirname "\$(readlink -f "\$0")")"
     echo "\$ABS_PATH"

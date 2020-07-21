@@ -1,5 +1,5 @@
 ;;; $DOOMDIR/config.el -*- lexical-binding: t; -*-
-;;; Modified : <2020-6-28 Sun 23:46:39 BST>
+;;; Modified : <2020-7-08 Wed 10:16:23 BST>
 
 ;; Place your private configuration here! Remember, you do not need to run 'doom
 ;; refresh' after modifying this file!
@@ -50,7 +50,7 @@
 ;; You can also try 'gd' (or 'C-c g d') to jump to their definition and see how
 ;; they are implemented.
 
-(setq time-stamp-pattern "8/Modified[ \t]*:\\\\?[ \t]*<%04Y-%:m-%02d %03a %02H:%02M:%02S %Z>$")
+(setq time-stamp-pattern "8/Modified[ \t]*:\\\\?[ \t]*<%04Y-%02m-%02d %03a %02H:%02M:%02S %Z>$")
 (setq blink-cursor-mode t)
 
 ;; part-of-emacs: nil
