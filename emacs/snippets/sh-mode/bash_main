@@ -1,6 +1,6 @@
 # -*- mode: snippet -*-
-# name: sh_main
-# key: shm_                                                         
+# name: bash_main
+# key: bash_main
 # --
 #!/usr/bin/env bash
 # File     : `(buffer-name)`

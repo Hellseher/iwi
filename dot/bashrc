@@ -1,7 +1,7 @@
 #!/usr/bin/env bash
 # File       : bashrc
 # Created    : Mon 08 Dec 2014 19:31:26
-# Modified   : <2020-07-16 Thu 08:45:36 BST>
+# Modified   : <2020-07-22 Wed 09:12:37 BST>
 # Maintainer : #Rλatan
 # Synopsis   : <BASH configuration file>
 
@@ -14,6 +14,13 @@ fi
 # ------------------------------------------------------------------------------
 #+EXPORTS
 shopt -s histappend
+
+# Resolve tramp hang
+# https://www.emacswiki.org/emacs/TrampMode
+if [ $TERM = "dumb" ]
+then
+    PS1='$ '
+fi
 
 # http://bashrcgenerator.com/
 export PS1="(${OSTYPE})[\u@\h \w]\\$: "
