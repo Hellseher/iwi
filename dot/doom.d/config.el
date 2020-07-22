@@ -1,5 +1,5 @@
 ;;; $DOOMDIR/config.el -*- lexical-binding: t; -*-
-;;; Modified : <2020-7-08 Wed 10:16:23 BST>
+;;; Modified : <2020-07-22 Wed 13:45:00 BST>
 
 ;; Place your private configuration here! Remember, you do not need to run 'doom
 ;; refresh' after modifying this file!
@@ -7,8 +7,13 @@
 
 ;; These are used for a number of things, particularly for GPG configuration,
 ;; some email clients, file templates and snippets.
-(setq user-full-name "#Rλatan"
-      user-mail-address "abc@incerto.xyz")
+(cond
+ ((string-equal system-type "darwin")
+  (setq user-full-name "Oleg Bocharov"
+        user-mail-address "oleg.bocharov@mirrorweb.com"))
+ ((string-equal system-type "gnu/Linux")
+  (setq user-full-name "#Rλatan"
+        user-mail-address "abc@incerto.xyz")))
 
 ;; Doom exposes five (optional) variables for controlling fonts in Doom. Here
 ;; are the three important ones:

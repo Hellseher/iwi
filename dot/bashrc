@@ -1,7 +1,7 @@
 #!/usr/bin/env bash
 # File       : bashrc
 # Created    : Mon 08 Dec 2014 19:31:26
-# Modified   : <2020-07-22 Wed 09:17:12 BST>
+# Modified   : <2020-07-22 Wed 11:00:23 BST>
 # Maintainer : #Rλatan
 # Synopsis   : <BASH configuration file>
 
@@ -75,8 +75,8 @@ edf()
     $EDITOR "$file"
 }
 
-whatp() {
-    # Return a name of a package for given command.
+whatp()
+{ # Return a name of a package for given command.
     local cmd
     cmd="$1"
     if command -v rpm &>/dev/null; then
@@ -88,82 +88,19 @@ whatp() {
     fi
 }
 
-whatc() {
-    # Return a list of commands for given package name.
+whatc()
+{ # Return a list of commands for given package name.
     local pckg
     pckg="$1"
     rpm -ql "$pckg" | grep -oP "(?<=in/).+"
 }
 
-whatd() {
-    # Return a list of command with short doc string of a given package
+whatd()
+{ # Return a list of command with short doc string of a given package
     local pckg
     pckg="$1"
     whatis $(whatc "$pckg")
 }
-
-# ------------------------------------------------------------------------------
-#+FUZZY_SEARCH
-
-# Fuzzy wrappwer for fzf, skim
-# https://github.com/junegunn/fzf
-# https://github.com/lotabout/skim
-fe() {
-    # fe [fuzzy pattern] open the selected file with the default editor
-    # -Bypass fuzzy finder if ther's only one match (--selected-1)
-    # - Exit if ther's no match (--exit-0)
-
-    cd
-    local file
-    file=$(fzf-tmux -d 20% --query="$1" --select-1 --exit-0)
-    [ -n "$file" ] && ${EDITOR} "$file"
-}
-
-fd() {
-    # fd - cd to selected directory (excluding hiden)
-
-    if command -v sk 2> /dev/null; then
-        cd && cd "$(dirname "$(sk --regex)")"
-    elif command -v fzf 2> /dev/null; then
-        cd $(fzf)
-    else
-        echo use find in the end
-    fi
-}
-
-fda() {
-    # fda - cd to any (including hiden) directory
-    local dir
-    dir=$(find ${1:-.} -type d 2> /dev/null | fzf-tmux -d 20% +m) &&
-        cd "$dir"
-}
-
-fdf() {
-    #
-    # fda cd into directory of the selected file
-    #
-    local file
-    local dir
-    file=$(fzf-tmux -d 20% +m -q "$1") && dir=$(dirname "$file") &&
-        cd "$dir"
-}
-
-
-## percol
-# https://github.com/mooz/percol
-mp () {
-    # Read man with percol
-     tmux split-window 'man $(ls /usr/bin | percol)'
-}
-m() {
-    #function_body
-    man $1 | percol
-}
-gpom () {
-    git push origin master
-}
-
-mcd() { mkdir -p "$1" && cd "$1";}
 
 # ------------------------------------------------------------------------------
 #+ALIASES
