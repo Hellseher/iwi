@@ -1,7 +1,7 @@
 #!/usr/bin/env bash
 # File       : bashrc
 # Created    : Mon 08 Dec 2014 19:31:26
-# Modified   : <2020-07-22 Wed 09:12:37 BST>
+# Modified   : <2020-07-22 Wed 09:17:12 BST>
 # Maintainer : #Rλatan
 # Synopsis   : <BASH configuration file>
 
@@ -20,11 +20,11 @@ shopt -s histappend
 if [ $TERM = "dumb" ]
 then
     PS1='$ '
+else
+    PS1="(${OSTYPE})[\u@\h \w]\\$: "
 fi
 
-# http://bashrcgenerator.com/
-export PS1="(${OSTYPE})[\u@\h \w]\\$: "
-
+export PS1
 export HISTCONTROL=ignoredups:erasedups
 export INFOPATH="$INFOPATH":/usr/share/info
 export VISUAL="/usr/bin/emacsclient -cn"
