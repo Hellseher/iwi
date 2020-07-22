@@ -1,5 +1,5 @@
 ;;; $DOOMDIR/config.el -*- lexical-binding: t; -*-
-;;; Modified : <2020-07-22 Wed 13:49:41 BST>
+;;; Modified : <2020-07-22 Wed 13:52:43 BST>
 
 ;; Place your private configuration here! Remember, you do not need to run 'doom
 ;; refresh' after modifying this file!
@@ -34,7 +34,7 @@
 ;; If you intend to use org, it is recommended you change this!
 (cond
  ((string-equal system-type "darwin")
-  (setq org-directory "~/org/"))
+  (setq org-directory "~/MIRRORWEB/wkfl/projects/"))
  ((string-equal system-type "gnu/Linux")
   (setq org-directory "~/org/")))
 
