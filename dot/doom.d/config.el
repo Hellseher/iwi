@@ -1,5 +1,5 @@
 ;;; $DOOMDIR/config.el -*- lexical-binding: t; -*-
-;;; Modified : <2020-07-22 Wed 13:45:00 BST>
+;;; Modified : <2020-07-22 Wed 13:49:41 BST>
 
 ;; Place your private configuration here! Remember, you do not need to run 'doom
 ;; refresh' after modifying this file!
@@ -32,7 +32,11 @@
 (setq doom-theme 'doom-nord)
 
 ;; If you intend to use org, it is recommended you change this!
-(setq org-directory "~/org/")
+(cond
+ ((string-equal system-type "darwin")
+  (setq org-directory "~/org/"))
+ ((string-equal system-type "gnu/Linux")
+  (setq org-directory "~/org/")))
 
 ;; If you want to change the style of line numbers, change this to `relative' or
 ;; `nil' to disable it:
