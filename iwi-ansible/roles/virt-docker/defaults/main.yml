@@ -1,0 +1,27 @@
+---
+# Created : <2020-08-04 Tue 14:52:01 BST>
+# Modified : <2020-08-13 Thu 09:47:15 BST>
+
+current:
+  osfamily: "{{ ansible_os_family|lower }}"
+  distname: "{{ ansible_distribution|lower }}"
+  distrelease: "{{ ansible_distribution_release }}"
+  distversion: "{{ ansible_distribution_version }}"
+  kernel: "{{ ansible_kernel }}"
+  arch: "{{ ansible_architecture }}"
+  keys:
+    deb:
+  pkgs:
+    deb:
+      default:
+        - apt-transport-https
+        - container.io
+        - docker-ce
+        - docker-ce-cli
+        - gpg
+    rpm:
+  repos:
+    deb:
+    rpm:
+...
+# End of main.yml
