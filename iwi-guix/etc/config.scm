@@ -1,19 +1,17 @@
 ;; config.scm -- Global configuration for Guix
 ;; Path      : /etc/config.scm
-;; Author    : Sharlatan <sharlatanus@gmail.com>
+;; Author    : #Rλatan <abc@incerto.xyz>
 ;; Created   : <2019-6-02 Sun 11:08:17 BST>
-;; Modified  : <2020-02-07 Fri 01:19:56 GMT> Sharlatan
+;; Modified  : <2020-10-20 Tue 00:35:24 BST>
+;; URL       : https://github.com/Hellseher/iwi
 
-;; URL: https://github.com/Hellseher/iwi
-
-;;; Cometary
+;;; Commetary:
 ;;
 ;;; Configuration pre-setup
 ;;  http://guix.gnu.org/manual/en/html_node/Keyboard-Layout-and-Networking-and-Partitioning.html
 ;;
-;; 3 partitions need to be added just before using this system declartion file.
-;; It is for EFI systems. Asume you want to deploy your system on drive
-;; /dev/sda:
+;; 3 partitions need to be added just before using this system declaration file.
+;; It is for EFI systems. Assume you want to deploy your t on drive /dev/sda:
 ;;
 ;; #+BEGIN
 ;; GUIX>: passwd # reset root password
