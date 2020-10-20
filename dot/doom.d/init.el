@@ -76,6 +76,7 @@ https://www.emacswiki.org/emacs/SortWords"
        hl-todo           ; highlight TODO/FIXME/NOTE/DEPRECATED/HACK/REVIEW
        ;;hydra
        ;;indent-guides     ; highlighted indent columns
+       ligatures         ; ligatures and symbols to make your code pretty again
        modeline          ; snazzy, Atom-inspired modeline, plus API
        nav-flash         ; blink the current line after jumping
        ;;neotree           ; a project drawer, like NERDTree for vim
@@ -85,7 +86,7 @@ https://www.emacswiki.org/emacs/SortWords"
         +defaults)       ; default popup rules
        ;;pretty-code       ; replace bits of code with pretty symbols
        ;;tabs              ; an tab bar for Emacs
-       ;;treemacs          ; a project drawer, like neotree but cooler
+       treemacs          ; a project drawer, like neotree but cooler
        ;;unicode           ; extended unicode support for various languages
        vc-gutter         ; vcs diff in the fringe
        vi-tilde-fringe   ; fringe tildes to mark beyond EOB
@@ -115,7 +116,7 @@ https://www.emacswiki.org/emacs/SortWords"
        vc                ; version-control and Emacs, sitting in a tree
 
        :term
-       ;;eshell            ; a consistent, cross-platform shell (WIP)
+       eshell            ; a consistent, cross-platform shell (WIP)
        ;;shell             ; a terminal REPL for Emacs
        ;;term              ; terminals in Emacs
        ;;vterm             ; another terminals in Emacs
@@ -137,7 +138,6 @@ https://www.emacswiki.org/emacs/SortWords"
        (lookup           ; helps you navigate your code and documentation
         +docsets)        ; ...or in Dash docsets locally
        ;;lsp
-       ;;macos             ; MacOS-specific commands
        magit             ; a git porcelain for Emacs
        make              ; run make tasks from Emacs
        ;;pass              ; password manager for nerds
@@ -147,6 +147,10 @@ https://www.emacswiki.org/emacs/SortWords"
        terraform         ; infrastructure as code
        ;;tmux              ; an API for interacting with tmux
        ;;upload            ; map local to remote projects via ssh/ftp
+       :os
+      (:if IS-MAC macos)  ; improve compatibility with macOS
+       ;;tty               ; improve the terminal Emacs experience
+
 
        :lang
        ;;agda              ; types of types of types of types...
@@ -164,13 +168,14 @@ https://www.emacswiki.org/emacs/SortWords"
        ;;erlang            ; an elegant language for a more civilized age
        ;;ess               ; emacs speaks statistics
        ;;faust             ; dsp, but you get to keep your soul
-       ;;fsharp           ; ML stands for Microsoft's Language
-       ;;go                ; the hipster dialect
+       ;;fsharp            ; ML stands for Microsoft's Language
+       (go +lsp)         ; the hipster dialect
        ;;(haskell +dante)  ; a language that's lazier than I am
        ;;hy                ; readability of scheme w/ speed of python
        ;;idris             ;
        ;;(java +meghanada) ; the poster child for carpal tunnel syndrome
        javascript        ; all(hope(abandon(ye(who(enter(here))))))
+       json              ; At least it ain't XML
        ;;julia             ; a better, faster MATLAB
        ;;kotlin            ; a better, slicker Java(Script)
        ;;latex             ; writing papers in Emacs has never been so fun
@@ -189,14 +194,14 @@ https://www.emacswiki.org/emacs/SortWords"
         +pandoc          ; export-with-pandoc support
         ;;+pomodoro        ; be fruitful with the tomato technique
         +present)        ; using org-mode for presentations
-       perl              ; write code no one else can comprehend
        ;;php               ; perl's insecure younger brother
        ;;plantuml          ; diagrams for confusing people more
        ;;purescript        ; javascript, but functional
        python            ; beautiful is better than ugly
        ;;qt                ; the 'cutest' gui framework ever
        ;;racket            ; a DSL for DSLs
-       ;;rest              ; Emacs as a REST client
+       ;;raku              ; the artist formerly known as perl6      
+       rest              ; Emacs as a REST client
        ;;rst               ; ReST in peace
        ruby              ; 1.step {|i| p "Ruby is #{i.even? ? 'love' : 'life'}"}
        rust              ; Fe2O3.unwrap().unwrap().unwrap().unwrap()
@@ -207,6 +212,7 @@ https://www.emacswiki.org/emacs/SortWords"
        ;;swift             ; who asked for emoji variables?
        ;terra             ; Earth and Moon in alignment for performance.
        ;;web               ; the tubes
+       yaml              ; JSON, but readable
 
        :email
        ;;(mu4e +gmail)
