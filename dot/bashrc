@@ -1,7 +1,7 @@
 #!/usr/bin/env bash
 # File       : bashrc
 # Created    : Mon 08 Dec 2014 19:31:26
-# Modified   : <2020-07-22 Wed 11:00:23 BST>
+# Modified   : <2020-12-02 Wed 20:59:08 GMT>
 # Maintainer : #Rλatan
 # Synopsis   : <BASH configuration file>
 
@@ -34,23 +34,30 @@ export EDITOR="$VISUAL"
 # https://guix.gnu.org/manual/en/html_node/Application-Setup.html
 if [ -e /gnu/store ]
 then
-    export PS1="(guix/${OSTYPE})[\u@\h \w]\$: "
-    export GUIX_LOCPATH="$HOME/.guix-profile/lib/locale"
-    export GUIX_PROFILE="$HOME/.guix-profile"
-    source "$GUIX_PROFILE/etc/profile"
+    # Emacs Tramp SSH access promt
+   if [ $TERM = "dumb" ]
+   then
+       PS1='$ '
+   else
+       PS1="(guix/${OSTYPE})[\u@\h \w]\$: "
+       export GUIX_LOCPATH="${HOME}/.guix-profile/lib/locale"
+       export GUIX_PROFILE="${HOME}/.guix-profile"
+       source "${GUIX_PROFILE}/etc/profile"
 
-    # https://guix.gnu.org/manual/en/html_node/X_002e509-Certificates.html
-    if [ -e "$HOME/.guix-profile/etc/ssl/certs" ]
-    then
-       export SSL_CERT_DIR="$HOME/.guix-profile/etc/ssl/certs"
-       export SSL_CERT_FILE="$HOME/.guix-profile/etc/ssl/certs/ca-certificates.crt"
-       export GIT_SSL_CAINFO="$SSL_CERT_FILE"
-    fi
+       # https://guix.gnu.org/manual/en/html_node/X_002e509-Certificates.html
+       if [ -e "$HOME/.guix-profile/etc/ssl/certs" ]
+       then
+           export SSL_CERT_DIR="$HOME/.guix-profile/etc/ssl/certs"
+           export SSL_CERT_FILE="$HOME/.guix-profile/etc/ssl/certs/ca-certificates.crt"
+           export GIT_SSL_CAINFO="$SSL_CERT_FILE"
+       fi
 
-    if [ -n "$GUIX_ENVIRONMENT" ]
-    then
-        export PS1="[env: ${GUIX_ENVIRONMENT}]\n" + "$PS1"
-    fi
+       if [ -n "$GUIX_ENVIRONMENT" ]
+       then
+           PS1="[env: ${GUIX_ENVIRONMENT}]\n> " + "$PS1"
+       fi
+   fi
+   export PS1
 fi
 
 # ------------------------------------------------------------------------------
@@ -64,6 +71,28 @@ _msg()
 { # Feedback messages to stdout.
     printf "[%s]: %s\n" "$(date +%s.%3N)" "$1" >&1
 }
+
+_ssh_hosts()
+{ # Return a list of hosts set in one of SSH config files.
+    grep '^Host' ~/.ssh/config ~/.ssh/config.d/* 2>/dev/null \
+        | grep -v '[?*]' \
+        | cut -d ' ' -f 2
+}
+
+_ssh()
+{ # Add aoutcomlition to ssh reading from availalbe configs
+  # Ref: https://dev.to/ahmedmusallam/how-to-autocomplete-ssh-hosts-1hob
+    local cur prev opts
+
+    COMPREPLY=()
+    cur="${COMP_WORDS[COMP_CWORD]}"
+    prev="${COMP_WORDS[COMP_CWORD-1]}"
+
+    COMPREPLY=( $(compgen -W "$(_ssh_hosts)" -- ${cur}) )
+    return 0
+}
+
+complete -F _ssh ssh
 
 # ------------------------------------------------------------------------------
 #+FUNCTIONS
@@ -101,33 +130,5 @@ whatd()
     pckg="$1"
     whatis $(whatc "$pckg")
 }
-
-# ------------------------------------------------------------------------------
-#+ALIASES
-
-alias c='clear'
-alias em='emacs -nw'
-alias aplay='ansible-playbook'
-
-alias ..='cd ..'
-alias ...='cd ../../'
-alias ....='cd ../../../'
-alias .....='cd ../../../../'
-alias ......='cd ../../../../../'
-
-# ls tricks
-alias l="ls -lhGgo"
-alias ll="ls -lh"
-alias la="ls -lhGgoA"
-alias lt="ls -lhGgotr"
-alias lS="ls -lhGgoSr"
-alias l.="ls -lhGgod .*"
-alias lhead="ls -lhGgo | head"
-alias ltail="ls -lhGgo | tail"
-alias lless='ls -lhGgo | less'
-alias u="cd ..;ls"
-
-# Scheme alias
-alias guile="guile2.2"
 
 # End of bashrc
