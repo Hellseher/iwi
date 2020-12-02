@@ -1,7 +1,7 @@
 #!/usr/bin/env bash
 # File       : bashrc
 # Created    : Mon 08 Dec 2014 19:31:26
-# Modified   : <2020-12-02 Wed 21:05:08 GMT>
+# Modified   : <2020-12-02 Wed 21:45:27 GMT>
 # Maintainer : #Rλatan
 # Synopsis   : <BASH configuration file>
 
@@ -34,6 +34,10 @@ export EDITOR="$VISUAL"
 # https://guix.gnu.org/manual/en/html_node/Application-Setup.html
 if [ -e /gnu/store ]
 then
+    export GUIX_LOCPATH="${HOME}/.guix-profile/lib/locale"
+    export GUIX_PROFILE="${HOME}/.guix-profile"
+    source "${GUIX_PROFILE}/etc/profile"
+
     # Emacs Tramp SSH access promt
     if [ $TERM = "dumb" ]
     then
@@ -41,10 +45,6 @@ then
     else
         PS1="(guix/${OSTYPE})[\u@\h \w]\$: "
     fi
-
-    export GUIX_LOCPATH="${HOME}/.guix-profile/lib/locale"
-    export GUIX_PROFILE="${HOME}/.guix-profile"
-    source "${GUIX_PROFILE}/etc/profile"
 
     # https://guix.gnu.org/manual/en/html_node/X_002e509-Certificates.html
     if [ -e "$HOME/.guix-profile/etc/ssl/certs" ]
