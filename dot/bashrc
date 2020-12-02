@@ -1,7 +1,7 @@
 #!/usr/bin/env bash
 # File       : bashrc
 # Created    : Mon 08 Dec 2014 19:31:26
-# Modified   : <2020-12-02 Wed 20:59:08 GMT>
+# Modified   : <2020-12-02 Wed 21:05:08 GMT>
 # Maintainer : #Rλatan
 # Synopsis   : <BASH configuration file>
 
@@ -35,29 +35,30 @@ export EDITOR="$VISUAL"
 if [ -e /gnu/store ]
 then
     # Emacs Tramp SSH access promt
-   if [ $TERM = "dumb" ]
-   then
-       PS1='$ '
-   else
-       PS1="(guix/${OSTYPE})[\u@\h \w]\$: "
-       export GUIX_LOCPATH="${HOME}/.guix-profile/lib/locale"
-       export GUIX_PROFILE="${HOME}/.guix-profile"
-       source "${GUIX_PROFILE}/etc/profile"
+    if [ $TERM = "dumb" ]
+    then
+        PS1='$ '
+    else
+        PS1="(guix/${OSTYPE})[\u@\h \w]\$: "
+    fi
 
-       # https://guix.gnu.org/manual/en/html_node/X_002e509-Certificates.html
-       if [ -e "$HOME/.guix-profile/etc/ssl/certs" ]
-       then
-           export SSL_CERT_DIR="$HOME/.guix-profile/etc/ssl/certs"
-           export SSL_CERT_FILE="$HOME/.guix-profile/etc/ssl/certs/ca-certificates.crt"
-           export GIT_SSL_CAINFO="$SSL_CERT_FILE"
-       fi
+    export GUIX_LOCPATH="${HOME}/.guix-profile/lib/locale"
+    export GUIX_PROFILE="${HOME}/.guix-profile"
+    source "${GUIX_PROFILE}/etc/profile"
 
-       if [ -n "$GUIX_ENVIRONMENT" ]
-       then
-           PS1="[env: ${GUIX_ENVIRONMENT}]\n> " + "$PS1"
-       fi
-   fi
-   export PS1
+    # https://guix.gnu.org/manual/en/html_node/X_002e509-Certificates.html
+    if [ -e "$HOME/.guix-profile/etc/ssl/certs" ]
+    then
+        export SSL_CERT_DIR="$HOME/.guix-profile/etc/ssl/certs"
+        export SSL_CERT_FILE="$HOME/.guix-profile/etc/ssl/certs/ca-certificates.crt"
+        export GIT_SSL_CAINFO="$SSL_CERT_FILE"
+    fi
+
+    if [ -n "$GUIX_ENVIRONMENT" ]
+    then
+        PS1="[env: ${GUIX_ENVIRONMENT}]\n> " + "$PS1"
+    fi
+    export PS1
 fi
 
 # ------------------------------------------------------------------------------
