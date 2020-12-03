@@ -1,7 +1,7 @@
 #!/usr/bin/env bash
 # File       : bashrc
 # Created    : Mon 08 Dec 2014 19:31:26
-# Modified   : <2020-12-02 Wed 21:45:27 GMT>
+# Modified   : <2020-12-03 Thu 14:52:37 GMT>
 # Maintainer : #Rλatan
 # Synopsis   : <BASH configuration file>
 
@@ -56,7 +56,7 @@ then
 
     if [ -n "$GUIX_ENVIRONMENT" ]
     then
-        PS1="[env: ${GUIX_ENVIRONMENT}]\n> " + "$PS1"
+        PS1="[env: ${GUIX_ENVIRONMENT}]\n> "
     fi
     export PS1
 fi
