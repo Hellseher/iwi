@@ -1,41 +1,94 @@
 ;;; _*_lisp_*_
 ;;; File     : init.lisp
 ;;; Created  : <2018-9-08 Sat 11:29:00 BST
-;;; Modified : <2018-9-09 Sun 01:10:15 BST> Sharlatan
+;;; Modified : <2020-12-07 Mon 20:11:45 GMT>
 ;;; Author   : Sharlatan
-;;; Synopsis : <>
+;;; Synopsis : <Configuration file for StumpWM>
 
 (in-package :stumpwm)
 
+#+quicklisp
+(ql:quickload '(truetype-clx
+                cl-diskspace
+                cl-mount-info
+                slynk
+                xembed))
 
-(load "~/quicklisp/setup.lisp")
-(ql:quickload "clx-truetype")
-(ql:quickload :xembed) ;; Required by stumptray
+;; Not all of the system has Quicklisp (Guix could be used as main package
+;; manager, or Ultralisp could alternative use)
+#-quicklisp
+(asdf:load-system '(truetype-clx
+                    cl-diskspace
+                    cl-mount-info
+                    slynk
+                    xembed))
 
-;; load some contrib modules
-(set-module-dir "~/Data/sft/src/stumpwm-contrib")
+(slynk:create-server :dont-close t)
+
+(set-module-dir "/mnt/library/code/stumpwm-contrib")
 (mapcar #'load-module '("cpu"
                         "mem"
                         "net"
                         "kbd-layouts"
                         "swm-emacs"
-                        "disk"
-                        "ttf-fonts"))
+                        "disk"))
 
-;; ------------------------------------------------------------------------------
+
 ;;; Functionality for local custom modules.
 
-(defvar *stumpwm-config-dir* "~/.stumpwm.d/"
-  "StumpWM configuration directory.")
+(defparameter *stumpwm-config-dir* "~/.stumpwm.d/")
+
+(set-prefix-key (kbd "s-t"))
 
-(defun load-usr-module (name)
-  "Load custom modules from *stumpwm-config-dir*."
-  (load (make-pathname :defaults *stumpwm-config-dir*
-                       :name name
-                       :type "lisp")))
+;;https://mmk2410.org/2018/02/15/scrolling-doesnt-work-in-gtk-3-apps-in-stumpwm/
+;; bugfix for scrolling doesn't work with an external mouse in GTK+3 apps.
+(setf (getenv "GDK_CORE_DEVICE_EVENTS") "1")
 
-(mapcar #'load-usr-module '("swm-theme"
-                            "swm-swank"
-                            "swm-apps"
-                            "swm-kbd"))
+;; focus follow mouse
+(setf *mouse-focus-policy* :click)
+(kbd-layouts::keyboard-layout-list "gb" "ru")
+(setf *caps-lock-behavior* :ctrl)
+
+(set-fg-color "#61afef")
+(set-bg-color "#21252b")
+(set-border-color "#21252b")
+(set-win-bg-color "#21252b")
+(set-focus-color "#61afef")
+(set-unfocus-color "#21252b")
+(set-maxsize-gravity :center)
+(set-transient-gravity :top)
+(set-msg-border-width 5)
+
+(setf *maxsize-border-width* 1
+      *transient-border-width* 1
+      *normal-border-width* 1
+      *window-border-style* :thin
+      *message-window-gravity* :top
+      *message-window-padding* 20
+      *input-window-gravity* :bottom
+      *mouse-follows-focus* t)
+
+;; (xft:cache-fonts)
+;; (set-font (make-instance 'xft:font
+;;                         :family "Droid Sans"
+;;                         :subfamily "Regular"
+;;                         :size 11
+;;                         :antialiased t))
+;
+;;;; mode-line configuration
+
+(setf *mode-line-background-color*  "#38394c"
+      *mode-line-foreground-color*  "#61afef"
+      *mode-line-border-color*      "#28394c")
+
+(setf *screen-mode-line-format*
+     (list ".:| "
+           '(:eval (run-shell-command "date '+%R, %F %a'|tr -d [:cntrl:]" t))
+           " | "
+           '(:eval (run-shell-command "cut -d' ' -f 1,2,3  /proc/loadavg |tr -d [:cntrl:]" t))
+           " | %l |:. [^B%n^b] %w"))
+
+(toggle-mode-line (current-screen) (current-head))
+;; ".:| #(\| #S #I:#P \| %a %d-%m-%Y \| ⌚#[fg=colour34] %H:%M #[fg=colour244]|:."
+
 ;;;; End of init.lisp
