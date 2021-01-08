@@ -1,6 +1,6 @@
 ;;;; sbclrc -- configuration file for SBCL
 ;;;; Created   :
-;;;; Modified  : <2020-4-20 Mon 12:48:31 BST>
+;;;; Modified  : <2020-12-15 Tue 20:32:55 GMT>
 ;;;; Author    : Sharlatan <sharlatanus@gmail.com>
 
 ;;;; Commentary:
@@ -32,7 +32,8 @@
 #-quicklisp
 (loop
   :for ql-init :in *user-quicklisp-init-path-maybe*
-  :when (probe-file ql-init) :do (load ql-init))
+  :when (probe-file ql-init)
+  :do (load ql-init))
 
 (require "asdf")
 ;;;; sbclrc ends here

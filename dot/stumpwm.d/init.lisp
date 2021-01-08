@@ -1,29 +1,26 @@
 ;;; _*_lisp_*_
 ;;; File     : init.lisp
 ;;; Created  : <2018-9-08 Sat 11:29:00 BST
-;;; Modified : <2020-12-07 Mon 20:11:45 GMT>
+;;; Modified : <2020-12-15 Tue 21:37:52 GMT>
 ;;; Author   : Sharlatan
 ;;; Synopsis : <Configuration file for StumpWM>
 
 (in-package :stumpwm)
 
+(defparameter *required-systems*
+  '(truetype-clx cl-diskspace cl-mount-info slynk xembed))
+
 #+quicklisp
-(ql:quickload '(truetype-clx
-                cl-diskspace
-                cl-mount-info
-                slynk
-                xembed))
+(ql:quickload *required-systems*)
 
 ;; Not all of the system has Quicklisp (Guix could be used as main package
 ;; manager, or Ultralisp could alternative use)
 #-quicklisp
-(asdf:load-system '(truetype-clx
-                    cl-diskspace
-                    cl-mount-info
-                    slynk
-                    xembed))
+(asdf:load-system *required-systems*)
 
 (slynk:create-server :dont-close t)
+;; (swank:create-server
+;;  :port 4006)
 
 (set-module-dir "/mnt/library/code/stumpwm-contrib")
 (mapcar #'load-module '("cpu"
@@ -32,12 +29,10 @@
                         "kbd-layouts"
                         "swm-emacs"
                         "disk"))
-
 
 ;;; Functionality for local custom modules.
 
 (defparameter *stumpwm-config-dir* "~/.stumpwm.d/")
-
 (set-prefix-key (kbd "s-t"))
 
 ;;https://mmk2410.org/2018/02/15/scrolling-doesnt-work-in-gtk-3-apps-in-stumpwm/
@@ -46,9 +41,10 @@
 
 ;; focus follow mouse
 (setf *mouse-focus-policy* :click)
-(kbd-layouts::keyboard-layout-list "gb" "ru")
+(kbd-layouts::keyboard-layout-list "us" "ru")
 (setf *caps-lock-behavior* :ctrl)
 
+;;; UI
 (set-fg-color "#61afef")
 (set-bg-color "#21252b")
 (set-border-color "#21252b")
@@ -74,8 +70,8 @@
 ;;                         :subfamily "Regular"
 ;;                         :size 11
 ;;                         :antialiased t))
-;
-;;;; mode-line configuration
+
+;;;; mode-line
 
 (setf *mode-line-background-color*  "#38394c"
       *mode-line-foreground-color*  "#61afef"
@@ -90,5 +86,8 @@
 
 (toggle-mode-line (current-screen) (current-head))
 ;; ".:| #(\| #S #I:#P \| %a %d-%m-%Y \| ⌚#[fg=colour34] %H:%M #[fg=colour244]|:."
+
+;;;; commands
 
+;(defcommand (emacs-client ))
 ;;;; End of init.lisp

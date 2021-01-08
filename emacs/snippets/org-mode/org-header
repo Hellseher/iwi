@@ -1,6 +1,6 @@
 # -*- mode: snippet -*-
 # name: org-header
-# key: hd_                 
+# key: header...
 # --
 # File      : `(buffer-name)`
 # Created   : `(format-time-string "<%Y-%m-%d %a %T %Z>" (current-time))`

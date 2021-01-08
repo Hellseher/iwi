@@ -59,3 +59,5 @@
 (package! page-break-lines)
 (package! restclient)
 (package! json-mode)
+(package! org-super-agenda)
+(package! telega)

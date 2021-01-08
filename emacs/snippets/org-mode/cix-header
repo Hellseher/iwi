@@ -5,7 +5,7 @@
 # File           : `(buffer-name)`
 # Created        : `(format-time-string "<%Y-%m-%d %a %T %Z>" (current-time))`
 # Modified       : `(format-time-string "<%Y-%m-%d %a %T %Z>" (current-time))`
-# Author         : `(user-login-name)`
+# Author         : `(user-full-name)`
 # Maintainer(s)  :
 # Sinopsis       : <$0>
 

@@ -16,47 +16,6 @@
 ;;      Alternatively, press 'gd' (or 'C-c g d') on a module to browse its
 ;;      directory (for easy access to its source code).
 
-(add-hook 'before-save-hook 'time-stamp)
-
-(defun exzellenz/hiorisontal-line ()
-  "Insert dashed horisotnal line."
-  (interactive)
-  (progn
-    (insert-char #x002D 78)
-    (comment-region (line-beginning-position) (line-end-position))))
-
-(defun exzellenz/timestamp ()
-  "Insert timestamp YmdHMS."
-  (interactive)
-  (insert (format-time-string "%y%m%d%H%M%S")))
-
-(defun exzellenz/epoch ()
-  "Insert timestamp seconds from epoch."
-  (interactive)
-  (insert (format-time-string "%s")))
-
-(defun exzellenz/insert-timed-buffer-sha256 ()
-  "Insert sha256sum of the current file into the current buffer
-    prefixed with org-time-stamp."
-  (interactive)
-  (progn
-    (beginning-of-line)
-    (insert "- ")
-    (org-time-stamp '(16) t)
-    (insert (concat ":" (secure-hash 'sha256 (buffer-string)) ":"))))
-
-(defun sort-words (reverse beg end)
-  "Sort words in region alphabetically, in REVERSE if negative.
-    Prefixed with negative \\[universal-argument], sorts in reverse.
-
-    The variable `sort-fold-case' determines whether alphabetic case
-    affects the sort order.
-
-    See `sort-regexp-fields'.
-https://www.emacswiki.org/emacs/SortWords"
-  (interactive "*P\nr")
-  (sort-regexp-fields reverse "\\_<.*?\\_>" "\\&" beg end))
-
 (doom! :input
        ;;chinese
        ;;japanese
@@ -137,7 +96,7 @@ https://www.emacswiki.org/emacs/SortWords"
        ;;gist              ; interacting with github gists
        (lookup           ; helps you navigate your code and documentation
         +docsets)        ; ...or in Dash docsets locally
-       ;;lsp
+       lsp
        magit             ; a git porcelain for Emacs
        make              ; run make tasks from Emacs
        ;;pass              ; password manager for nerds
@@ -174,7 +133,9 @@ https://www.emacswiki.org/emacs/SortWords"
        ;;hy                ; readability of scheme w/ speed of python
        ;;idris             ;
        ;;(java +meghanada) ; the poster child for carpal tunnel syndrome
-       javascript        ; all(hope(abandon(ye(who(enter(here))))))
+
+       (javascript       ; all(hope(abandon(ye(who(enter(here))))))
+        +lsp)
        json              ; At least it ain't XML
        ;;julia             ; a better, faster MATLAB
        ;;kotlin            ; a better, slicker Java(Script)
@@ -193,11 +154,15 @@ https://www.emacswiki.org/emacs/SortWords"
         ;;+jupyter        ; ipython/jupyter support for babel
         +pandoc          ; export-with-pandoc support
         ;;+pomodoro        ; be fruitful with the tomato technique
+        +roam
         +present)        ; using org-mode for presentations
        ;;php               ; perl's insecure younger brother
        ;;plantuml          ; diagrams for confusing people more
        ;;purescript        ; javascript, but functional
-       python            ; beautiful is better than ugly
+       (python            ; beautiful is better than ugly
+       ;; +poetry
+       ;;+lsp
+       )
        ;;qt                ; the 'cutest' gui framework ever
        ;;racket            ; a DSL for DSLs
        ;;raku              ; the artist formerly known as perl6      
@@ -207,7 +172,8 @@ https://www.emacswiki.org/emacs/SortWords"
        rust              ; Fe2O3.unwrap().unwrap().unwrap().unwrap()
        ;;scala             ; java, but good
        scheme            ; a fully conniving family of lisps
-       sh                ; she sells {ba,z,fi}sh shells on the C xor
+       (sh                ; she sells {ba,z,fi}sh shells on the C xor
+        +lsp)
        ;;solidity          ; do you need a blockchain? No.
        ;;swift             ; who asked for emoji variables?
        ;terra             ; Earth and Moon in alignment for performance.
@@ -228,3 +194,6 @@ https://www.emacswiki.org/emacs/SortWords"
        :config
        ;;literate
        (default +bindings +smartparens))
+
+(setq org-roam-directory "~/roam/"
+      org-roam-db-location "~/roam/org-roam.db")

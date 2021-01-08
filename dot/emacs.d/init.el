@@ -1,6 +1,6 @@
 ;;; package ---  init.el Emacs configuration
 ;;; Created    : <Tue 10 Mar 2015 11:39:46>
-;;; Modified   : <2020-02-15 Sat 09:58:36 GMT> Sharlatan
+;;; Modified   : <2020-12-15 Tue 20:26:06 GMT> Sharlatan
 ;;; Author     : sharlatan <sharlatanus@gmail.com>
 
 ;;; Commentary:
@@ -106,7 +106,17 @@
   (indent-tabs-mode nil "Spaces!")
   (tab-width 4)
   (debug-on-quit nil)
-  (make-pointer-invisible t))
+  (make-pointer-invisible t)
+  :config
+  (cond
+   ((string-equal system-type "darwin")
+    (setq user-full-name "Oleg Bocharov"
+          user-mail-address "oleg.bocharov@mirrorweb.com"))
+   ((string-equal system-type "gnu/linux")
+    (setq user-full-name "#Rλatan"
+          user-mail-address "abc@incerto.xyz"))
+   (t (setq user-full-name "#Rλatan"
+            user-mail-address "abc@incerto.xyz"))))
 
 ;;; USE-PACKAGE-EXTENSIONS ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 ;;
@@ -562,7 +572,7 @@
                       nil
                       :family (caar face-font-family-alternatives)
                       :weight 'regular
-                      :height 120
+                      :height 100
                       :box nil))
 
 (use-package fill-column-indicator
@@ -1075,6 +1085,35 @@
   :custom-face
   (Man-overstrike ((t (:inherit font-lock-type-face :bold t))))
   (Man-underline ((t (:inherit font-lock-keyword-face :underline t)))))
+
+;; part-of-emacs: nil
+;; synopsis:
+;; URL:
+(use-package org-roam
+  :ensure t
+  :custom
+  (org-roam-db-location "~/roam/org-roam.db")
+  (org-roam-directory "~/roam/")
+  (org-roam-dailies-directory "daily/")
+  :bind (:map org-roam-mode-map
+              (("C-c n l" . org-roam)
+               ("C-c n f" . org-roam-find-file)
+               ("C-c n g" . org-roam-graph)
+               ("C-c n d" . org-roam-dailies-capture-today)))
+  :config
+  (setq org-roam-dailies-capture-templates
+        '(("d" "default" entry
+           #'org-roam-capture--get-point
+           "* %?"
+           :file-name "daily/%<%Y-%m-%d>"
+           :head "#+title: %<%Y-%m-%d>\n\n")
+          ("w" "work" entry
+           #'org-roam-capture--get-point
+           "* %?"
+           :file-name "daily/%<%Y-%m-%d>"
+           :head "#+title: %<%Y-%m-%d>\n\n"
+           :olp ("Work")))))
+
 
 ;;; LANGUAGE-SUPPORT ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 ;;
@@ -1636,6 +1675,28 @@ It's commented out by current default comment symbol."
   "Insert time stamp YmdHMS."
   (interactive)
   (insert (format-time-string "%y%m%d%H%M%S")))
+
+(defun exzellenz/insert-timed-buffer-sha256 ()
+  "Insert sha256sum of the current file into the current buffer
+    prefixed with org-time-stamp."
+  (interactive)
+  (progn
+    (beginning-of-line)
+    (insert "- ")
+    (org-time-stamp '(16) t)
+    (insert (concat ":" (secure-hash 'sha256 (buffer-string)) ":"))))
+
+(defun sort-words (reverse beg end)
+  "Sort words in region alphabetically, in REVERSE if negative.
+    Prefixed with negative \\[universal-argument], sorts in reverse.
+
+    The variable `sort-fold-case' determines whether alphabetic case
+    affects the sort order.
+
+    See `sort-regexp-fields'.
+https://www.emacswiki.org/emacs/SortWords"
+  (interactive "*P\nr")
+  (sort-regexp-fields reverse "\\_<.*?\\_>" "\\&" beg end))
 
 (provide 'init.el)
 
