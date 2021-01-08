@@ -1,0 +1,15 @@
+# -*- mode: snippet -*-
+# name: with-open-file
+# key: with-open-file...
+# condition: t
+# --
+(with-open-file (stream $1
+                        :direction ${2:$$(yas-choose-value
+'(:output :input :io :probe))}
+                        :element-type ${3::default}
+                        :if-exists ${4:$$(yas-choose-value
+'(nil :error :new-version :rename :rename-and-delete :append :supersede :overwrite))}
+                        :if-does-not-exist ${5:$$(yas-choose-value
+'(nil :error :create))}
+                        :external-format ${6::default})
+$0)

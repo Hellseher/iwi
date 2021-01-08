@@ -1,0 +1,17 @@
+# -*- mode: snippet -*-
+# name: guix-lisp-build-modules
+# key: lisp-build-modules...
+# condition: t
+# --
+(use-modules (guix packages)
+             (guix utils)
+             (guix build-system asdf)
+             (guix build-system trivial)
+             (guix download)
+             (guix git-download)
+             ((guix licenses) #:prefix license:)
+             (gnu packages)
+             (gnu packages pkg-config)
+             (gnu packages lisp)
+             (gnu packages lisp-xyz)
+             (ice-9 match))

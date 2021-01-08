@@ -1,0 +1,6 @@
+# -*- mode: snippet -*-
+# name: eval-when
+# key: eval-when...
+# condition: t
+# --
+(eval-when $1)

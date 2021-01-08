@@ -1,0 +1,30 @@
+# -*- mode: snippet -*-
+# name: asdf-defsystem
+# key: defsystem...
+# --
+(defsystem :$1
+  :long-name "$1"
+  :author ("`user-full-name`")
+  :version (:read-file-from "version.lisp-expr")
+  :licence "${3:$$(yas-choose-value "MIT"
+                                    "GPLv1"
+                                    "GPLv2"
+                                    "GPLv3"
+                                    "Apache")}"
+  :maintainer ("$5")
+  :mailto "`user-mail-address`"
+  :description "$7"
+  :long-description "$8"
+  :homepage "$11$12"
+  :bug-tracker "$10"
+  :source-control (:git "${11:$$(yas-choose-value "https://githbub.com/"
+                                                  "https://gitlab.com/"
+                                                  "https://bitbucket.org/")}$12")
+  :class ${13:$$(yas-choose-value
+'(:package-inferred-system)}
+  :build-operation monolithic-concatenate-source-op
+  :build-pathname "${14:build}"
+  :encoding :utf-8
+  :depends-on ($15)
+  :components
+  ($16))

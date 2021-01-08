@@ -1,0 +1,17 @@
+# -*- mode: snippet -*-
+# name: header
+# key: header...
+# condition: t
+# --
+;;;; `(buffer-name)` -- $1
+;;;; Created  : `(format-time-string "<%Y-%m-%d %a %T %Z>" (current-time))`
+;;;; Modified : `(format-time-string "<%Y-%m-%d %a %T %Z>" (current-time))`
+;;;; Author   : `user-full-name` <`user-mail-address`>
+;;;; Limb     :
+
+;;; Commentary:
+;;;
+;;; $2
+
+$0
+;;;; `(buffer-name)` ends here

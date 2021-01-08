@@ -1,0 +1,10 @@
+# -*- mode: snippet -*-
+# name: defpackage
+# key: defpackage...
+# condition: t
+# --
+
+(defpackage :$1
+  (:nicknames #:$2)
+  (:use :cl)
+  (:export $0))

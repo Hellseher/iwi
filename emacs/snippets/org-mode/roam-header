@@ -1,0 +1,10 @@
+# -*- mode: snippet -*-
+# name: roam-header
+# key: roam-header...
+# condition: t
+# --
+
+#+roam_tags:
+#+roam_alias:
+
+- tags :: $0

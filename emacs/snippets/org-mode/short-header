@@ -1,0 +1,7 @@
+# -*- mode: snippet -*-
+# name: short-header
+# key: short-header...
+# --
+#+created: `(format-time-string "<%Y-%m-%d %a %T %Z>" (current-time))`
+# Modified  : `(format-time-string "<%Y-%m-%d %a %T %Z>" (current-time))`
+$0

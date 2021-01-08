@@ -1,0 +1,15 @@
+/dot/emacs.d/transient/
+/dot/emacs.d/bookmarks
+/dot/emacs.d/elpa/
+/dot/emacs.d/elpy/
+/dot/emacs.d/eshell/
+/dot/emacs.d/history
+/dot/emacs.d/org-roam.db
+/dot/emacs.d/places
+/dot/emacs.d/projectile-bookmarks.eld
+/dot/emacs.d/recentf
+/dot/emacs.d/snippets
+/dot/emacs.d/tramp
+/dot/stumpwm.d/stumpwm.log
+/dot/stumpwm.d/stumpwm.log.1
+/dot/doom.d/custom.el
