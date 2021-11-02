@@ -1,4 +1,23 @@
-;; Modified : <2021-06-22 Tue 09:46:14 BST>
+;; Modified : <2021-11-02 Tue 19:12:31 GMT>
+;;
+;; Commentary:
+;;
+;; This Guix configuration file is deployed and tested on hardware:
+;; - CPU :: AMD Ryzen 7 3800X 8-Core Processor
+;; - VGA :: [AMD/ATI] Baffin [Radeon Pro WX 4100]
+;;
+;; It requires noGuix channel:
+;;
+;; ~# guix describe
+;; Generation 9    Jun 22 2021 09:49:37    (current)
+;;   guix 61a9ba3
+;;     repository URL: https://git.savannah.gnu.org/git/guix.git
+;;     branch: master
+;;     commit: 61a9ba398f39258e603ba7eaf107ecf051d4f462
+;;   nonguix c5fed11
+;;     repository URL: https://gitlab.com/nonguix/nonguix
+;;     branch: master
+;;     commit: c5fed11e7df221cad1045fc193b4136b34e23451
 
 (use-modules (gnu)
              (gnu packages xorg)
@@ -88,3 +107,5 @@
       (device "/dev/md0")
       (type "xfs"))
     %base-file-systems)))
+
+;; config.scm ends here
