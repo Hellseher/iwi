@@ -1,23 +1,26 @@
-;; Modified : <2021-11-02 Tue 19:18:30 GMT>
+;; Modified : <2021-12-22 Wed 21:02:03 GMT>
 ;;
 ;; Commentary:
 ;;
 ;; This Guix configuration file is deployed and tested on hardware:
 ;; - CPU :: AMD Ryzen 7 3800X 8-Core Processor
 ;; - VGA :: [AMD/ATI] Baffin [Radeon Pro WX 4100]
+;; - MEM :: CMK64GX4M2D3600C18
+;; - MB :: ASRock X570 Steel Legend
+;; - SYSTEM drive :: Samsung SSD 980 PRO 500GB
 ;;
 ;; It requires noGuix channel:
 ;;
 ;; ~# guix describe
-;; Generation 9    Jun 22 2021 09:49:37    (current)
-;;   guix 61a9ba3
+;; Generation 15   Dec 16 2021 10:16:21    (current)
+;;   guix 08218fd
 ;;     repository URL: https://git.savannah.gnu.org/git/guix.git
 ;;     branch: master
-;;     commit: 61a9ba398f39258e603ba7eaf107ecf051d4f462
-;;   nonguix c5fed11
+;;     commit: 08218fd7a4e941c83d069d7f4fd89f0a9dee60e2
+;;   nonguix 21d41c8
 ;;     repository URL: https://gitlab.com/nonguix/nonguix
 ;;     branch: master
-;;     commit: c5fed11e7df221cad1045fc193b4136b34e23451
+;;     commit: 21d41c8dd4ad3099c5440a2413d0045a3de8f21a
 
 (use-modules (gnu)
              (gnu packages xorg)
