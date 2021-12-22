@@ -1,0 +1,12 @@
+# -*- mode: snippet -*-
+# name: project-header
+# key: project-header...
+# --
+---
+# File      : `(buffer-name)`
+# Created   : `(format-time-string "<%Y-%m-%d %a %T %Z>" (current-time))`
+# Modified  : `(format-time-string "<%Y-%m-%d %a %T %Z>" (current-time))`
+# Limb      : `(projectile-project-name)`
+$0
+...
+# End of `(buffer-name)`

@@ -1,47 +1,43 @@
 ;;; _*_lisp_*_
 ;;; File     : init.lisp
 ;;; Created  : <2018-9-08 Sat 11:29:00 BST
-;;; Modified : <2020-12-15 Tue 21:37:52 GMT>
+;;; Modified : <2021-07-03 Sat 11:42:58 BST>
 ;;; Author   : Sharlatan
 ;;; Synopsis : <Configuration file for StumpWM>
 
 (in-package :stumpwm)
 
 (defparameter *required-systems*
-  '(truetype-clx cl-diskspace cl-mount-info slynk xembed))
+  '(truetype-clx slynk))
+  ;'(truetype-clx cl-diskspace cl-mount-info slynk xembed))
 
 #+quicklisp
 (ql:quickload *required-systems*)
 
-;; Not all of the system has Quicklisp (Guix could be used as main package
-;; manager, or Ultralisp could alternative use)
-#-quicklisp
-(asdf:load-system *required-systems*)
+;; #+slynk
+;; (slynk:create-server :dont-close t)
+;; #+swank
+;; (swank:create-server :port 4006)
 
-(slynk:create-server :dont-close t)
-;; (swank:create-server
-;;  :port 4006)
-
-(set-module-dir "/mnt/library/code/stumpwm-contrib")
-(mapcar #'load-module '("cpu"
-                        "mem"
-                        "net"
-                        "kbd-layouts"
-                        "swm-emacs"
-                        "disk"))
+;; ;; (set-module-dir "/mnt/library/code/stumpwm-contrib")
+;; (mapcar #'load-module '("cpu"
+;;                         "mem"
+;;                         "net"
+;;                         "kbd-layouts"
+;;                         "disk"))
 
 ;;; Functionality for local custom modules.
 
-(defparameter *stumpwm-config-dir* "~/.stumpwm.d/")
+;; (defparameter *stumpwm-config-dir* "~/.stumpwm.d/")
 (set-prefix-key (kbd "s-t"))
 
-;;https://mmk2410.org/2018/02/15/scrolling-doesnt-work-in-gtk-3-apps-in-stumpwm/
-;; bugfix for scrolling doesn't work with an external mouse in GTK+3 apps.
-(setf (getenv "GDK_CORE_DEVICE_EVENTS") "1")
+;; ;;https://mmk2410.org/2018/02/15/scrolling-doesnt-work-in-gtk-3-apps-in-stumpwm/
+;; ;; bugfix for scrolling doesn't work with an external mouse in GTK+3 apps.
+;; (setf (getenv "GDK_CORE_DEVICE_EVENTS") "1")
 
 ;; focus follow mouse
 (setf *mouse-focus-policy* :click)
-(kbd-layouts::keyboard-layout-list "us" "ru")
+;; (kbd-layouts::keyboard-layout-list "us" "ru")
 (setf *caps-lock-behavior* :ctrl)
 
 ;;; UI
@@ -64,12 +60,6 @@
       *input-window-gravity* :bottom
       *mouse-follows-focus* t)
 
-;; (xft:cache-fonts)
-;; (set-font (make-instance 'xft:font
-;;                         :family "Droid Sans"
-;;                         :subfamily "Regular"
-;;                         :size 11
-;;                         :antialiased t))
 
 ;;;; mode-line
 
@@ -85,9 +75,5 @@
            " | %l |:. [^B%n^b] %w"))
 
 (toggle-mode-line (current-screen) (current-head))
-;; ".:| #(\| #S #I:#P \| %a %d-%m-%Y \| ⌚#[fg=colour34] %H:%M #[fg=colour244]|:."
-
-;;;; commands
 
-;(defcommand (emacs-client ))
 ;;;; End of init.lisp

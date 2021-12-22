@@ -1,0 +1,18 @@
+# -*- mode: snippet -*-
+# name: roam-tags
+# key: roam-tags...
+# condition: t
+# --
+#+filetags: ${1:$$(yas-choose-value
+'(":book:"
+  ":blog-post:"
+  ":journal:"
+  ":journal_article:"
+  ":magazine_article:"
+  ":phylosopher:"
+  ":preprint:"
+  ":publisher:"
+  ":research_article:"
+  ":white_paper:"
+))}
+$0

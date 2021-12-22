@@ -1,0 +1,8 @@
+# -*- mode: snippet -*-
+# name: make-array
+# key: make-array...
+# condition: t
+# --
+(make-array ${1:'(0)}
+    :element-type ${2:$$(yas-choose-value
+'("'base-char"))})

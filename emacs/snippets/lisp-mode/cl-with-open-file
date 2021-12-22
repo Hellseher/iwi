@@ -3,13 +3,15 @@
 # key: with-open-file...
 # condition: t
 # --
-(with-open-file (stream $1
+(with-open-file (stream "${1:/path/to/file}"
                         :direction ${2:$$(yas-choose-value
 '(:output :input :io :probe))}
-                        :element-type ${3::default}
+                        :element-type ${3:$$(yas-choose-value
+ '(:default "'base-char" "'(unsigned-byte 8)"))}
                         :if-exists ${4:$$(yas-choose-value
 '(nil :error :new-version :rename :rename-and-delete :append :supersede :overwrite))}
                         :if-does-not-exist ${5:$$(yas-choose-value
 '(nil :error :create))}
-                        :external-format ${6::default})
+                        :external-format ${6:$$(yas-choose-value
+'(:default :utf-8 :utf-16 :utf-32))})
 $0)

@@ -57,10 +57,9 @@
        (evil +everywhere); come to the dark side, we have cookies
        file-templates    ; auto-snippets for empty files
        fold              ; (nigh) universal code folding
-       ;;(format +onsave)  ; automated prettiness
+       (format +onsave)  ; automated prettiness
        ;; god               ; run Emacs commands without modifier keys
-       ;; lispy
-                                        ; vim for lisp, for people who don't like vim
+       ;; lispy              ; vim for lisp, for people who don't like vim
        ;;multiple-cursors  ; editing in many places at once
        ;;objed             ; text object editing for the innocent
        ;;parinfer          ; turn lisp into python, sort of
@@ -154,26 +153,25 @@
         ;;+jupyter        ; ipython/jupyter support for babel
         +pandoc          ; export-with-pandoc support
         ;;+pomodoro        ; be fruitful with the tomato technique
-        +roam
+        ;;+roam
+        +roam2
         +present)        ; using org-mode for presentations
        ;;php               ; perl's insecure younger brother
        ;;plantuml          ; diagrams for confusing people more
        ;;purescript        ; javascript, but functional
-       (python            ; beautiful is better than ugly
-       ;; +poetry
-       ;;+lsp
-       )
+       python            ; beautiful is better than ugly
        ;;qt                ; the 'cutest' gui framework ever
        ;;racket            ; a DSL for DSLs
        ;;raku              ; the artist formerly known as perl6      
        rest              ; Emacs as a REST client
        ;;rst               ; ReST in peace
        ruby              ; 1.step {|i| p "Ruby is #{i.even? ? 'love' : 'life'}"}
-       rust              ; Fe2O3.unwrap().unwrap().unwrap().unwrap()
-       ;;scala             ; java, but good
-       scheme            ; a fully conniving family of lisps
-       (sh                ; she sells {ba,z,fi}sh shells on the C xor
+       (rust              ; Fe2O3.unwrap().unwrap().unwrap().unwrap()
         +lsp)
+       ;;scala             ; java, but good
+       (scheme            ; a fully conniving family of lisps
+        +guile)
+       sh                ; she sells {ba,z,fi}sh shells on the C xor
        ;;solidity          ; do you need a blockchain? No.
        ;;swift             ; who asked for emoji variables?
        ;terra             ; Earth and Moon in alignment for performance.
@@ -195,5 +193,5 @@
        ;;literate
        (default +bindings +smartparens))
 
-(setq org-roam-directory "~/roam/"
-      org-roam-db-location "~/roam/org-roam.db")
+;; (setq org-roam-directory "~/roam/"
+;;       org-roam-db-location "~/roam/org-roam.db")

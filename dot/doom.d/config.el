@@ -1,5 +1,5 @@
 ;;; $DOOMDIR/config.el -*- lexical-binding: t; -*-
-;;; Modified : <2021-01-06 Wed 21:38:23 GMT>
+;;; Modified : <2021-12-19 Sun 20:38:43 GMT>
 
 ;; - `load!' for loading external *.el files relative to this one
 ;; - `use-package' for configuring packages
@@ -15,6 +15,7 @@
         user-mail-address "oleg.bocharov@mirrorweb.com"))
  ((string-equal system-type "gnu/linux")
   (setq user-full-name "#Rλatan"
+        user-nick-name "Sharlatan"
         user-mail-address "abc@incerto.xyz"))
  (t (setq user-full-name "#Rλatan"
           user-mail-address "abc@incerto.xyz")))
@@ -35,12 +36,27 @@
   (global-page-break-lines-mode))
 
 ;;; :lang Scheme
+;;;
 
 (after! geiser
   (setq
    geiser-active-implementations '(guile)
    geiser-default-implementation 'guile
    geiser-guile-binary (executable-find "guile")))
+
+(after! geiser-guile
+  (add-to-list 'geiser-guile-load-path "~/code/guix"))
+
+(use-package! rainbow-identifiers
+  :custom
+  (rainbow-identifiers-cie-l*a*b*-lightness 80)
+  (rainbow-identifiers-cie-l*a*b*-saturation 50)
+  (rainbow-identifiers-choose-face-function
+   #'rainbow-identifiers-cie-l*a*b*-choose-face)
+  :hook
+  (emacs-lisp-mode . rainbow-identifiers-mode)
+  (lisp-mode . rainbow-identifiers-mode)
+  (scheme-mode . rainbow-identifiers-mode))
 
 ;;; Org-mode org-roam
 
@@ -52,58 +68,109 @@
         org-log-redeadline 'note
         org-log-note-clock-out t))
 
+;; :source https://github.com/org-roam/org-roam/wiki/Hitchhiker's-Rough-Guide-to-Org-roam-V2
+(cl-defmethod org-roam-node-backlinkscount ((node org-roam-node))
+  (let* ((count (caar (org-roam-db-query
+                       [:select (funcall count source)
+                                :from links
+                                :where (= dest $s1)
+                                :and (= type "id")]
+                       (org-roam-node-id node)))))
+    (format "[%d]" count)))
+
 (use-package! org-roam
   :custom
   (org-roam-db-location "~/zettelkasten/org-roam.db")
   (org-roam-directory "~/zettelkasten")
   (org-roam-dailies-directory "daily/")
-  :bind (:map org-roam-mode-map
-         (("C-c n l" . org-roam)
-          ("C-c n f" . org-roam-find-file)
-          ("C-c n g" . org-roam-graph)
-          ("C-c n d" . org-roam-dailies-capture-today)))
+  ;; :bind (:map org-roam-mode-map ("[mouse-1]" org-roam-visit-thing))
   :config
+  (setq org-roam-node-display-template
+        "${doom-hierarchy:*} ${backlinkscount:6} ${doom-tags:45}")
+  (setq org-roam-mode-section-functions
+        (list #'org-roam-backlinks-section
+              ;;#'org-roam-reflinks-section
+              ;; #'org-roam-unlinked-references-section
+              ))
   (setq org-roam-capture-templates
-        '(("d" "default" plain (function org-roam--capture-get-point)
-           "%?"
-           :file-name "%<%Y%m%d%H%M%S>-${slug}"
-           :head "#+title: ${title}
+        '(("n" "note" plain "%?"
+           :if-new (file+head "%<%Y%m%d%H%M%S>-${slug}.org"
+                              "#+title: ${title}
 #+created: %U
 #+modified: <>
-#+roam_alias:
-#+roam_tags:
+#+filetags: :note:
 
-- tags :: "
+- tags ::
+- keywords ::
+- source ::
+
+* References")
+           :immediate-finish t
            :unnarrowed t)
-          ("b" "book" plain (function org-roam--capture-get-point)
-           "%?"
-           :file-name "books/%<%Y%m%d%H%M%S>-${slug}"
-           :head "#+title: ${title}\n"
+          ("w" "wiki" plain "%?"
+           :if-new (file+head "wiki/%<%Y%m%d%H%M%S>-${slug}.org"
+                              "#+title: ${title}
+#+created: %U
+#+modified: <>
+#+filetags: :wiki:%^G:
+
+- tags :: ")
+           :unnarrowed t)
+          ("d" "drafts" plain "%?"
+           :if-new (file+head "%<%Y%m%d%H%M%S>-${slug}.org"
+                              "#+title: ${title}
+#+created: %U
+#+modified: <>
+#+filetags: :note:draft:
+
+- tags :: ")
+           :unnarrowed t)
+          ("b" "bibliography" plain "%?"
+           :if-new (file+head "bib/%<%Y%m%d%H%M%S>-${slug}.org"
+                              "#+title: ${title}
+#+created: %U
+#+modified: <>
+#+filetags: :bib:
+
+- tags ::
+- author ::
+- publisher/journal/platform ::
+- volume ::
+- number ::
+- pages ::
+- year ::
+- DOI ::
+- ISSN ::
+- ISBN-13 ::
+- ISBN-10 ::
+- URL ::
+
+* Abstract ")
            :unnarrowed t)))
-  (setq org-roam-dailies-capture-templates
-        '(("d" "default" entry
-           #'org-roam-capture--get-point
-           "* %?"
-           :file-name "daily/%<%Y-%m-%d>"
-           :head "#+title: %<%Y-%m-%d>\n\n")
-          ("w" "work" entry
-           #'org-roam-capture--get-point
-           "* %?"
-           :file-name "daily/%<%Y-%m-%d>"
-           :head "#+title: %<%Y-%m-%d>\n\n"
-           :olp ("Work"))))
   (setq org-roam-graph-node-extra-config '(("color" . "skyblue")))
   (setq org-roam-graph-edge-extra-config '(("dir" . "back")
                                            ("arrowsize" . "0.5")))
   (setq org-roam-graph-exclude-matcher '("private" "daily"))
-  (setq org-roam-graph-edge-cites-extra-config '(("color" . "red"))))
+(setq org-roam-graph-edge-cites-extra-config '(("color" . "red"))))
+
+(use-package! org-roam-ui
+  :after org-roam
+  :hook (after-init . org-roam-ui-mode)
+  :config
+    (setq org-roam-ui-sync-theme t
+          org-roam-ui-follow t
+          org-roam-ui-update-on-save t
+          org-roam-ui-open-on-start nil))
+
+(use-package! websocket
+    :after org-roam)
 
 (add-hook 'org-mode-hook (lambda () (set-fill-column 100)))
-(add-hook 'after-init-hook 'org-roam-mode)
 (add-hook 'js-mode-hook (lambda () (set-fill-column 100)))
-
+(add-hook 'terraform-mode-hook (lambda () (setq comment-start "//")))
+(setq emacsql-sqlite-executable (executable-find "emacsql-sqlite"))
 
-;;; Tramp
+;;; Tramp and Shells
 ;;; https://lists.gnu.org/archive/html/help-guix/2016-10/msg00049.html
 
 (after! tramp
@@ -117,6 +184,15 @@
                 '(tramp-own-remote-path)))
   (setq tramp-copy-size-limit nil))
 
+;; (use-package! racer
+;;   :config
+;;   (setq racer-rust-src-path "~/code/rust/library"))
+
+(after! rustic
+  (setq rustic-lsp-server 'rls))
+
+(add-hook 'eshell-preoutput-filter-functions
+           'ansi-color-filter-apply)
 
 
 (defun exzellenz/hiorisontal-line ()
@@ -134,7 +210,7 @@
 (defun exzellenz/timestamp-iso ()
   "Insert timestamp YmdHMS."
   (interactive)
-  (insert (format-time-string "%Y%m%d%H%M%S%z")))
+  (insert (format-time-string "%Y%m%dT%H%M%S%z")))
 
 (defun exzellenz/insert-local-time-utc ()
   "Insert timestamp YmdHMS."
@@ -155,6 +231,15 @@
     (insert "- ")
     (org-time-stamp '(16) t)
     (insert (concat ":" (secure-hash 'sha256 (buffer-string)) ":"))))
+
+(defun exzellenz/user-note ()
+  "Insert NOTE with iso timestamp"
+  (interactive)
+  (progn
+    (insert (format "NOTE: (%s-%s): "
+                    user-nick-name
+                    (format-time-string "%Y%m%dT%H%M%S%z")))
+    (comment-region (line-beginning-position) (line-end-position))))
 
 (defun sort-words (reverse beg end)
   "Sort words in region alphabetically, in REVERSE if negative.
@@ -183,3 +268,14 @@ Sort lines in region by their length."
                    (lambda (l1 l2)
                      (apply #'< (mapcar (lambda (range) (- (cdr range) (car range)))
                                         (list l1 l2)))))))))
+;
+;; Allow cyrillic inputs
+;; source :: https://github.com/rynffoll/.doom.d/blob/master/config.el
+;; (def-package! reverse-im
+;;   :config
+;;   (reverse-im-activate "russian-computer")
+;;   (after! evil
+;;     ;; cyrillic tweaks
+;;     (define-key evil-normal-state-map (kbd "C-х") #'evil-force-normal-state)
+;;     (define-key evil-insert-state-map (kbd "C-х") #'evil-normal-state)
+;;     (define-key evil-visual-state-map (kbd "C-х") #'evil-exit-visual-state)))
