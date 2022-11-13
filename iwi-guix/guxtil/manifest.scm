@@ -1,4 +1,4 @@
-;; Modified : <2021-11-22 Mon 20:38:52 GMT>
+;; Modified : <2022-11-03 Thu 22:35:10 GMT>
 ;;
 ;; This "manifest" file can be passed to 'guix package -m' to reproduce
 ;; the content of your profile.  This is "symbolic": it only specifies
@@ -7,72 +7,70 @@
 ;; See the "Replicating Guix" section in the manual.
 
 (define package-group-font
-  (list
-   "font-gnu-unifont"
-   "font-google-noto"
-   "font-hack"
-   "font-liberation"))
+  (list "font-gnu-unifont"
+        "font-google-noto"
+        "font-hack"
+        "font-liberation"))
 
 (define package-group-graphic
-  (list
-   "gphoto2"
-   "gimp"
-   "blender"
-   "darktable"
-   "rawtherapee"))
+  (list "gphoto2"
+        "gimp"
+        "shotwell"
+        "blender"
+        "darktable"
+        "rawtherapee"))
 
 (define package-group-stumpwm
-  (list
-   "sbcl-clx-truetype"
-   "sbcl-slynk"))
+  (list "sbcl-clx-truetype"
+        "sbcl-slynk"))
 
 (define package-group-code-craft
-  (list
-   "git"
-   "go"
-   "python-ipython"
-   "rust-cargo"
-   "rust-analyzer"
-   "rust"
-   "sbcl"))
+  (list "git"
+        "git:send-email"
+        "go"
+        "python"
+        "licensecheck"
+        "python-ipython"
+        "rust"
+        "sbcl"))
 
 (define package-group-emacs
-  (list
-   "emacs"
-   "emacs-emacsql-sqlite3"))
+  ;; This vaiable provides a list of Emacs itself and it's related package names
+  (list "emacs"
+        "emacs-emacsql-sqlite3"))
 
 (define package-group-misc
-  (list
-   "alacritty"
-   "curl"
-   "pandoc"
-   "fd"
-   "git"
-   "gnome-icon-theme"
-   "gnome-tweaks"
-   "gnupg"
-   "graphviz"
-   "htop"
-   "ispell"
-   "aspell-dict-ru"
-   "jq"
-   "moka-icon-theme"
-   "nmap"
-   "remmina"
-   "setxkbmap"
-   "rhythmbox"
-   "ripgrep"
-   "rsync"
-   "rtorrent"
-   "sqlite"
-   "stackistry"
-   "ungoogled-chromium"
-   "telegram-desktop"
-   "tmux"
-   "tree"
-   "vim"
-   "vlc"
-   "xdg-utils"))
+  (list "alacritty"
+        "aspell-dict-ru"
+        "calibre"
+        "cryptsetup"
+        "curl"
+        "fd"
+        "adwaita-icon-theme"
+        "gnome-tweaks"
+        "gnupg"
+        "graphviz"
+        "htop"
+        "ispell"
+        "jq"
+        "moka-icon-theme"
+        "nmap"
+        "pandoc"
+        "remmina"
+        "rhythmbox"
+        "ripgrep"
+        "rsync"
+        "rtorrent"
+        "setxkbmap"
+        "sqlite"
+        "stackistry"
+        "telegram-desktop"
+        "tmux"
+        "tree"
+        "ungoogled-chromium"
+        "vim"
+        "vlc"
+        "xdg-utils"))
 
 (specifications->manifest
  (append

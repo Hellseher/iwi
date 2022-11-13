@@ -1,5 +1,5 @@
 ;;; $DOOMDIR/config.el -*- lexical-binding: t; -*-
-;;; Modified : <2021-12-19 Sun 20:38:43 GMT>
+;;; Modified : <2022-11-08 Tue 10:54:41 GMT>
 
 ;; - `load!' for loading external *.el files relative to this one
 ;; - `use-package' for configuring packages
@@ -9,6 +9,9 @@
 ;;   looks when you load packages with `require' or `use-package'.
 ;; - `map!' for binding new keys
 
+
+(setq emacsql-sqlite-executable (executable-find "emacsql-sqlite"))
+
 (cond
  ((string-equal system-type "darwin")
   (setq user-full-name "Oleg Bocharov"
@@ -29,7 +32,7 @@
 (add-hook 'before-save-hook 'time-stamp)
 
 (blink-cursor-mode nil)
-(setq cursor-type 'hbar)
+;(set-default 'cursor-type 'hbar)
 
 (use-package! page-break-lines
   :config
@@ -47,46 +50,47 @@
 (after! geiser-guile
   (add-to-list 'geiser-guile-load-path "~/code/guix"))
 
-(use-package! rainbow-identifiers
-  :custom
-  (rainbow-identifiers-cie-l*a*b*-lightness 80)
-  (rainbow-identifiers-cie-l*a*b*-saturation 50)
-  (rainbow-identifiers-choose-face-function
-   #'rainbow-identifiers-cie-l*a*b*-choose-face)
-  :hook
-  (emacs-lisp-mode . rainbow-identifiers-mode)
-  (lisp-mode . rainbow-identifiers-mode)
-  (scheme-mode . rainbow-identifiers-mode))
+;; (use-package! rainbow-identifiers
+;;   :custom
+;;   (rainbow-identifiers-cie-l*a*b*-lightness 80)
+;;   (rainbow-identifiers-cie-l*a*b*-saturation 50)
+;;   (rainbow-identifiers-choose-face-function
+;;    #'rainbow-identifiers-cie-l*a*b*-choose-face)
+;;   :hook
+;;   (emacs-lisp-mode . rainbow-identifiers-mode)
+;;   (lisp-mode . rainbow-identifiers-mode)
+;;   (scheme-mode . rainbow-identifiers-mode))
 
 ;;; Org-mode org-roam
 
 (use-package! org
-  :config
+  :init
   (setq org-log-into-drawer "LOGBOOK"
         org-log-done 'time
         org-log-reschedule 'time
         org-log-redeadline 'note
         org-log-note-clock-out t))
 
-;; :source https://github.com/org-roam/org-roam/wiki/Hitchhiker's-Rough-Guide-to-Org-roam-V2
-(cl-defmethod org-roam-node-backlinkscount ((node org-roam-node))
-  (let* ((count (caar (org-roam-db-query
-                       [:select (funcall count source)
-                                :from links
-                                :where (= dest $s1)
-                                :and (= type "id")]
-                       (org-roam-node-id node)))))
-    (format "[%d]" count)))
+;; ;; :source https://github.com/org-roam/org-roam/wiki/Hitchhiker's-Rough-Guide-to-Org-roam-V2
+;; (cl-defmethod org-roam-node-backlinkscount ((node org-roam-node))
+;;   (let* ((count (caar (org-roam-db-query
+;;                        [:select (funcall count source)
+;;                                 :from links
+;;                                 :where (= dest $s1)
+;;                                 :and (= type "id")]
+;;                        (org-roam-node-id node)))))
+;;     (format "[%d]" count)))
 
 (use-package! org-roam
+  :after org
   :custom
   (org-roam-db-location "~/zettelkasten/org-roam.db")
   (org-roam-directory "~/zettelkasten")
   (org-roam-dailies-directory "daily/")
   ;; :bind (:map org-roam-mode-map ("[mouse-1]" org-roam-visit-thing))
   :config
-  (setq org-roam-node-display-template
-        "${doom-hierarchy:*} ${backlinkscount:6} ${doom-tags:45}")
+  ;; (setq org-roam-node-display-template
+  ;;       "${doom-hierarchy:*} ${backlinkscount:6} ${doom-tags:45}")
   (setq org-roam-mode-section-functions
         (list #'org-roam-backlinks-section
               ;;#'org-roam-reflinks-section
@@ -146,29 +150,22 @@
 - URL ::
 
 * Abstract ")
-           :unnarrowed t)))
-  (setq org-roam-graph-node-extra-config '(("color" . "skyblue")))
-  (setq org-roam-graph-edge-extra-config '(("dir" . "back")
-                                           ("arrowsize" . "0.5")))
-  (setq org-roam-graph-exclude-matcher '("private" "daily"))
-(setq org-roam-graph-edge-cites-extra-config '(("color" . "red"))))
-
-(use-package! org-roam-ui
-  :after org-roam
-  :hook (after-init . org-roam-ui-mode)
-  :config
-    (setq org-roam-ui-sync-theme t
-          org-roam-ui-follow t
-          org-roam-ui-update-on-save t
-          org-roam-ui-open-on-start nil))
+           :unnarrowed t))))
 
 (use-package! websocket
     :after org-roam)
 
+(use-package! org-roam-ui
+  :after org-roam
+  :config
+  (setq org-roam-ui-sync-theme t
+        org-roam-ui-follow t
+        org-roam-ui-update-on-save t
+        org-roam-ui-open-on-start t))
+
 (add-hook 'org-mode-hook (lambda () (set-fill-column 100)))
 (add-hook 'js-mode-hook (lambda () (set-fill-column 100)))
 (add-hook 'terraform-mode-hook (lambda () (setq comment-start "//")))
-(setq emacsql-sqlite-executable (executable-find "emacsql-sqlite"))
 
 ;;; Tramp and Shells
 ;;; https://lists.gnu.org/archive/html/help-guix/2016-10/msg00049.html
@@ -205,7 +202,7 @@
 (defun exzellenz/timestamp ()
   "Insert timestamp YmdHMS."
   (interactive)
-  (insert (format-time-string "%y%m%d%H%M%S")))
+  (insert (format-time-string "%Y%m%d%H%M%S")))
 
 (defun exzellenz/timestamp-iso ()
   "Insert timestamp YmdHMS."

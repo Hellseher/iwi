@@ -1,7 +1,7 @@
 #!/usr/bin/env bash
 # File       : bashrc
 # Created    : Mon 08 Dec 2014 19:31:26
-# Modified   : <2021-06-21 Mon 09:28:52 BST>
+# Modified   : <2022-10-30 Sun 21:48:37 GMT>
 # Maintainer : #Rλatan
 # Synopsis   : <BASH configuration file>
 
@@ -37,6 +37,8 @@ then
     export GUIX_LOCPATH="${HOME}/.guix-profile/lib/locale"
     export GUIX_PROFILE="${HOME}/.guix-profile"
     source "${GUIX_PROFILE}/etc/profile"
+    export VISUAL="/home/sharlatan/.guix-profile/bin/emacsclient -cn"
+    export EDITOR="$VISUAL"
 
     # Emacs Tramp SSH access promt
     if [ $TERM = "dumb" ]
