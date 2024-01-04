@@ -1,4 +1,4 @@
-;; Modified : <2022-11-03 Thu 22:35:10 GMT>
+;; Modified : <2023-12-27 Wed 23:08:37 GMT>
 ;;
 ;; This "manifest" file can be passed to 'guix package -m' to reproduce
 ;; the content of your profile.  This is "symbolic": it only specifies
@@ -29,6 +29,8 @@
         "git:send-email"
         "go"
         "python"
+        "make"
+        "perl"
         "licensecheck"
         "python-ipython"
         "rust"
@@ -37,25 +39,32 @@
 (define package-group-emacs
   ;; This vaiable provides a list of Emacs itself and it's related package names
   (list "emacs"
-        "emacs-emacsql-sqlite3"))
+        "emacs-sqlite"))
 
 (define package-group-misc
   (list "alacritty"
+        "adwaita-icon-theme"
         "aspell-dict-ru"
         "calibre"
         "cryptsetup"
         "curl"
         "fd"
-        "adwaita-icon-theme"
+        "filezilla"
+        "glibc-locales"
         "gnome-tweaks"
         "gnupg"
+        "gnutls"
         "graphviz"
         "htop"
         "ispell"
         "jq"
+        "le-certs"
         "moka-icon-theme"
         "nmap"
+        "nss-certs"
+        "nyxt"
         "pandoc"
+        "pinentry"
         "remmina"
         "rhythmbox"
         "ripgrep"
@@ -64,6 +73,7 @@
         "setxkbmap"
         "sqlite"
         "stackistry"
+        "stellarium"
         "telegram-desktop"
         "tmux"
         "tree"

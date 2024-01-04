@@ -1,15 +1,12 @@
 #!/usr/bin/env bash
 # File       : bashrc
 # Created    : Mon 08 Dec 2014 19:31:26
-# Modified   : <2022-10-30 Sun 21:48:37 GMT>
+# Modified   : <2023-10-22 Sun 23:27:20 BST>
 # Maintainer : #Rλatan
 # Synopsis   : <BASH configuration file>
 
-# Source global definitions
-if [ -f /etc/bashrc ]
-then
-   source /etc/bashrc
-fi
+# Honor per-interactive-shell startup file
+if [ -f ~/.bashrc ]; then . ~/.bashrc; fi
 
 # ------------------------------------------------------------------------------
 #+EXPORTS

@@ -1,5 +1,5 @@
 ;;; $DOOMDIR/config.el -*- lexical-binding: t; -*-
-;;; Modified : <2022-11-08 Tue 10:54:41 GMT>
+;;; Modified : <2023-12-22 Fri 03:05:24 GMT>
 
 ;; - `load!' for loading external *.el files relative to this one
 ;; - `use-package' for configuring packages
@@ -23,7 +23,7 @@
  (t (setq user-full-name "#Rλatan"
           user-mail-address "abc@incerto.xyz")))
 
-(setq doom-font (font-spec :family "Hack" :size 14)
+(setq doom-font (font-spec :family "Hack" :size 12 :weight 'medium)
       doom-theme 'doom-nord
       display-line-numbers-type nil)
 
@@ -41,7 +41,8 @@
 ;;; :lang Scheme
 ;;;
 
-(after! geiser
+(use-package! geiser
+  :init
   (setq
    geiser-active-implementations '(guile)
    geiser-default-implementation 'guile
@@ -50,16 +51,16 @@
 (after! geiser-guile
   (add-to-list 'geiser-guile-load-path "~/code/guix"))
 
-;; (use-package! rainbow-identifiers
-;;   :custom
-;;   (rainbow-identifiers-cie-l*a*b*-lightness 80)
-;;   (rainbow-identifiers-cie-l*a*b*-saturation 50)
-;;   (rainbow-identifiers-choose-face-function
-;;    #'rainbow-identifiers-cie-l*a*b*-choose-face)
-;;   :hook
-;;   (emacs-lisp-mode . rainbow-identifiers-mode)
-;;   (lisp-mode . rainbow-identifiers-mode)
-;;   (scheme-mode . rainbow-identifiers-mode))
+(use-package! rainbow-identifiers
+  :custom
+  (rainbow-identifiers-cie-l*a*b*-lightness 80)
+  (rainbow-identifiers-cie-l*a*b*-saturation 50)
+  (rainbow-identifiers-choose-face-function
+   #'rainbow-identifiers-cie-l*a*b*-choose-face)
+  :hook
+  (emacs-lisp-mode . rainbow-identifiers-mode)
+  (lisp-mode . rainbow-identifiers-mode)
+  (scheme-mode . rainbow-identifiers-mode))
 
 ;;; Org-mode org-roam
 
@@ -138,6 +139,7 @@
 
 - tags ::
 - author ::
+- illistrator ::
 - publisher/journal/platform ::
 - volume ::
 - number ::
@@ -161,7 +163,7 @@
   (setq org-roam-ui-sync-theme t
         org-roam-ui-follow t
         org-roam-ui-update-on-save t
-        org-roam-ui-open-on-start t))
+        org-roam-ui-open-on-start nil))
 
 (add-hook 'org-mode-hook (lambda () (set-fill-column 100)))
 (add-hook 'js-mode-hook (lambda () (set-fill-column 100)))
@@ -265,7 +267,17 @@ Sort lines in region by their length."
                    (lambda (l1 l2)
                      (apply #'< (mapcar (lambda (range) (- (cdr range) (car range)))
                                         (list l1 l2)))))))))
-;
+
+(defun exzellenz/smarge-all-lower ()
+  "Keep all lower part of conflict by applying `smarge-keep-lower' for
+entire buffer."
+  (interactive)
+  (save-restriction
+    (goto-char (point-min))
+    (while (re-search-forward smerge-begin-re nil t)
+      (smerge-keep-lower)
+      (save-buffer))))
+
 ;; Allow cyrillic inputs
 ;; source :: https://github.com/rynffoll/.doom.d/blob/master/config.el
 ;; (def-package! reverse-im
@@ -276,3 +288,49 @@ Sort lines in region by their length."
 ;;     (define-key evil-normal-state-map (kbd "C-х") #'evil-force-normal-state)
 ;;     (define-key evil-insert-state-map (kbd "C-х") #'evil-normal-state)
 ;;     (define-key evil-visual-state-map (kbd "C-х") #'evil-exit-visual-state)))
+
+;; Email
+
+;; https://github.com/kensanata/ggg
+(setq user-mail-address "sharlatanus@gmail.com"
+      user-full-name    "Sharlatan Hellseher"
+      mml-secure-openpgp-signers '("984781DE689C21C26418086776D727BFF62CD2B5")
+      mml2015-signers '("984781DE689C21C26418086776D727BFF62CD2B5")
+      ;; gnus-select-method
+      ;; '(nnimap "gmail"
+      ;;     (nnimap-address "imap.gmail.com")
+      ;;     (nnimap-server-port 993)
+      ;;     (nnimap-stream ssl)
+      ;;     (nnir-search-engine imap)
+      ;;     (nnimap-authinfo-file "~/.authinfo.gpg"))
+      gnus-agent nil
+      gnus-ignored-newsgroups "^to\\.\\|^[0-9. ]+\\( \\|$\\)\\|^[\"]\"[#'()]"
+      gnus-message-archive-group nil
+      message-send-mail-function 'smtpmail-send-it
+      mml-secure-openpgp-encrypt-to-self t
+      nntp-authinfo-file "~/.authinfo.gpg"
+      smtpmail-smtp-server "smtp.gmail.com"
+      smtpmail-smtp-service 587
+      smtpmail-auth-credentials '(("smtp.gmail.com" 587 "sharlatanus@gmail.com"))
+      starttls-extra-arguments nil
+      starttls-gnutls-program ".guix-profile/bin/gnutls-cli"
+      starttls-use-gnutls t)
+
+(add-hook 'message-setup-hook 'mml-secure-message-encrypt)
+(add-hook 'gnus-summary-mode-hook 'my-gnus-summary-keys)
+
+(defun my-gnus-summary-keys ()
+  (local-set-key "y" 'gmail-archive)
+  (local-set-key "$" 'gmail-report-spam))
+
+(defun gmail-archive ()
+  "Archive the current or marked mails.
+This moves them into the All Mail folder."
+  (interactive)
+  (gnus-summary-move-article nil "nnimap+imap.gmail.com:[Gmail]/All Mail"))
+
+(defun gmail-report-spam ()
+  "Report the current or marked mails as spam.
+This moves them into the Spam folder."
+  (interactive)
+  (gnus-summary-move-article nil "nnimap+imap.gmail.com:[Gmail]/Spam"))

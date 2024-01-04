@@ -13,3 +13,4 @@
 ;;
 (package! rainbow-identifiers)
 (package! modus-themes)
+(package! debbugs)

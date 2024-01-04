@@ -4,15 +4,17 @@
 # condition: t
 # --
 #+filetags: ${1:$$(yas-choose-value
-'(":book:"
-  ":blog-post:"
+'(":article:"
+  ":book:"
+  ":blog:"
+  ":character:"
+  ":deity:"
   ":journal:"
-  ":journal_article:"
-  ":magazine_article:"
+  ":magazine:"
+  ":paper:"
   ":phylosopher:"
+  ":pl:"
   ":preprint:"
   ":publisher:"
-  ":research_article:"
-  ":white_paper:"
 ))}
 $0
